@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Bitfinex.Net.Enums;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Bitfinex.Net.Objects

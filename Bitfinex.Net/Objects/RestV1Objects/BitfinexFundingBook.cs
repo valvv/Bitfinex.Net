@@ -27,13 +27,15 @@ namespace Bitfinex.Net.Objects.RestV1Objects
     public class BitfinexFundingBookEntry
     {
         /// <summary>
-        /// The rate of the entry
+        /// The price of the entry
         /// </summary>
-        public decimal Rate { get; set; }
+        [JsonProperty("rate")]
+        public decimal Price { get; set; }
         /// <summary>
-        /// The amount of the entry
+        /// The quantity of the entry
         /// </summary>
-        public decimal Amount { get; set; }
+        [JsonProperty("amount")]
+        public decimal Quantity { get; set; }
         /// <summary>
         /// The period in days
         /// </summary>

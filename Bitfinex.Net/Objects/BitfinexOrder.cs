@@ -1,5 +1,6 @@
 ﻿using System;
 using Bitfinex.Net.Converters;
+using Bitfinex.Net.Enums;
 using Bitfinex.Net.Objects.SocketObjects;
 using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.ExchangeInterfaces;
@@ -41,25 +42,25 @@ namespace Bitfinex.Net.Objects
         /// The creation time of the order
         /// </summary>
         [ArrayProperty(4), JsonConverter(typeof(TimestampConverter))]
-        public DateTime TimestampCreated { get; set; }
+        public DateTime CreateTime { get; set; }
 
         /// <summary>
         /// The last update time
         /// </summary>
         [ArrayProperty(5), JsonConverter(typeof(TimestampConverter))]
-        public DateTime TimestampUpdated { get; set; }
+        public DateTime UpdateTime { get; set; }
 
         /// <summary>
-        /// The amount left
+        /// The quantity left
         /// </summary>
         [ArrayProperty(6)]
-        public decimal Amount { get; set; }
+        public decimal QuantityRemaining { get; set; }
 
         /// <summary>
-        /// The original amount
+        /// The original quantity
         /// </summary>
         [ArrayProperty(7)]
-        public decimal AmountOriginal { get; set; }
+        public decimal Quantity { get; set; }
 
         /// <summary>
         /// The order type
@@ -202,15 +203,15 @@ namespace Bitfinex.Net.Objects
         string ICommonOrderId.CommonId => Id.ToString();
         string ICommonOrder.CommonSymbol => Symbol;
         decimal ICommonOrder.CommonPrice => Price;
-        decimal ICommonOrder.CommonQuantity => AmountOriginal;
+        decimal ICommonOrder.CommonQuantity => Quantity;
         IExchangeClient.OrderStatus ICommonOrder.CommonStatus => Status == OrderStatus.Canceled ? IExchangeClient.OrderStatus.Canceled:
             Status == OrderStatus.Executed ? IExchangeClient.OrderStatus.Filled:
             IExchangeClient.OrderStatus.Active;
         bool ICommonOrder.IsActive => Status == OrderStatus.Active;
-        DateTime ICommonOrder.CommonOrderTime => TimestampCreated;
+        DateTime ICommonOrder.CommonOrderTime => CreateTime;
 
         IExchangeClient.OrderSide ICommonOrder.CommonSide =>
-            AmountOriginal < 0 ? IExchangeClient.OrderSide.Sell : IExchangeClient.OrderSide.Buy;
+            Quantity < 0 ? IExchangeClient.OrderSide.Sell : IExchangeClient.OrderSide.Buy;
         IExchangeClient.OrderType ICommonOrder.CommonType
         {
             get

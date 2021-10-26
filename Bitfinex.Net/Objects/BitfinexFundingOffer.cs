@@ -1,5 +1,6 @@
 ﻿using System;
 using Bitfinex.Net.Converters;
+using Bitfinex.Net.Enums;
 using CryptoExchange.Net.Converters;
 using Newtonsoft.Json;
 
@@ -18,7 +19,7 @@ namespace Bitfinex.Net.Objects
         public long Id { get; set; }
 
         /// <summary>
-        /// The currency of the offer
+        /// The symbol of the offer
         /// </summary>
         [ArrayProperty(1)]
         public string Symbol { get; set; } = string.Empty;
@@ -27,31 +28,31 @@ namespace Bitfinex.Net.Objects
         /// The creation timestamp
         /// </summary>
         [ArrayProperty(2), JsonConverter(typeof(TimestampConverter))]
-        public DateTime TimestampCreated { get; set; }
+        public DateTime CreateTime { get; set; }
 
         /// <summary>
         /// The last update timestamp
         /// </summary>
         [ArrayProperty(3), JsonConverter(typeof(TimestampConverter))]
-        public DateTime TimestampUpdated { get; set; }
+        public DateTime UpdateTime { get; set; }
 
         /// <summary>
-        /// The amount of the offer
+        /// The quantity of the offer
         /// </summary>
         [ArrayProperty(4)]
-        public decimal Amount { get; set; }
+        public decimal Quantity { get; set; }
 
         /// <summary>
-        /// The original amount
+        /// The original quantity
         /// </summary>
         [ArrayProperty(5)]
-        public decimal AmountOriginal { get; set; }
+        public decimal QuantityOriginal { get; set; }
 
         /// <summary>
         /// The funding type
         /// </summary>
-        [ArrayProperty(6), JsonConverter(typeof(FundingTypeConverter))]
-        public FundingType FundingType { get; set; }
+        [ArrayProperty(6), JsonConverter(typeof(FundingOfferTypeConverter))]
+        public FundingOfferType FundingType { get; set; }
         /// <summary>
         /// 
         /// </summary>

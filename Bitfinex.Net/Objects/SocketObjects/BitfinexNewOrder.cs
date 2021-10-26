@@ -1,4 +1,5 @@
 ﻿using Bitfinex.Net.Converters;
+using Bitfinex.Net.Enums;
 using Newtonsoft.Json;
 
 namespace Bitfinex.Net.Objects.SocketObjects

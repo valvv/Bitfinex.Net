@@ -1,4 +1,5 @@
 ﻿using Bitfinex.Net.Converters;
+using Bitfinex.Net.Enums;
 using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
@@ -18,16 +19,16 @@ namespace Bitfinex.Net.Objects
         public WalletType Type { get; set; }
 
         /// <summary>
-        /// the currency
+        /// The asset
         /// </summary>
         [ArrayProperty(1)]
-        public string Currency { get; set; } = string.Empty;
+        public string Asset { get; set; } = string.Empty;
 
         /// <summary>
         /// The current balance
         /// </summary>
         [ArrayProperty(2)]
-        public decimal Balance { get; set; }
+        public decimal Total { get; set; }
 
         /// <summary>
         /// The unsettled interest
@@ -39,10 +40,10 @@ namespace Bitfinex.Net.Objects
         /// The available balance
         /// </summary>
         [ArrayProperty(4)]
-        public decimal? BalanceAvailable { get; set; }
+        public decimal? Available { get; set; }
 
-        string ICommonBalance.CommonAsset => Currency;
-        decimal ICommonBalance.CommonAvailable => BalanceAvailable ?? 0;
-        decimal ICommonBalance.CommonTotal => Balance;
+        string ICommonBalance.CommonAsset => Asset;
+        decimal ICommonBalance.CommonAvailable => Available ?? 0;
+        decimal ICommonBalance.CommonTotal => Total;
     }
 }

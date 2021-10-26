@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using Bitfinex.Net.Enums;
 using Bitfinex.Net.Objects;
 using Newtonsoft.Json;
 

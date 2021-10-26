@@ -1,4 +1,5 @@
 ﻿using Bitfinex.Net.Converters;
+using Bitfinex.Net.Enums;
 using CryptoExchange.Net.Converters;
 using Newtonsoft.Json;
 

@@ -16,20 +16,20 @@ namespace Bitfinex.Net.Objects
         [ArrayProperty(0)]
         public long Id { get; set; }
         /// <summary>
-        /// The currency
+        /// The asset
         /// </summary>
         [ArrayProperty(1)]
-        public string Currency { get; set; } = string.Empty;
+        public string Asset { get; set; } = string.Empty;
         /// <summary>
         /// The timestamp of the event
         /// </summary>
         [ArrayProperty(3), JsonConverter(typeof(TimestampConverter))]
         public DateTime Timestamp { get; set; }
         /// <summary>
-        /// The change amount
+        /// The change quantity
         /// </summary>
         [ArrayProperty(5)]
-        public decimal Amount { get; set; }
+        public decimal Quantity { get; set; }
         /// <summary>
         /// The new balance
         /// </summary>

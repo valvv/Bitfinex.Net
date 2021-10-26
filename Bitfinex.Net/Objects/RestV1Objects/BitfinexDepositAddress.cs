@@ -18,9 +18,10 @@ namespace Bitfinex.Net.Objects.RestV1Objects
         /// </summary>
         public string Method { get; set; } = string.Empty;
         /// <summary>
-        /// The currency the address is for
+        /// The asset the address is for
         /// </summary>
-        public string Currency { get; set; } = string.Empty;
+        [JsonProperty("currency")]
+        public string Asset { get; set; } = string.Empty;
         /// <summary>
         /// The deposit address
         /// </summary>

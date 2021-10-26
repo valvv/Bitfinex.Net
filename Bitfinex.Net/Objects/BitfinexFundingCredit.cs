@@ -1,5 +1,6 @@
 ﻿using System;
 using Bitfinex.Net.Converters;
+using Bitfinex.Net.Enums;
 using CryptoExchange.Net.Converters;
 using Newtonsoft.Json;
 
@@ -18,7 +19,7 @@ namespace Bitfinex.Net.Objects
         public long Id { get; set; }
 
         /// <summary>
-        /// The currency of the offer
+        /// The symbol of the offer
         /// </summary>
         [ArrayProperty(1)]
         public string Symbol { get; set; } = string.Empty;
@@ -26,26 +27,26 @@ namespace Bitfinex.Net.Objects
         /// <summary>
         /// The side of the funding
         /// </summary>
-        [ArrayProperty(2), JsonConverter(typeof(FundingTypeConverter))]
-        public FundingType Side { get; set; }
+        [ArrayProperty(2), JsonConverter(typeof(FundingSideConverter))]
+        public FundingSide Side { get; set; }
 
         /// <summary>
         /// The creation timestamp
         /// </summary>
         [ArrayProperty(3), JsonConverter(typeof(TimestampConverter))]
-        public DateTime TimestampCreated { get; set; }
+        public DateTime CreateTime { get; set; }
 
         /// <summary>
         /// The last update timestamp
         /// </summary>
         [ArrayProperty(4), JsonConverter(typeof(TimestampConverter))]
-        public DateTime TimestampUpdated { get; set; }
+        public DateTime UpdateTime { get; set; }
 
         /// <summary>
-        /// The amount of the offer
+        /// The quantity of the offer
         /// </summary>
         [ArrayProperty(5)]
-        public decimal Amount { get; set; }
+        public decimal Quantity { get; set; }
         /// <summary>
         /// </summary>
         [ArrayProperty(6)]
@@ -75,10 +76,10 @@ namespace Bitfinex.Net.Objects
         public string PlaceHolder3 { get; set; } = string.Empty;
 
         /// <summary>
-        /// The rate of the offer
+        /// The price of the offer
         /// </summary>
         [ArrayProperty(11)]
-        public decimal Rate { get; set; }
+        public decimal Price { get; set; }
 
         /// <summary>
         /// The period of the offer in days
@@ -90,13 +91,13 @@ namespace Bitfinex.Net.Objects
         /// The timestamp when the funding was opened
         /// </summary>
         [ArrayProperty(13), JsonConverter(typeof(TimestampConverter))]
-        public DateTime TimestampOpened { get; set; }
+        public DateTime OpenTime { get; set; }
 
         /// <summary>
         /// The timestamp of the last payout
         /// </summary>
         [ArrayProperty(14), JsonConverter(typeof(TimestampConverter))]
-        public DateTime TimestampLastPayout { get; set; }
+        public DateTime LastPayoutTime { get; set; }
 
         /// <summary>
         /// If notify

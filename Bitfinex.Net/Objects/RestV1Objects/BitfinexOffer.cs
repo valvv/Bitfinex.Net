@@ -1,5 +1,6 @@
 ﻿using System;
 using Bitfinex.Net.Converters;
+using Bitfinex.Net.Enums;
 using CryptoExchange.Net.Converters;
 using Newtonsoft.Json;
 
@@ -15,13 +16,15 @@ namespace Bitfinex.Net.Objects.RestV1Objects
         /// </summary>
         public long Id { get; set; }
         /// <summary>
-        /// The currency of the offer
+        /// The asset of the offer
         /// </summary>
-        public string Currency { get; set; } = string.Empty;
+        [JsonProperty("currency")]
+        public string Asset { get; set; } = string.Empty;
         /// <summary>
         /// The rate of the offer
         /// </summary>
-        public decimal Rate { get; set; }
+        [JsonProperty("rate")]
+        public decimal Price { get; set; }
         /// <summary>
         /// The period in days
         /// </summary>
@@ -47,20 +50,20 @@ namespace Bitfinex.Net.Objects.RestV1Objects
         [JsonProperty("is_cancelled")]
         public bool IsCanceled { get; set; }
         /// <summary>
-        /// The original amount of the offer
+        /// The original quantity of the offer
         /// </summary>
         [JsonProperty("original_amount")]
-        public decimal OriginalAmount { get; set; }
+        public decimal Quantity { get; set; }
         /// <summary>
-        /// The remaining amount on the offer
+        /// The remaining quantity on the offer
         /// </summary>
         [JsonProperty("remaining_amount")]
-        public decimal RemainingAmount { get; set; }
+        public decimal QuantityRemaining { get; set; }
         /// <summary>
-        /// The executed amount of the offer
+        /// The executed quantity of the offer
         /// </summary>
         [JsonProperty("executed_amount")]
-        public decimal ExecutedAmount { get; set; }
+        public decimal QuantityFilled { get; set; }
         /// <summary>
         /// The offer id
         /// </summary>

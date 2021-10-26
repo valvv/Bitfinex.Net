@@ -26,9 +26,10 @@ namespace Bitfinex.Net.Objects.RestV1Objects
         /// </summary>
         public decimal Base { get; set; }
         /// <summary>
-        /// The amount of the position
+        /// The quantity of the position
         /// </summary>
-        public decimal Amount { get; set; }
+        [JsonProperty("amount")]
+        public decimal Quantity { get; set; }
         /// <summary>
         /// The timestamp
         /// </summary>

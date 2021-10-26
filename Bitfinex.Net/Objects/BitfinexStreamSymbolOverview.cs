@@ -13,22 +13,22 @@ namespace Bitfinex.Net.Objects
         /// Best bid price
         /// </summary>
         [ArrayProperty(0)]
-        public decimal Bid { get; set; }
+        public decimal BestBidPrice { get; set; }
         /// <summary>
-        /// Best bid size
+        /// Best bid quantity
         /// </summary>
         [ArrayProperty(1)]
-        public decimal BidSize { get; set; }
+        public decimal BestBidQuantity { get; set; }
         /// <summary>
         /// Best ask price
         /// </summary>
         [ArrayProperty(2)]
-        public decimal Ask { get; set; }
+        public decimal BestAskPrice { get; set; }
         /// <summary>
-        /// Best ask size
+        /// Best ask quantity
         /// </summary>
         [ArrayProperty(3)]
-        public decimal AskSize { get; set; }
+        public decimal BestAskQuantity { get; set; }
         /// <summary>
         /// Change versus 24 hours ago
         /// </summary>
@@ -53,12 +53,12 @@ namespace Bitfinex.Net.Objects
         /// The 24 hour high price
         /// </summary>
         [ArrayProperty(8)]
-        public decimal High { get; set; }
+        public decimal HighPrice { get; set; }
         /// <summary>
         /// The 24 hour low price
         /// </summary>
         [ArrayProperty(9)]
-        public decimal Low { get; set; }
+        public decimal LowPrice { get; set; }
 
     }
 }

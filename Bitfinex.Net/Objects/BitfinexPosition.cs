@@ -1,5 +1,6 @@
 ﻿using System;
 using Bitfinex.Net.Converters;
+using Bitfinex.Net.Enums;
 using CryptoExchange.Net.Converters;
 using Newtonsoft.Json;
 
@@ -24,10 +25,10 @@ namespace Bitfinex.Net.Objects
         public PositionStatus Status { get; set; }
 
         /// <summary>
-        /// The amount
+        /// The quantity
         /// </summary>
         [ArrayProperty(2)]
-        public decimal Amount { get; set; }
+        public decimal Quantity { get; set; }
 
         /// <summary>
         /// The base price

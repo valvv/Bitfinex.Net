@@ -4,18 +4,18 @@ using Newtonsoft.Json;
 namespace Bitfinex.Net.Objects
 {
     /// <summary>
-    /// Currency info
+    /// Asset info
     /// </summary>
     [JsonConverter(typeof(ArrayConverter))]
-    public class BitfinexCurrency
+    public class BitfinexAsset
     {
         /// <summary>
-        /// The shorthand name of the currency
+        /// The shorthand name of the asset
         /// </summary>
         [ArrayProperty(0)]
         public string Name { get; set; } = string.Empty;
         /// <summary>
-        /// The full name of the currency
+        /// The full name of the asset
         /// </summary>
         [ArrayProperty(1)]
         public string FullName { get; set; } = string.Empty;

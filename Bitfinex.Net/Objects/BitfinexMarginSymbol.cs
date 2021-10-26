@@ -10,15 +10,21 @@ namespace Bitfinex.Net.Objects
     public class BitfinexMarginSymbol
     {
         /// <summary>
-        /// The symbol
+        /// The topic
         /// </summary>
         [ArrayProperty(0)]
+        public string Topic { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The symbol
+        /// </summary>
+        [ArrayProperty(1)]
         public string Symbol { get; set; } = string.Empty;
 
         /// <summary>
         /// Data
         /// </summary>
-        [ArrayProperty(1), JsonConverter(typeof(ArrayConverter))]
+        [ArrayProperty(2), JsonConverter(typeof(ArrayConverter))]
         public BitfinexMarginSymbolInfo Data { get; set; } = default!;
     }
 
@@ -41,13 +47,13 @@ namespace Bitfinex.Net.Objects
         public decimal GrossBalance { get; set; }
 
         /// <summary>
-        /// Buy amount
+        /// Buy quantity
         /// </summary>
         [ArrayProperty(2)]
         public decimal Buy { get; set; }
 
         /// <summary>
-        /// Sell amount
+        /// Sell quantity
         /// </summary>
         [ArrayProperty(3)]
         public decimal Sell { get; set; }

@@ -16,9 +16,9 @@ namespace Bitfinex.Net.Objects
         public decimal AverageRate { get; set; }
 
         /// <summary>
-        /// The amount
+        /// The quantity
         /// </summary>
         [ArrayProperty(1)]
-        public decimal Amount { get; set; }
+        public decimal Quantity { get; set; }
     }
 }

@@ -17,10 +17,10 @@ namespace Bitfinex.Net.Objects
         [ArrayProperty(0)]
         public long Id { get; set; }
         /// <summary>
-        /// The currency
+        /// The asset
         /// </summary>
         [ArrayProperty(1)]
-        public string Currency { get; set; } = string.Empty;
+        public string Asset { get; set; } = string.Empty;
         /// <summary>
         /// The timestamp
         /// </summary>
@@ -32,10 +32,10 @@ namespace Bitfinex.Net.Objects
         [ArrayProperty(3)]
         public long OfferId { get; set; }
         /// <summary>
-        /// The trade amount
+        /// The trade quantity
         /// </summary>
         [ArrayProperty(4)]
-        public decimal Amount { get; set; }
+        public decimal Quantity { get; set; }
         /// <summary>
         /// The rate
         /// </summary>

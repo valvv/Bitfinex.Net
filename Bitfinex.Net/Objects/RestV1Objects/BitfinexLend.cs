@@ -12,17 +12,18 @@ namespace Bitfinex.Net.Objects.RestV1Objects
         /// <summary>
         /// The rate of the lend
         /// </summary>
-        public decimal Rate { get; set; }
+        [JsonProperty("rate")]
+        public decimal Price { get; set; }
         /// <summary>
-        /// The amount that was lent
+        /// The quantity that was lent
         /// </summary>
         [JsonProperty("amount_lent")]
-        public decimal AmountLent { get; set; }
+        public decimal QuantityLent { get; set; }
         /// <summary>
-        /// The amount that is used
+        /// The quantity that is used
         /// </summary>
         [JsonProperty("amount_used")]
-        public decimal AmountUsed { get; set; }
+        public decimal QuantityUsed { get; set; }
         /// <summary>
         /// Timestamp
         /// </summary>

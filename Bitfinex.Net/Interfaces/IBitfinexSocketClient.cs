@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Bitfinex.Net.Enums;
 using Bitfinex.Net.Objects;
 using Bitfinex.Net.Objects.SocketObjects;
 using CryptoExchange.Net.Interfaces;
@@ -40,7 +41,7 @@ namespace Bitfinex.Net.Interfaces
         /// <param name="handler">The handler for the data</param>
         /// <param name="checksumHandler">The handler for the checksum, can be used to validate a order book implementation</param>
         /// <returns></returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToBookUpdatesAsync(string symbol, Precision precision, Frequency frequency, int length, Action<DataEvent<IEnumerable<BitfinexOrderBookEntry>>> handler, Action<DataEvent<int>>? checksumHandler = null);
+        Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, Precision precision, Frequency frequency, int length, Action<DataEvent<IEnumerable<BitfinexOrderBookEntry>>> handler, Action<DataEvent<int>>? checksumHandler = null);
 
         /// <summary>
         /// Subscribes to raw order book updates for a symbol
@@ -50,7 +51,7 @@ namespace Bitfinex.Net.Interfaces
         /// <param name="handler">The handler for the data</param>
         /// <param name="checksumHandler">The handler for the checksum, can be used to validate a order book implementation</param>
         /// <returns></returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToRawBookUpdatesAsync(string symbol, int limit, Action<DataEvent<IEnumerable<BitfinexRawOrderBookEntry>>> handler, Action<DataEvent<int>>? checksumHandler = null);
+        Task<CallResult<UpdateSubscription>> SubscribeToRawOrderBookUpdatesAsync(string symbol, int limit, Action<DataEvent<IEnumerable<BitfinexRawOrderBookEntry>>> handler);
 
         /// <summary>
         /// Subscribes to public trade updates for a symbol
@@ -67,7 +68,7 @@ namespace Bitfinex.Net.Interfaces
         /// <param name="interval">The interval of the klines</param>
         /// <param name="handler">The handler for the data</param>
         /// <returns></returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, TimeFrame interval, Action<DataEvent<IEnumerable<BitfinexKline>>> handler);
+        Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, KlineInterval interval, Action<DataEvent<IEnumerable<BitfinexKline>>> handler);
 
         /// <summary>
         /// Subscribe to trading information updates
@@ -76,7 +77,7 @@ namespace Bitfinex.Net.Interfaces
         /// <param name="tradeHandler">Data handler for trade execution updates. Can be null if not interested</param>
         /// <param name="positionHandler">Data handler for position updates. Can be null if not interested</param>
         /// <returns></returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToTradingUpdatesAsync(
+        Task<CallResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexOrder>>>> orderHandler,
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexTradeDetails>>>> tradeHandler,
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexPosition>>>> positionHandler);
@@ -86,7 +87,7 @@ namespace Bitfinex.Net.Interfaces
         /// </summary>
         /// <param name="walletHandler">Data handler for wallet updates</param>
         /// <returns></returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToWalletUpdatesAsync(Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexWallet>>>> walletHandler);
+        Task<CallResult<UpdateSubscription>> SubscribeToBalanceUpdatesAsync(Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexWallet>>>> walletHandler);
 
         /// <summary>
         /// Subscribe to funding information updates
@@ -105,7 +106,7 @@ namespace Bitfinex.Net.Interfaces
         /// </summary>
         /// <param name="type">The type of the order</param>
         /// <param name="symbol">The symbol the order is for</param>
-        /// <param name="amount">The amount of the order, positive for buying, negative for selling</param>
+        /// <param name="quantity">The quantity of the order, positive for buying, negative for selling</param>
         /// <param name="groupId">Group id to assign to the order</param>
         /// <param name="clientOrderId">Client order id to assign to the order</param>
         /// <param name="price">Price of the order</param>
@@ -115,20 +116,20 @@ namespace Bitfinex.Net.Interfaces
         /// <param name="flags">Additional flags</param>
         /// <param name="affiliateCode">Affiliate code for the order</param>
         /// <returns></returns>
-        Task<CallResult<BitfinexOrder>> PlaceOrderAsync(OrderType type, string symbol, decimal amount, long? groupId = null, long? clientOrderId = null, decimal? price = null, decimal? priceTrailing = null, decimal? priceAuxiliaryLimit = null, decimal? priceOcoStop = null, OrderFlags? flags = null, string? affiliateCode = null);
+        Task<CallResult<BitfinexOrder>> PlaceOrderAsync(OrderType type, string symbol, decimal quantity, long? groupId = null, long? clientOrderId = null, decimal? price = null, decimal? priceTrailing = null, decimal? priceAuxiliaryLimit = null, decimal? priceOcoStop = null, OrderFlags? flags = null, string? affiliateCode = null);
 
         /// <summary>
         /// Updates an order
         /// </summary>
         /// <param name="orderId">The id of the order to update</param>
         /// <param name="price">The new price of the order</param>
-        /// <param name="amount">The new amount of the order</param>
+        /// <param name="quantity">The new quantity of the order</param>
         /// <param name="delta">The delta to change</param>
         /// <param name="priceAuxiliaryLimit">the new aux limit price</param>
         /// <param name="priceTrailing">The new trailing price</param>
         /// <param name="flags">The new flags</param>
         /// <returns></returns>
-        Task<CallResult<BitfinexOrder>> UpdateOrderAsync(long orderId, decimal? price = null, decimal? amount = null, decimal? delta = null, decimal? priceAuxiliaryLimit = null, decimal? priceTrailing = null, OrderFlags? flags = null);
+        Task<CallResult<BitfinexOrder>> UpdateOrderAsync(long orderId, decimal? price = null, decimal? quantity = null, decimal? delta = null, decimal? priceAuxiliaryLimit = null, decimal? priceTrailing = null, OrderFlags? flags = null);
 
         /// <summary>
         /// Cancels an order

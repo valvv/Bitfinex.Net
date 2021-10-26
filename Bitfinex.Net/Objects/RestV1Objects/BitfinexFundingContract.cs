@@ -19,21 +19,24 @@ namespace Bitfinex.Net.Objects.RestV1Objects
         [JsonProperty("position_id")]
         public long PositionId { get; set; }
         /// <summary>
-        /// The currency of the contract
+        /// The asset of the contract
         /// </summary>
-        public string Currency { get; set; } = string.Empty;
+        [JsonProperty("currency")]
+        public string Asset { get; set; } = string.Empty;
         /// <summary>
         /// The rate of the contract
         /// </summary>
-        public decimal Rate { get; set; }
+        [JsonProperty("rate")]
+        public decimal Price { get; set; }
         /// <summary>
         /// The period in days
         /// </summary>
         public int Period { get; set; }
         /// <summary>
-        /// The amount
+        /// The quantity
         /// </summary>
-        public decimal Amount { get; set; }
+        [JsonProperty("amount")]
+        public decimal Quantity { get; set; }
         /// <summary>
         /// The timestamp
         /// </summary>

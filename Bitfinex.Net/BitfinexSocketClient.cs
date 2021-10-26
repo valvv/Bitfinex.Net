@@ -15,6 +15,7 @@ using Bitfinex.Net.Interfaces;
 using Microsoft.Extensions.Logging;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Interfaces;
+using Bitfinex.Net.Enums;
 
 namespace Bitfinex.Net
 {
@@ -83,12 +84,7 @@ namespace Bitfinex.Net
             defaultOptions = newDefaultOptions;
         }
 
-        /// <summary>
-        /// Subscribes to ticker updates for a symbol
-        /// </summary>
-        /// <param name="symbol">The symbol to subscribe to</param>
-        /// <param name="handler">The handler for the data</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(string symbol, Action<DataEvent<BitfinexStreamSymbolOverview>> handler)
         {
             symbol.ValidateBitfinexSymbol();
@@ -99,17 +95,8 @@ namespace Bitfinex.Net
             return await SubscribeAsync(new BitfinexSubscriptionRequest("ticker", symbol), null, false, internalHandler).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribes to order book updates for a symbol
-        /// </summary>
-        /// <param name="symbol">The symbol to subscribe to</param>
-        /// <param name="precision">The precision of the updates</param>
-        /// <param name="frequency">The frequency of updates</param>
-        /// <param name="length">The range for the order book updates, either 25 or 100</param>
-        /// <param name="handler">The handler for the data</param>
-        /// <param name="checksumHandler">The handler for the checksum, can be used to validate a order book implementation</param>
-        /// <returns></returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToBookUpdatesAsync(string symbol, Precision precision, Frequency frequency, int length, Action<DataEvent<IEnumerable<BitfinexOrderBookEntry>>> handler, Action<DataEvent<int>>? checksumHandler = null)
+        /// <inheritdoc />
+        public async Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, Precision precision, Frequency frequency, int length, Action<DataEvent<IEnumerable<BitfinexOrderBookEntry>>> handler, Action<DataEvent<int>>? checksumHandler = null)
         {
             symbol.ValidateBitfinexSymbol();
             length.ValidateIntValues(nameof(length), 25, 100);
@@ -149,15 +136,8 @@ namespace Bitfinex.Net
             return await SubscribeAsync(sub, null, false, internalHandler).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribes to raw order book updates for a symbol
-        /// </summary>
-        /// <param name="symbol">The symbol to subscribe to</param>
-        /// <param name="limit">The range for the order book updates</param>
-        /// <param name="handler">The handler for the data</param>
-        /// <param name="checksumHandler">The handler for the checksum, can be used to validate a order book implementation</param>
-        /// <returns></returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToRawBookUpdatesAsync(string symbol, int limit, Action<DataEvent<IEnumerable<BitfinexRawOrderBookEntry>>> handler, Action<DataEvent<int>>? checksumHandler = null)
+        /// <inheritdoc />
+        public async Task<CallResult<UpdateSubscription>> SubscribeToRawOrderBookUpdatesAsync(string symbol, int limit, Action<DataEvent<IEnumerable<BitfinexRawOrderBookEntry>>> handler)
         {
             symbol.ValidateBitfinexSymbol();
             var internalHandler = new Action<DataEvent<JToken>>(data =>
@@ -179,12 +159,7 @@ namespace Bitfinex.Net
             return await SubscribeAsync(new BitfinexRawBookSubscriptionRequest(symbol, "R0", limit), null, false, internalHandler).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribes to public trade updates for a symbol
-        /// </summary>
-        /// <param name="symbol">The symbol to subscribe to</param>
-        /// <param name="handler">The handler for the data</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol, Action<DataEvent<IEnumerable<BitfinexTradeSimple>>> handler)
         {
             var internalHandler = new Action<DataEvent<JToken>>(data =>
@@ -209,14 +184,8 @@ namespace Bitfinex.Net
             return await SubscribeAsync(new BitfinexSubscriptionRequest("trades", symbol), null, false, internalHandler).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribes to kline updates for a symbol
-        /// </summary>
-        /// <param name="symbol">The symbol to subscribe to</param>
-        /// <param name="interval">The interval of the klines</param>
-        /// <param name="handler">The handler for the data</param>
-        /// <returns></returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, TimeFrame interval, Action<DataEvent<IEnumerable<BitfinexKline>>> handler)
+        /// <inheritdoc />
+        public async Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, KlineInterval interval, Action<DataEvent<IEnumerable<BitfinexKline>>> handler)
         {
             symbol.ValidateBitfinexSymbol();
             var internalHandler = new Action<DataEvent<JToken>>(data =>
@@ -233,17 +202,11 @@ namespace Bitfinex.Net
                 else
                     HandleSingleToArrayData("Kline update", dataArray, symbol, data, handler);
             });
-            return await SubscribeAsync(new BitfinexKlineSubscriptionRequest(symbol, JsonConvert.SerializeObject(interval, new TimeFrameConverter(false))), null, false, internalHandler).ConfigureAwait(false);
+            return await SubscribeAsync(new BitfinexKlineSubscriptionRequest(symbol, JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))), null, false, internalHandler).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribe to trading information updates
-        /// </summary>
-        /// <param name="orderHandler">Data handler for order updates. Can be null if not interested</param>
-        /// <param name="tradeHandler">Data handler for trade execution updates. Can be null if not interested</param>
-        /// <param name="positionHandler">Data handler for position updates. Can be null if not interested</param>
-        /// <returns></returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToTradingUpdatesAsync(
+        /// <inheritdoc />
+        public async Task<CallResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexOrder>>>> orderHandler,
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexTradeDetails>>>> tradeHandler,
              Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexPosition>>>> positionHandler)
@@ -258,12 +221,8 @@ namespace Bitfinex.Net
             return await SubscribeAsync(null, "Orders|Trades|Positions", true, tokenHandler).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribe to wallet information updates
-        /// </summary>
-        /// <param name="walletHandler">Data handler for wallet updates</param>
-        /// <returns></returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToWalletUpdatesAsync(Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexWallet>>>> walletHandler)
+        /// <inheritdoc />
+        public async Task<CallResult<UpdateSubscription>> SubscribeToBalanceUpdatesAsync(Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexWallet>>>> walletHandler)
         {
             var tokenHandler = new Action<DataEvent<JToken>>(tokenData =>
             {
@@ -273,13 +232,7 @@ namespace Bitfinex.Net
             return await SubscribeAsync(null, "Wallet", true, tokenHandler).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribe to funding information updates
-        /// </summary>
-        /// <param name="fundingOfferHandler">Subscribe to funding offer updates. Can be null if not interested</param>
-        /// <param name="fundingCreditHandler">Subscribe to funding credit updates. Can be null if not interested</param>
-        /// <param name="fundingLoanHandler">Subscribe to funding loan updates. Can be null if not interested</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToFundingUpdatesAsync(
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexFundingOffer>>>> fundingOfferHandler,
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexFundingCredit>>>> fundingCreditHandler,
@@ -295,22 +248,8 @@ namespace Bitfinex.Net
             return await SubscribeAsync(null, "FundingOffers|FundingCredits|FundingLoans", true, tokenHandler).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Places a new order
-        /// </summary>
-        /// <param name="type">The type of the order</param>
-        /// <param name="symbol">The symbol the order is for</param>
-        /// <param name="amount">The amount of the order, positive for buying, negative for selling</param>
-        /// <param name="groupId">Group id to assign to the order</param>
-        /// <param name="clientOrderId">Client order id to assign to the order</param>
-        /// <param name="price">Price of the order</param>
-        /// <param name="priceTrailing">Trailing price of the order</param>
-        /// <param name="priceAuxiliaryLimit">Auxiliary limit price of the order</param>
-        /// <param name="priceOcoStop">Oco stop price of the order</param>
-        /// <param name="flags">Additional flags</param>
-        /// <param name="affiliateCode">Affiliate code for the order</param>
-        /// <returns></returns>
-        public async Task<CallResult<BitfinexOrder>> PlaceOrderAsync(OrderType type, string symbol, decimal amount, long? groupId = null, long? clientOrderId = null, decimal? price = null, decimal? priceTrailing = null, decimal? priceAuxiliaryLimit = null, decimal? priceOcoStop = null, OrderFlags? flags = null, string? affiliateCode = null)
+        /// <inheritdoc />
+        public async Task<CallResult<BitfinexOrder>> PlaceOrderAsync(OrderType type, string symbol, decimal quantity, long? groupId = null, long? clientOrderId = null, decimal? price = null, decimal? priceTrailing = null, decimal? priceAuxiliaryLimit = null, decimal? priceOcoStop = null, OrderFlags? flags = null, string? affiliateCode = null)
         {
             symbol.ValidateBitfinexSymbol();
             log.Write(LogLevel.Information, "Going to place order");
@@ -320,7 +259,7 @@ namespace Bitfinex.Net
             var affCode = affiliateCode ?? _affCode;
             var query = new BitfinexSocketQuery(clientOrderId.ToString(), BitfinexEventType.OrderNew, new BitfinexNewOrder
             {
-                Amount = amount,
+                Amount = quantity,
                 OrderType = type,
                 Symbol = symbol,
                 Price = price,
@@ -336,24 +275,14 @@ namespace Bitfinex.Net
             return await QueryAsync<BitfinexOrder>(query, true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Updates an order
-        /// </summary>
-        /// <param name="orderId">The id of the order to update</param>
-        /// <param name="price">The new price of the order</param>
-        /// <param name="amount">The new amount of the order</param>
-        /// <param name="delta">The delta to change</param>
-        /// <param name="priceAuxiliaryLimit">the new aux limit price</param>
-        /// <param name="priceTrailing">The new trailing price</param>
-        /// <param name="flags">The new flags</param>
-        /// <returns></returns>
-        public async Task<CallResult<BitfinexOrder>> UpdateOrderAsync(long orderId, decimal? price = null, decimal? amount = null, decimal? delta = null, decimal? priceAuxiliaryLimit = null, decimal? priceTrailing = null, OrderFlags? flags = null)
+        /// <inheritdoc />
+        public async Task<CallResult<BitfinexOrder>> UpdateOrderAsync(long orderId, decimal? price = null, decimal? quantity = null, decimal? delta = null, decimal? priceAuxiliaryLimit = null, decimal? priceTrailing = null, OrderFlags? flags = null)
         {
             log.Write(LogLevel.Information, "Going to update order " + orderId);
             var query = new BitfinexSocketQuery(orderId.ToString(CultureInfo.InvariantCulture), BitfinexEventType.OrderUpdate, new BitfinexUpdateOrder
             {
                 OrderId = orderId,
-                Amount = amount,
+                Amount = quantity,
                 Price = price,
                 Flags = flags,
                 PriceAuxiliaryLimit = priceAuxiliaryLimit?.ToString(CultureInfo.InvariantCulture),
@@ -381,11 +310,7 @@ namespace Bitfinex.Net
         //    return await Query<bool>(query, true).ConfigureAwait(false);
         //}
 
-        /// <summary>
-        /// Cancels an order
-        /// </summary>
-        /// <param name="orderId">The id of the order to cancel</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public async Task<CallResult<BitfinexOrder>> CancelOrderAsync(long orderId)
         {
             log.Write(LogLevel.Information, "Going to cancel order " + orderId);
@@ -394,43 +319,27 @@ namespace Bitfinex.Net
             return await QueryAsync<BitfinexOrder>(query, true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Cancels multiple orders based on their groupId
-        /// </summary>
-        /// <param name="groupOrderId">The group id to cancel</param>
-        /// <returns>True if successfully committed on server</returns>
+        /// <inheritdoc />
         public async Task<CallResult<bool>> CancelOrdersByGroupIdAsync(long groupOrderId)
         {
             return await CancelOrdersAsync(null, null, new Dictionary<long, long?> { { groupOrderId, null } }).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Cancels multiple orders based on their groupIds
-        /// </summary>
-        /// <param name="groupOrderIds">The group ids to cancel</param>
-        /// <returns>True if successfully committed on server</returns>
+        /// <inheritdoc />
         public async Task<CallResult<bool>> CancelOrdersByGroupIdsAsync(IEnumerable<long> groupOrderIds)
         {
             groupOrderIds.ValidateNotNull(nameof(groupOrderIds));
             return await CancelOrdersAsync(null, null, groupOrderIds.ToDictionary(v => v, k => (long?)null)).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Cancels multiple orders based on their order ids
-        /// </summary>
-        /// <param name="orderIds">The order ids to cancel</param>
-        /// <returns>True if successfully committed on server</returns>
+        /// <inheritdoc />
         public async Task<CallResult<bool>> CancelOrdersAsync(IEnumerable<long> orderIds)
         {
             orderIds.ValidateNotNull(nameof(orderIds));
             return await CancelOrdersAsync(orderIds, null).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Cancels multiple orders based on their clientOrderIds
-        /// </summary>
-        /// <param name="clientOrderIds">The client order ids to cancel, listed as (clientOrderId, Day) pair. ClientOrderIds are unique per day, so timestamp should be provided</param>
-        /// <returns>True if successfully committed on server</returns>
+        /// <inheritdoc />
         public async Task<CallResult<bool>> CancelOrdersByClientOrderIdsAsync(Dictionary<long, DateTime> clientOrderIds)
         {
             return await CancelOrdersAsync(null, clientOrderIds).ConfigureAwait(false);

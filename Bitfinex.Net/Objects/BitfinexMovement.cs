@@ -16,40 +16,40 @@ namespace Bitfinex.Net.Objects
         [ArrayProperty(0)]
         public string Id { get; set; } = string.Empty;
         /// <summary>
-        /// The currency of the movement
+        /// The asset of the movement
         /// </summary>
         [ArrayProperty(1)]
-        public string Currency { get; set; } = string.Empty;
+        public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// The full name of the currency
+        /// The full name of the asset
         /// </summary>
         [ArrayProperty(2)]
-        public string CurrencyName { get; set; } = string.Empty;
+        public string AssetName { get; set; } = string.Empty;
         /// <summary>
         /// The initial creation time
         /// </summary>
         [ArrayProperty(5), JsonConverter(typeof(TimestampConverter))]
-        public DateTime Started { get; set; }
+        public DateTime StartTime { get; set; }
         /// <summary>
         /// The last update time
         /// </summary>
         [ArrayProperty(6), JsonConverter(typeof(TimestampConverter))]
-        public DateTime Updated { get; set; }
+        public DateTime UpdateTime { get; set; }
         /// <summary>
         /// The status of the movement
         /// </summary>
         [ArrayProperty(9)]
         public string Status { get; set; } = string.Empty;
         /// <summary>
-        /// The amount of the movement
+        /// The quantity of the movement
         /// </summary>
         [ArrayProperty(12)]
-        public decimal Amount { get; set; }
+        public decimal Quantity { get; set; }
         /// <summary>
-        /// The fees of the movement
+        /// The fee paid for the movement
         /// </summary>
         [ArrayProperty(13)]
-        public decimal Fees { get; set; }
+        public decimal Fee { get; set; }
         /// <summary>
         /// The address
         /// </summary>

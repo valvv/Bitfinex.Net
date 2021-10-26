@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Bitfinex.Net.Converters;
+using Bitfinex.Net.Enums;
 using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
@@ -13,15 +14,9 @@ namespace Bitfinex.Net.Objects.RestV1Objects
     public class BitfinexPlacedOrder: ICommonOrderId, ICommonOrder
     {
         /// <summary>
-        /// Id
-        /// </summary>
-        [JsonIgnore]
-        public string Id => OrderId.ToString(CultureInfo.InvariantCulture);
-        /// <summary>
         /// The id of the order
         /// </summary>
-        [JsonProperty("id")]
-        public long OrderId { get; set; }
+        public long Id { get; set; }
         /// <summary>
         /// The symbol the order is for
         /// </summary>
@@ -75,24 +70,20 @@ namespace Bitfinex.Net.Objects.RestV1Objects
         [JsonProperty("was_forced")]
         public bool Forced { get; set; }
         /// <summary>
-        /// The quantity of the order
-        /// </summary>
-        public decimal Quantity => OriginalAmount;
-        /// <summary>
-        /// The original amount of the order
+        /// The original quantity of the order
         /// </summary>
         [JsonProperty("original_amount")]
-        public decimal OriginalAmount { get; set; }
+        public decimal Quantity { get; set; }
         /// <summary>
-        /// The remaining amount of the order
+        /// The remaining quantity of the order
         /// </summary>
         [JsonProperty("remaining_amount")]
-        public decimal RemainingAmount { get; set; }
+        public decimal QuantityRemaining { get; set; }
         /// <summary>
-        /// The executed amount of the order
+        /// The executed quantity of the order
         /// </summary>
         [JsonProperty("executed_amount")]
-        public decimal ExecutedAmount { get; set; }
+        public decimal QuantityFilled { get; set; }
         /// <summary>
         /// The group id
         /// </summary>
@@ -125,17 +116,17 @@ namespace Bitfinex.Net.Objects.RestV1Objects
         [JsonProperty("aff_code")]
         public string? AffiliateCode { get; set; }
         
-        string ICommonOrderId.CommonId => Id;
+        string ICommonOrderId.CommonId => Id.ToString();
         string ICommonOrder.CommonSymbol => Symbol;
         decimal ICommonOrder.CommonPrice => Price;
-        decimal ICommonOrder.CommonQuantity => OriginalAmount;
+        decimal ICommonOrder.CommonQuantity => Quantity;
 
         IExchangeClient.OrderStatus ICommonOrder.CommonStatus
         {
             get
             {
                 if (Canceled) return IExchangeClient.OrderStatus.Canceled;
-                if (RemainingAmount == 0) return IExchangeClient.OrderStatus.Filled;
+                if (QuantityRemaining == 0) return IExchangeClient.OrderStatus.Filled;
                 return IExchangeClient.OrderStatus.Active;
             }
         }

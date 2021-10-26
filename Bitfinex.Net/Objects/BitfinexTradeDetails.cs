@@ -1,5 +1,6 @@
 ﻿using System;
 using Bitfinex.Net.Converters;
+using Bitfinex.Net.Enums;
 using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
@@ -22,13 +23,13 @@ namespace Bitfinex.Net.Objects
         /// The pair the trade is for
         /// </summary>
         [ArrayProperty(1)]
-        public string Pair { get; set; } = string.Empty;
+        public string Symbol { get; set; } = string.Empty;
 
         /// <summary>
         /// The time the trade was created
         /// </summary>
         [ArrayProperty(2), JsonConverter(typeof(TimestampConverter))]
-        public DateTime TimestampCreated { get; set; }
+        public DateTime Timestamp { get; set; }
 
         /// <summary>
         /// The id of the order
@@ -37,16 +38,16 @@ namespace Bitfinex.Net.Objects
         public long OrderId { get; set; }
 
         /// <summary>
-        /// The executed amount
+        /// The executed quantity
         /// </summary>
         [ArrayProperty(4)]
-        public decimal ExecutedAmount { get; set; }
+        public decimal Quantity { get; set; }
 
         /// <summary>
         /// The price of the trade
         /// </summary>
         [ArrayProperty(5)]
-        public decimal ExecutedPrice { get; set; }
+        public decimal Price { get; set; }
 
         /// <summary>
         /// The type of the order
@@ -73,16 +74,16 @@ namespace Bitfinex.Net.Objects
         public decimal Fee { get; set; }
 
         /// <summary>
-        /// The currency the fee is in
+        /// The asset the fee is in
         /// </summary>
         [ArrayProperty(10)]
-        public string FeeCurrency { get; set; } = string.Empty;
+        public string FeeAsset { get; set; } = string.Empty;
 
         string ICommonTrade.CommonId => Id.ToString();
-        decimal ICommonTrade.CommonPrice => ExecutedPrice;
-        decimal ICommonTrade.CommonQuantity => ExecutedAmount;
+        decimal ICommonTrade.CommonPrice => Price;
+        decimal ICommonTrade.CommonQuantity => Quantity;
         decimal ICommonTrade.CommonFee => Fee;
-        string ICommonTrade.CommonFeeAsset => FeeCurrency;
-        DateTime ICommonTrade.CommonTradeTime => TimestampCreated;
+        string ICommonTrade.CommonFeeAsset => FeeAsset;
+        DateTime ICommonTrade.CommonTradeTime => Timestamp;
     }
 }

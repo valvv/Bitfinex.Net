@@ -20,6 +20,11 @@ namespace Bitfinex.Net.Objects.RestV1Objects
         [JsonProperty("trade_vol_30d")]
         public IEnumerable<Bitfinex30DaySummaryVolumeEntry> TradeVolume { get; set; } = Array.Empty<Bitfinex30DaySummaryVolumeEntry>();
         /// <summary>
+        /// Trade volume data
+        /// </summary>
+        [JsonProperty("funding_profit_30d")]
+        public IEnumerable<Bitfinex30DayFundingProfitEntry> FundingProfit { get; set; } = Array.Empty<Bitfinex30DayFundingProfitEntry>();
+        /// <summary>
         /// Current maker fee
         /// </summary>
         [JsonProperty("maker_fee")]
@@ -32,15 +37,33 @@ namespace Bitfinex.Net.Objects.RestV1Objects
     }
 
     /// <summary>
+    /// Funding profit entry
+    /// </summary>
+    public class Bitfinex30DayFundingProfitEntry 
+    {
+        /// <summary>
+        /// The asset
+        /// </summary>
+        [JsonProperty("curr")]
+        public string Asset { get; set; } = string.Empty;
+        /// <summary>
+        /// The asset
+        /// </summary>
+        [JsonProperty("amount")]
+        public string Quantity { get; set; } = string.Empty;
+    }
+
+
+    /// <summary>
     /// Summary entry
     /// </summary>
     public class Bitfinex30DaySummaryVolumeEntry
     {
         /// <summary>
-        /// The currency
+        /// The asset
         /// </summary>
         [JsonProperty("curr")]
-        public string Currency { get; set; } = string.Empty;
+        public string Asset { get; set; } = string.Empty;
 
         /// <summary>
         /// The volume

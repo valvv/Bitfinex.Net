@@ -11,7 +11,8 @@ namespace Bitfinex.Net.Objects.RestV1Objects
         /// <summary>
         /// The symbol pair
         /// </summary>
-        public string Pair { get; set; } = string.Empty;
+        [JsonProperty("pair")]
+        public string Symbol { get; set; } = string.Empty;
         /// <summary>
         /// The price precision of the pair
         /// </summary>
@@ -31,12 +32,12 @@ namespace Bitfinex.Net.Objects.RestV1Objects
         /// The maximum order size
         /// </summary>
         [JsonProperty("maximum_order_size")]
-        public decimal MaximumOrderSize { get; set; }
+        public decimal MaximumOrderQuantity { get; set; }
         /// <summary>
         /// The minimum order size
         /// </summary>
         [JsonProperty("minimum_order_size")]
-        public decimal MinimumOrderSize { get; set; }
+        public decimal MinimumOrderQuantity { get; set; }
 
         /// <summary>
         /// Expiration
@@ -47,7 +48,7 @@ namespace Bitfinex.Net.Objects.RestV1Objects
         /// </summary>
         public bool Margin { get; set; }
 
-        string ICommonSymbol.CommonName => Pair;
-        decimal ICommonSymbol.CommonMinimumTradeSize => MinimumOrderSize;
+        string ICommonSymbol.CommonName => Symbol;
+        decimal ICommonSymbol.CommonMinimumTradeQuantity => MinimumOrderQuantity;
     }
 }
