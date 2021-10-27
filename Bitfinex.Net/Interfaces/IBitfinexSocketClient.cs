@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Bitfinex.Net.Enums;
 using Bitfinex.Net.Objects;
@@ -28,8 +29,9 @@ namespace Bitfinex.Net.Interfaces
         /// </summary>
         /// <param name="symbol">The symbol to subscribe to</param>
         /// <param name="handler">The handler for the data</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns></returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(string symbol, Action<DataEvent<BitfinexStreamSymbolOverview>> handler);
+        Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(string symbol, Action<DataEvent<BitfinexStreamSymbolOverview>> handler, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribes to order book updates for a symbol
@@ -40,8 +42,9 @@ namespace Bitfinex.Net.Interfaces
         /// <param name="length">The range for the order book updates, either 25 or 100</param>
         /// <param name="handler">The handler for the data</param>
         /// <param name="checksumHandler">The handler for the checksum, can be used to validate a order book implementation</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns></returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, Precision precision, Frequency frequency, int length, Action<DataEvent<IEnumerable<BitfinexOrderBookEntry>>> handler, Action<DataEvent<int>>? checksumHandler = null);
+        Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, Precision precision, Frequency frequency, int length, Action<DataEvent<IEnumerable<BitfinexOrderBookEntry>>> handler, Action<DataEvent<int>>? checksumHandler = null, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribes to raw order book updates for a symbol
@@ -50,16 +53,18 @@ namespace Bitfinex.Net.Interfaces
         /// <param name="limit">The range for the order book updates</param>
         /// <param name="handler">The handler for the data</param>
         /// <param name="checksumHandler">The handler for the checksum, can be used to validate a order book implementation</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns></returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToRawOrderBookUpdatesAsync(string symbol, int limit, Action<DataEvent<IEnumerable<BitfinexRawOrderBookEntry>>> handler);
+        Task<CallResult<UpdateSubscription>> SubscribeToRawOrderBookUpdatesAsync(string symbol, int limit, Action<DataEvent<IEnumerable<BitfinexRawOrderBookEntry>>> handler, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribes to public trade updates for a symbol
         /// </summary>
         /// <param name="symbol">The symbol to subscribe to</param>
         /// <param name="handler">The handler for the data</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns></returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol, Action<DataEvent<IEnumerable<BitfinexTradeSimple>>> handler);
+        Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol, Action<DataEvent<IEnumerable<BitfinexTradeSimple>>> handler, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribes to kline updates for a symbol
@@ -67,8 +72,9 @@ namespace Bitfinex.Net.Interfaces
         /// <param name="symbol">The symbol to subscribe to</param>
         /// <param name="interval">The interval of the klines</param>
         /// <param name="handler">The handler for the data</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns></returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, KlineInterval interval, Action<DataEvent<IEnumerable<BitfinexKline>>> handler);
+        Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, KlineInterval interval, Action<DataEvent<IEnumerable<BitfinexKline>>> handler, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to trading information updates
@@ -76,18 +82,21 @@ namespace Bitfinex.Net.Interfaces
         /// <param name="orderHandler">Data handler for order updates. Can be null if not interested</param>
         /// <param name="tradeHandler">Data handler for trade execution updates. Can be null if not interested</param>
         /// <param name="positionHandler">Data handler for position updates. Can be null if not interested</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns></returns>
         Task<CallResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexOrder>>>> orderHandler,
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexTradeDetails>>>> tradeHandler,
-            Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexPosition>>>> positionHandler);
+            Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexPosition>>>> positionHandler, 
+            CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to wallet information updates
         /// </summary>
         /// <param name="walletHandler">Data handler for wallet updates</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns></returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToBalanceUpdatesAsync(Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexWallet>>>> walletHandler);
+        Task<CallResult<UpdateSubscription>> SubscribeToBalanceUpdatesAsync(Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexWallet>>>> walletHandler, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribe to funding information updates
@@ -95,11 +104,13 @@ namespace Bitfinex.Net.Interfaces
         /// <param name="fundingOfferHandler">Subscribe to funding offer updates. Can be null if not interested</param>
         /// <param name="fundingCreditHandler">Subscribe to funding credit updates. Can be null if not interested</param>
         /// <param name="fundingLoanHandler">Subscribe to funding loan updates. Can be null if not interested</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns></returns>
         Task<CallResult<UpdateSubscription>> SubscribeToFundingUpdatesAsync(
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexFundingOffer>>>> fundingOfferHandler,
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexFundingCredit>>>> fundingCreditHandler,
-            Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexFunding>>>> fundingLoanHandler);
+            Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexFunding>>>> fundingLoanHandler, 
+            CancellationToken ct = default);
 
         /// <summary>
         /// Places a new order

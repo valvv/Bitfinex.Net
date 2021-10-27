@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Interfaces;
 using Bitfinex.Net.Enums;
+using System.Threading;
 
 namespace Bitfinex.Net
 {
@@ -85,18 +86,18 @@ namespace Bitfinex.Net
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(string symbol, Action<DataEvent<BitfinexStreamSymbolOverview>> handler)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(string symbol, Action<DataEvent<BitfinexStreamSymbolOverview>> handler, CancellationToken ct = default)
         {
             symbol.ValidateBitfinexSymbol();
             var internalHandler = new Action<DataEvent<JToken>>(data =>
             {
                 HandleData("Ticker", (JArray) data.Data[1]!, symbol, data, handler);
             });
-            return await SubscribeAsync(new BitfinexSubscriptionRequest("ticker", symbol), null, false, internalHandler).ConfigureAwait(false);
+            return await SubscribeAsync(new BitfinexSubscriptionRequest("ticker", symbol), null, false, internalHandler, ct).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, Precision precision, Frequency frequency, int length, Action<DataEvent<IEnumerable<BitfinexOrderBookEntry>>> handler, Action<DataEvent<int>>? checksumHandler = null)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, Precision precision, Frequency frequency, int length, Action<DataEvent<IEnumerable<BitfinexOrderBookEntry>>> handler, Action<DataEvent<int>>? checksumHandler = null, CancellationToken ct = default)
         {
             symbol.ValidateBitfinexSymbol();
             length.ValidateIntValues(nameof(length), 25, 100);
@@ -133,11 +134,11 @@ namespace Bitfinex.Net
                 JsonConvert.SerializeObject(precision, new PrecisionConverter(false)),
                 JsonConvert.SerializeObject(frequency, new FrequencyConverter(false)),
                 length);
-            return await SubscribeAsync(sub, null, false, internalHandler).ConfigureAwait(false);
+            return await SubscribeAsync(sub, null, false, internalHandler, ct).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToRawOrderBookUpdatesAsync(string symbol, int limit, Action<DataEvent<IEnumerable<BitfinexRawOrderBookEntry>>> handler)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToRawOrderBookUpdatesAsync(string symbol, int limit, Action<DataEvent<IEnumerable<BitfinexRawOrderBookEntry>>> handler, CancellationToken ct = default)
         {
             symbol.ValidateBitfinexSymbol();
             var internalHandler = new Action<DataEvent<JToken>>(data =>
@@ -156,11 +157,11 @@ namespace Bitfinex.Net
                         HandleSingleToArrayData("Raw book update", dataArray, symbol, data, handler);
                 }
             });
-            return await SubscribeAsync(new BitfinexRawBookSubscriptionRequest(symbol, "R0", limit), null, false, internalHandler).ConfigureAwait(false);
+            return await SubscribeAsync(new BitfinexRawBookSubscriptionRequest(symbol, "R0", limit), null, false, internalHandler, ct).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol, Action<DataEvent<IEnumerable<BitfinexTradeSimple>>> handler)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol, Action<DataEvent<IEnumerable<BitfinexTradeSimple>>> handler, CancellationToken ct = default)
         {
             var internalHandler = new Action<DataEvent<JToken>>(data =>
             {
@@ -181,11 +182,11 @@ namespace Bitfinex.Net
                     handler(data.As<IEnumerable<BitfinexTradeSimple>>(new[] { desResult.Data }, symbol));
                 }
             });
-            return await SubscribeAsync(new BitfinexSubscriptionRequest("trades", symbol), null, false, internalHandler).ConfigureAwait(false);
+            return await SubscribeAsync(new BitfinexSubscriptionRequest("trades", symbol), null, false, internalHandler, ct).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, KlineInterval interval, Action<DataEvent<IEnumerable<BitfinexKline>>> handler)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, KlineInterval interval, Action<DataEvent<IEnumerable<BitfinexKline>>> handler, CancellationToken ct = default)
         {
             symbol.ValidateBitfinexSymbol();
             var internalHandler = new Action<DataEvent<JToken>>(data =>
@@ -202,14 +203,15 @@ namespace Bitfinex.Net
                 else
                     HandleSingleToArrayData("Kline update", dataArray, symbol, data, handler);
             });
-            return await SubscribeAsync(new BitfinexKlineSubscriptionRequest(symbol, JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))), null, false, internalHandler).ConfigureAwait(false);
+            return await SubscribeAsync(new BitfinexKlineSubscriptionRequest(symbol, JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))), null, false, internalHandler, ct).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexOrder>>>> orderHandler,
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexTradeDetails>>>> tradeHandler,
-             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexPosition>>>> positionHandler)
+             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexPosition>>>> positionHandler, 
+             CancellationToken ct = default)
         {
             var tokenHandler = new Action<DataEvent<JToken>>(tokenData =>
             {
@@ -218,25 +220,26 @@ namespace Bitfinex.Net
                 HandleAuthUpdate(tokenData, positionHandler, "Positions");
             });
 
-            return await SubscribeAsync(null, "Orders|Trades|Positions", true, tokenHandler).ConfigureAwait(false);
+            return await SubscribeAsync(null, "Orders|Trades|Positions", true, tokenHandler, ct).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToBalanceUpdatesAsync(Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexWallet>>>> walletHandler)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToBalanceUpdatesAsync(Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexWallet>>>> walletHandler, CancellationToken ct = default)
         {
             var tokenHandler = new Action<DataEvent<JToken>>(tokenData =>
             {
                 HandleAuthUpdate(tokenData, walletHandler, "Wallet");
             });
 
-            return await SubscribeAsync(null, "Wallet", true, tokenHandler).ConfigureAwait(false);
+            return await SubscribeAsync(null, "Wallet", true, tokenHandler, ct).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToFundingUpdatesAsync(
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexFundingOffer>>>> fundingOfferHandler,
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexFundingCredit>>>> fundingCreditHandler,
-            Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexFunding>>>> fundingLoanHandler)
+            Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexFunding>>>> fundingLoanHandler, 
+            CancellationToken ct = default)
         {
             var tokenHandler = new Action<DataEvent<JToken>>(tokenData =>
             {
@@ -245,7 +248,7 @@ namespace Bitfinex.Net
                 HandleAuthUpdate(tokenData, fundingLoanHandler, "FundingLoans");
             });
 
-            return await SubscribeAsync(null, "FundingOffers|FundingCredits|FundingLoans", true, tokenHandler).ConfigureAwait(false);
+            return await SubscribeAsync(null, "FundingOffers|FundingCredits|FundingLoans", true, tokenHandler, ct).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -459,7 +462,7 @@ namespace Bitfinex.Net
             log.Write(LogLevel.Debug, $"Socket {messageEvent.Connection.Socket.Id} Info event received: {messageEvent.JsonData}");
             if (messageEvent.JsonData["code"] == null)
             {
-                // welcome event
+                // welcome event, send a config message for receiving checsum updates for order book subscriptions
                 messageEvent.Connection.Send(new BitfinexSocketConfig { Event = "conf", Flags = 131072 });
                 return;
             }
