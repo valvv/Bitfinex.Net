@@ -502,7 +502,7 @@ namespace Bitfinex.Net
             var channelId = ((BitfinexSubscriptionRequest) subscription.Request!).ChannelId;
             var unsub = new BitfinexUnsubscribeRequest(channelId);
             var result = false;
-            await connection.SendAndWaitAsync(unsub, ResponseTimeout, data =>
+            await connection.SendAndWaitAsync(unsub, ClientOptions.SocketResponseTimeout, data =>
             {
                 if (data.Type != JTokenType.Object)
                     return false;
@@ -553,7 +553,7 @@ namespace Bitfinex.Net
 
             var authObject = GetAuthObject();
             var result = new CallResult<bool>(false, new ServerError("No response from server"));
-            await s.SendAndWaitAsync(authObject, ResponseTimeout, tokenData =>
+            await s.SendAndWaitAsync(authObject, ClientOptions.SocketResponseTimeout, tokenData =>
             {
                 if (tokenData.Type != JTokenType.Object)
                     return false;
@@ -561,7 +561,7 @@ namespace Bitfinex.Net
                 if (tokenData["event"]?.ToString() != "auth")
                     return false;
 
-                var authResponse = Deserialize<BitfinexAuthenticationResponse>(tokenData, false);
+                var authResponse = Deserialize<BitfinexAuthenticationResponse>(tokenData);
                 if (!authResponse)
                 {
                     log.Write(LogLevel.Warning, $"Socket {s.Socket.Id} authentication failed: " + authResponse.Error);
@@ -708,7 +708,7 @@ namespace Bitfinex.Net
 
             if (infoEvent)
             {
-                var subResponse = Deserialize<BitfinexSubscribeResponse>(data, false);
+                var subResponse = Deserialize<BitfinexSubscribeResponse>(data);
                 if (!subResponse)
                 {
                     callResult = new CallResult<object>(null, subResponse.Error);
@@ -726,7 +726,7 @@ namespace Bitfinex.Net
             }
             else
             {
-                var subResponse = Deserialize<BitfinexErrorResponse>(data, false);
+                var subResponse = Deserialize<BitfinexErrorResponse>(data);
                 if (!subResponse)
                 {
                     callResult = new CallResult<object>(null, subResponse.Error);
