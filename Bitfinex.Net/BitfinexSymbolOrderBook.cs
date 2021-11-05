@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Bitfinex.Net.Clients.Socket.Spot;
 using Bitfinex.Net.Enums;
 using Bitfinex.Net.Interfaces;
+using Bitfinex.Net.Interfaces.Clients.Socket.Spot;
 using Bitfinex.Net.Objects;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
@@ -20,7 +22,7 @@ namespace Bitfinex.Net
     /// </summary>
     public class BitfinexSymbolOrderBook: SymbolOrderBook
     {
-        private readonly IBitfinexSocketClient socketClient;
+        private readonly IBitfinexSocketClientSpot socketClient;
         private readonly Precision precision;
         private bool _initial = true;
         private readonly bool _socketOwner;
@@ -32,10 +34,10 @@ namespace Bitfinex.Net
         /// <param name="precisionLevel">The precision level of the order book</param>
         /// <param name="limit">The limit of entries in the order book, either 25 or 100</param>
         /// <param name="options">Options for the order book</param>
-        public BitfinexSymbolOrderBook(string symbol, Precision precisionLevel, int limit, BitfinexOrderBookOptions? options = null) : base(symbol, options ?? new BitfinexOrderBookOptions())
+        public BitfinexSymbolOrderBook(string symbol, Precision precisionLevel, int limit, BitfinexOrderBookOptions? options = null) : base("Bitfinex[Spot]", symbol, options ?? new BitfinexOrderBookOptions())
         {
             symbol.ValidateBitfinexSymbol();
-            socketClient = options?.SocketClient ?? new BitfinexSocketClient(new BitfinexSocketClientOptions
+            socketClient = options?.SocketClient ?? new BitfinexSocketClientSpot(new BitfinexSocketClientOptions
             {
                 LogLevel = options?.LogLevel ?? LogLevel.Information
             });

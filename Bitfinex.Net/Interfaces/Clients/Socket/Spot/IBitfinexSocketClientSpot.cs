@@ -9,12 +9,12 @@ using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
 
-namespace Bitfinex.Net.Interfaces
+namespace Bitfinex.Net.Interfaces.Clients.Socket.Spot
 {
     /// <summary>
     /// Interface for the Bitfinex socket client
     /// </summary>
-    public interface IBitfinexSocketClient: ISocketClient
+    public interface IBitfinexSocketClientSpot: ISocketClient
     {
         /// <summary>
         /// Set the API key and secret

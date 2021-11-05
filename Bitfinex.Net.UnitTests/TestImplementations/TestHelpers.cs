@@ -9,7 +9,10 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Bitfinex.Net.Clients.Rest.Spot;
+using Bitfinex.Net.Clients.Socket.Spot;
 using Bitfinex.Net.Interfaces;
+using Bitfinex.Net.Interfaces.Clients.Rest.Spot;
 using Bitfinex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
@@ -63,45 +66,45 @@ namespace Bitfinex.Net.UnitTests.TestImplementations
             return self == to;
         }
 
-        public static BitfinexSocketClient CreateAuthenticatedSocketClient(IWebsocket socket, BitfinexSocketClientOptions options = null)
+        public static BitfinexSocketClientSpot CreateAuthenticatedSocketClient(IWebsocket socket, BitfinexSocketClientOptions options = null)
         {
             return CreateSocketClient(socket, options ?? new BitfinexSocketClientOptions() { ApiCredentials = new ApiCredentials("Test", "Test"), LogLevel = LogLevel.Debug});
         }
 
-        public static BitfinexSocketClient CreateSocketClient(IWebsocket socket, BitfinexSocketClientOptions options = null)
+        public static BitfinexSocketClientSpot CreateSocketClient(IWebsocket socket, BitfinexSocketClientOptions options = null)
         {
-            BitfinexSocketClient client;
-            client = options != null ? new BitfinexSocketClient(options) : new BitfinexSocketClient();
+            BitfinexSocketClientSpot client;
+            client = options != null ? new BitfinexSocketClientSpot(options) : new BitfinexSocketClientSpot();
             client.SocketFactory = Mock.Of<IWebsocketFactory>();
             Mock.Get(client.SocketFactory).Setup(f => f.CreateWebsocket(It.IsAny<Log>(), It.IsAny<string>())).Returns(socket);
             return client;
         }
 
-        public static IBitfinexClient CreateClient(BitfinexClientOptions options = null)
+        public static IBitfinexClientSpot CreateClient(BitfinexClientOptions options = null)
         {
-            IBitfinexClient client;
-            client = options != null ? new BitfinexClient(options) : new BitfinexClient();
+            IBitfinexClientSpot client;
+            client = options != null ? new BitfinexClientSpot(options) : new BitfinexClientSpot();
             client.RequestFactory = Mock.Of<IRequestFactory>();
             return client;
         }
 
-        public static IBitfinexClient CreateResponseClient(string response, BitfinexClientOptions options = null, HttpStatusCode code = HttpStatusCode.OK)
+        public static IBitfinexClientSpot CreateResponseClient(string response, BitfinexClientOptions options = null, HttpStatusCode code = HttpStatusCode.OK)
         {
-            var client = (BitfinexClient)CreateClient(options);
+            var client = (BitfinexClientSpot)CreateClient(options);
             SetResponse(client, response, code);
             return client;
         }
 
-        public static IBitfinexClient CreateAuthenticatedResponseClient<T>(T response, BitfinexClientOptions options = null)
+        public static IBitfinexClientSpot CreateAuthenticatedResponseClient<T>(T response, BitfinexClientOptions options = null)
         {
-            var client = (BitfinexClient)CreateClient(options ?? new BitfinexClientOptions() { ApiCredentials = new ApiCredentials("Test", "Test") });
+            var client = (BitfinexClientSpot)CreateClient(options ?? new BitfinexClientOptions() { ApiCredentials = new ApiCredentials("Test", "Test") });
             SetResponse(client, JsonConvert.SerializeObject(response));
             return client;
         }
 
-        public static IBitfinexClient CreateResponseClient<T>(T response, BitfinexClientOptions options = null)
+        public static IBitfinexClientSpot CreateResponseClient<T>(T response, BitfinexClientOptions options = null)
         {
-            var client = (BitfinexClient)CreateClient(options);
+            var client = (BitfinexClientSpot)CreateClient(options);
             SetResponse(client, JsonConvert.SerializeObject(response));
             return client;
         }

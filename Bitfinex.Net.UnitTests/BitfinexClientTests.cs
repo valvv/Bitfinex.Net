@@ -24,7 +24,7 @@ namespace Bitfinex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient("Error message", null, HttpStatusCode.BadRequest);
 
             // act
-            var result = await client.GetAssetAsync();
+            var result = await client.ExchangeData.GetAssetAsync();
 
             // assert
             Assert.AreEqual(false, result.Success);
@@ -66,7 +66,7 @@ namespace Bitfinex.Net.UnitTests
             var request = TestHelpers.SetResponse((RestClient)client, "{}");
 
             // act
-            await client.GetActiveOrdersAsync();
+            await client.Trading.GetOpenOrdersAsync();
 
             // assert
             request.Verify(r => r.AddHeader("bfx-nonce", It.IsAny<string>()));
@@ -82,7 +82,7 @@ namespace Bitfinex.Net.UnitTests
             var request = TestHelpers.SetResponse((RestClient)client, "{}");
 
             // act
-            await client.GetAccountInfoAsync();
+            await client.Account.GetAccountInfoAsync();
 
             // assert
             request.Verify(r => r.AddHeader("X-BFX-SIGNATURE", It.IsAny<string>()));
