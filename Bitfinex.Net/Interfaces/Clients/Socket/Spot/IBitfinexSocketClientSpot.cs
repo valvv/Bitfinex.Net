@@ -55,7 +55,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Socket.Spot
         /// <param name="checksumHandler">The handler for the checksum, can be used to validate a order book implementation</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns></returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToRawOrderBookUpdatesAsync(string symbol, int limit, Action<DataEvent<IEnumerable<BitfinexRawOrderBookEntry>>> handler, CancellationToken ct = default);
+        Task<CallResult<UpdateSubscription>> SubscribeToRawOrderBookUpdatesAsync(string symbol, int limit, Action<DataEvent<IEnumerable<BitfinexRawOrderBookEntry>>> handler, Action<DataEvent<int>>? checksumHandler = null, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribes to public trade updates for a symbol
