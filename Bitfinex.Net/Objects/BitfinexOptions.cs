@@ -10,12 +10,12 @@ namespace Bitfinex.Net.Objects
     /// <summary>
     /// Options for the BitfinexClient
     /// </summary>
-    public class BitfinexClientOptions : RestClientOptions
+    public class BitfinexClientOptionsSpot : RestClientOptions
     {
         /// <summary>
         /// Default options for the spot client
         /// </summary>
-        public static BitfinexClientOptions Default { get; set; } = new BitfinexClientOptions()
+        public static BitfinexClientOptionsSpot Default { get; set; } = new BitfinexClientOptionsSpot()
         {
             BaseAddress = "https://api.bitfinex.com"
         };
@@ -33,7 +33,7 @@ namespace Bitfinex.Net.Objects
         /// <summary>
         /// Ctor
         /// </summary>
-        public BitfinexClientOptions()
+        public BitfinexClientOptionsSpot()
         {
             if (Default == null)
                 return;
@@ -47,7 +47,7 @@ namespace Bitfinex.Net.Objects
         /// <typeparam name="T"></typeparam>
         /// <param name="input"></param>
         /// <param name="def"></param>
-        public new void Copy<T>(T input, T def) where T : BitfinexClientOptions
+        public new void Copy<T>(T input, T def) where T : BitfinexClientOptionsSpot
         {
             base.Copy(input, def);
 
@@ -59,12 +59,12 @@ namespace Bitfinex.Net.Objects
     /// <summary>
     /// Options for the BitfinexSocketClient
     /// </summary>
-    public class BitfinexSocketClientOptions: SocketClientOptions
+    public class BitfinexSocketClientOptionsSpot: SocketClientOptions
     {
         /// <summary>
         /// Default options for the spot client
         /// </summary>
-        public static BitfinexSocketClientOptions Default { get; set; } = new BitfinexSocketClientOptions()
+        public static BitfinexSocketClientOptionsSpot Default { get; set; } = new BitfinexSocketClientOptionsSpot()
         {
             BaseAddress = "wss://api.bitfinex.com/ws/2",
             SocketSubscriptionsCombineTarget = 10,
@@ -84,7 +84,7 @@ namespace Bitfinex.Net.Objects
         /// <summary>
         /// Ctor
         /// </summary>
-        public BitfinexSocketClientOptions()
+        public BitfinexSocketClientOptionsSpot()
         {
             if (Default == null)
                 return;
@@ -98,7 +98,7 @@ namespace Bitfinex.Net.Objects
         /// <typeparam name="T"></typeparam>
         /// <param name="input"></param>
         /// <param name="def"></param>
-        public new void Copy<T>(T input, T def) where T : BitfinexSocketClientOptions
+        public new void Copy<T>(T input, T def) where T : BitfinexSocketClientOptionsSpot
         {
             base.Copy(input, def);
 

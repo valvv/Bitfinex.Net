@@ -37,7 +37,7 @@ namespace Bitfinex.Net
         public BitfinexSymbolOrderBook(string symbol, Precision precisionLevel, int limit, BitfinexOrderBookOptions? options = null) : base("Bitfinex[Spot]", symbol, options ?? new BitfinexOrderBookOptions())
         {
             symbol.ValidateBitfinexSymbol();
-            socketClient = options?.SocketClient ?? new BitfinexSocketClientSpot(new BitfinexSocketClientOptions
+            socketClient = options?.SocketClient ?? new BitfinexSocketClientSpot(new BitfinexSocketClientOptionsSpot
             {
                 LogLevel = options?.LogLevel ?? LogLevel.Information
             });
