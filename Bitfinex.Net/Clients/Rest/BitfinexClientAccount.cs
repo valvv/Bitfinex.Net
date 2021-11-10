@@ -1,6 +1,6 @@
 ﻿using Bitfinex.Net.Converters;
 using Bitfinex.Net.Enums;
-using Bitfinex.Net.Interfaces.Clients.Rest.Spot;
+using Bitfinex.Net.Interfaces.Clients.Rest;
 using Bitfinex.Net.Objects;
 using Bitfinex.Net.Objects.RestV1Objects;
 using CryptoExchange.Net;
@@ -16,9 +16,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bitfinex.Net.Clients.Rest.Spot
+namespace Bitfinex.Net.Clients.Rest
 {
-    public class BitfinexClientSpotAccount: IBitfinexClientSpotAccount
+    public class BitfinexClientAccount: IBitfinexClientAccount
     {
         private const string WalletsEndpoint = "auth/r/wallets";
         private const string CalcAvailableBalanceEndpoint = "auth/calc/order/avail"; 
@@ -41,9 +41,9 @@ namespace Bitfinex.Net.Clients.Rest.Spot
         private const string SummaryEndpoint = "summary";
         private const string WithdrawalFeeEndpoint = "account_fees";
 
-        private readonly BitfinexClientSpot _baseClient;
+        private readonly BitfinexClient _baseClient;
 
-        public BitfinexClientSpotAccount(BitfinexClientSpot baseClient)
+        internal BitfinexClientAccount(BitfinexClient baseClient)
         {
             _baseClient = baseClient;
         }
@@ -264,6 +264,5 @@ namespace Bitfinex.Net.Clients.Rest.Spot
         {
             return await _baseClient.SendRequestAsync<BitfinexWithdrawalFees>(_baseClient.GetUrl(WithdrawalFeeEndpoint, "1"), HttpMethod.Post, ct, null, true).ConfigureAwait(false);
         }
-
     }
 }

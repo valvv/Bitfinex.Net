@@ -1,6 +1,6 @@
 ﻿using Bitfinex.Net.Converters;
 using Bitfinex.Net.Enums;
-using Bitfinex.Net.Interfaces.Clients.Rest.Spot;
+using Bitfinex.Net.Interfaces.Clients.Rest;
 using Bitfinex.Net.Objects;
 using Bitfinex.Net.Objects.RestV1Objects;
 using CryptoExchange.Net;
@@ -16,9 +16,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bitfinex.Net.Clients.Rest.Spot
+namespace Bitfinex.Net.Clients.Rest
 {
-    public class BitfinexClientSpotExchangeData: IBitfinexClientSpotExchangeData
+    public class BitfinexClientExchangeData: IBitfinexClientExchangeData
     {
         private const string StatusEndpoint = "platform/status";
         private const string SymbolsEndpoint = "symbols";
@@ -38,9 +38,9 @@ namespace Bitfinex.Net.Clients.Rest.Spot
         private const string FundingCandlesEndpoint = "candles/trade:{}:{}:{}/hist";
         private const string MarketAverageEndpoint = "calc/trade/avg";
 
-        private readonly BitfinexClientSpot _baseClient;
+        private readonly BitfinexClient _baseClient;
 
-        public BitfinexClientSpotExchangeData(BitfinexClientSpot baseClient)
+        internal BitfinexClientExchangeData(BitfinexClient baseClient)
         {
             _baseClient = baseClient;
         }

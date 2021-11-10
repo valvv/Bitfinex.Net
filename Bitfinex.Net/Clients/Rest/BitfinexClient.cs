@@ -18,23 +18,24 @@ using Bitfinex.Net.Interfaces;
 using CryptoExchange.Net.ExchangeInterfaces;
 using CryptoExchange.Net.Interfaces;
 using Bitfinex.Net.Enums;
-using Bitfinex.Net.Interfaces.Clients.Rest.Spot;
+using Bitfinex.Net.Interfaces.Clients.Rest;
 
-namespace Bitfinex.Net.Clients.Rest.Spot
+namespace Bitfinex.Net.Clients.Rest
 {
     /// <summary>
     /// Client for the Bitfinex API
     /// </summary>
-    public class BitfinexClientSpot : RestClient, IBitfinexClientSpot, IExchangeClient
+    public class BitfinexClient : RestClient, IBitfinexClient, IExchangeClient
     {
         #region fields
         internal string? AffiliateCode { get; set; }
         #endregion
 
         #region Subclient
-        public IBitfinexClientSpotAccount Account { get; set; }
-        public IBitfinexClientSpotExchangeData ExchangeData { get; set; }
-        public IBitfinexClientSpotTrading Trading { get; set; }
+        public IBitfinexClientAccount Account { get; }
+        public IBitfinexClientExchangeData ExchangeData { get; }
+        public IBitfinexClientTrading Trading { get; }
+        public IBitfinexClientFunding Funding { get; }
         #endregion
 
         /// <summary>
@@ -50,7 +51,7 @@ namespace Bitfinex.Net.Clients.Rest.Spot
         /// <summary>
         /// Create a new instance of BitfinexClient using the default options
         /// </summary>
-        public BitfinexClientSpot() : this(BitfinexClientOptionsSpot.Default)
+        public BitfinexClient() : this(BitfinexClientOptions.Default)
         {
         }
 
@@ -58,14 +59,15 @@ namespace Bitfinex.Net.Clients.Rest.Spot
         /// Create a new instance of BitfinexClient using provided options
         /// </summary>
         /// <param name="options">The options to use for this client</param>
-        public BitfinexClientSpot(BitfinexClientOptionsSpot options) : base("Bitfinex[Spot]", options, options.ApiCredentials == null ? null : new BitfinexAuthenticationProvider(options.ApiCredentials, options.NonceProvider))
+        public BitfinexClient(BitfinexClientOptions options) : base("Bitfinex", options, options.ApiCredentials == null ? null : new BitfinexAuthenticationProvider(options.ApiCredentials, options.NonceProvider))
         {
             if (options == null)
                 throw new ArgumentException("Cant pass null options, use empty constructor for default");
 
-            Account = new BitfinexClientSpotAccount(this);
-            ExchangeData = new BitfinexClientSpotExchangeData(this);
-            Trading = new BitfinexClientSpotTrading(this);
+            Account = new BitfinexClientAccount(this);
+            ExchangeData = new BitfinexClientExchangeData(this);
+            Trading = new BitfinexClientTrading(this);
+            Funding = new BitfinexClientFunding(this);
 
             AffiliateCode = options.AffiliateCode;
         }
@@ -76,9 +78,9 @@ namespace Bitfinex.Net.Clients.Rest.Spot
         /// Sets the default options to use for new clients
         /// </summary>
         /// <param name="options">The options to use for new clients</param>
-        public static void SetDefaultOptions(BitfinexClientOptionsSpot options)
+        public static void SetDefaultOptions(BitfinexClientOptions options)
         {
-            BitfinexClientOptionsSpot.Default = options;
+            BitfinexClientOptions.Default = options;
         }
 
         /// <summary>
@@ -196,7 +198,6 @@ namespace Bitfinex.Net.Clients.Rest.Spot
             "t" + (baseAsset + quoteAsset).ToUpper(CultureInfo.InvariantCulture);
 
         #endregion
-
 
         #region private methods
         /// <summary>

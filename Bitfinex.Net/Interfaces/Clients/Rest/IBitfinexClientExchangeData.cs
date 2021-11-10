@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bitfinex.Net.Interfaces.Clients.Rest.Spot
+namespace Bitfinex.Net.Interfaces.Clients.Rest
 {
-    public interface IBitfinexClientSpotExchangeData
+    public interface IBitfinexClientExchangeData
     {
         /// <summary>
         /// Gets the platform status

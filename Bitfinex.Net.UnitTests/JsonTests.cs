@@ -1,5 +1,5 @@
 ﻿using Bitfinex.Net.Interfaces;
-using Bitfinex.Net.Interfaces.Clients.Rest.Spot;
+using Bitfinex.Net.Interfaces.Clients.Rest;
 using Bitfinex.Net.Objects;
 using Bitfinex.Net.UnitTests;
 using Bitfinex.Net.UnitTests.TestImplementations;
@@ -12,7 +12,7 @@ namespace Bitfinex.Net.UnitTests
     [TestFixture]
     public class JsonTests
     {
-        private JsonToObjectComparer<IBitfinexClientSpot> _comparer = new JsonToObjectComparer<IBitfinexClientSpot>((json) => TestHelpers.CreateResponseClient(json, new BitfinexClientOptions()
+        private JsonToObjectComparer<IBitfinexClient> _comparer = new JsonToObjectComparer<IBitfinexClient>((json) => TestHelpers.CreateResponseClient(json, new BitfinexClientOptions()
         { ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "123"), OutputOriginalData = true }, System.Net.HttpStatusCode.OK));
 
         [Test]
@@ -41,6 +41,14 @@ namespace Bitfinex.Net.UnitTests
                 {
                     { "GetOrderAsync", new List<string> { "meta" } }
                 }
+                );
+        }
+
+        [Test]
+        public async Task ValidateSpotFundingCalls()
+        {
+            await _comparer.ProcessSubject("Spot/Funding", c => c.Funding,
+                parametersToSetNull: new[] { "limit", "clientOrderId" }
                 );
         }
     }

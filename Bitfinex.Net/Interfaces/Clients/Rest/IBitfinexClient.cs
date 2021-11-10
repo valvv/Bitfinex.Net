@@ -8,16 +8,17 @@ using Bitfinex.Net.Objects.RestV1Objects;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 
-namespace Bitfinex.Net.Interfaces.Clients.Rest.Spot
+namespace Bitfinex.Net.Interfaces.Clients.Rest
 {
     /// <summary>
     /// Interface for the Bitfinex client
     /// </summary>
-    public interface IBitfinexClientSpot: IRestClient
+    public interface IBitfinexClient: IRestClient
     {
-        public IBitfinexClientSpotAccount Account { get; set; }
-        public IBitfinexClientSpotExchangeData ExchangeData { get; set; }
-        public IBitfinexClientSpotTrading Trading { get; set; }
+        public IBitfinexClientAccount Account { get; }
+        public IBitfinexClientExchangeData ExchangeData { get; }
+        public IBitfinexClientTrading Trading { get; }
+        public IBitfinexClientFunding Funding { get; }
 
         /// <summary>
         /// Set the API key and secret

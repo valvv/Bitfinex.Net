@@ -17,14 +17,14 @@ using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Interfaces;
 using Bitfinex.Net.Enums;
 using System.Threading;
-using Bitfinex.Net.Interfaces.Clients.Socket.Spot;
+using Bitfinex.Net.Interfaces.Clients.Socket;
 
-namespace Bitfinex.Net.Clients.Socket.Spot
+namespace Bitfinex.Net.Clients.Socket
 {
     /// <summary>
     /// Socket client for the Bitfinex API
     /// </summary>
-    public class BitfinexSocketClientSpot : SocketClient, IBitfinexSocketClientSpot
+    public class BitfinexSocketClient : SocketClient, IBitfinexSocketClient
     {
         #region fields
         private readonly string? _affCode;
@@ -38,7 +38,7 @@ namespace Bitfinex.Net.Clients.Socket.Spot
         /// <summary>
         /// Create a new instance of BitfinexSocketClient using the default options
         /// </summary>
-        public BitfinexSocketClientSpot() : this(BitfinexSocketClientOptionsSpot.Default)
+        public BitfinexSocketClient() : this(BitfinexSocketClientOptions.Default)
         {
         }
 
@@ -46,7 +46,7 @@ namespace Bitfinex.Net.Clients.Socket.Spot
         /// Create a new instance of BitfinexSocketClient using provided options
         /// </summary>
         /// <param name="options">The options to use for this client</param>
-        public BitfinexSocketClientSpot(BitfinexSocketClientOptionsSpot options) : base("Bitfinex", options, options.ApiCredentials == null ? null : new BitfinexAuthenticationProvider(options.ApiCredentials, options.NonceProvider))
+        public BitfinexSocketClient(BitfinexSocketClientOptions options) : base("Bitfinex", options, options.ApiCredentials == null ? null : new BitfinexAuthenticationProvider(options.ApiCredentials, options.NonceProvider))
         {
             if (options == null)
                 throw new ArgumentException("Cant pass null options, use empty constructor for default");
@@ -78,9 +78,9 @@ namespace Bitfinex.Net.Clients.Socket.Spot
         /// set the default options used when creating a client without specifying options
         /// </summary>
         /// <param name="newDefaultOptions"></param>
-        public static void SetDefaultOptions(BitfinexSocketClientOptionsSpot newDefaultOptions)
+        public static void SetDefaultOptions(BitfinexSocketClientOptions newDefaultOptions)
         {
-            BitfinexSocketClientOptionsSpot.Default = newDefaultOptions;
+            BitfinexSocketClientOptions.Default = newDefaultOptions;
         }
 
         /// <inheritdoc />

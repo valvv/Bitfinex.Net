@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bitfinex.Net.Interfaces.Clients.Rest.Spot
+namespace Bitfinex.Net.Interfaces.Clients.Rest
 {
-    public interface IBitfinexClientSpotAccount
+    public interface IBitfinexClientAccount
     {
         /// <summary>
         /// Get all balances
@@ -197,5 +197,6 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest.Spot
             string? accountName = null,
             string? paymentId = null,
             CancellationToken ct = default);
+
     }
 }
