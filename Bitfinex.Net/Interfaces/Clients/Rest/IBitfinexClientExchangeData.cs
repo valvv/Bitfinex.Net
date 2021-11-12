@@ -65,6 +65,15 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
         Task<WebCallResult<IEnumerable<BitfinexOrderBookEntry>>> GetOrderBookAsync(string symbol, Precision precision, int? limit = null, CancellationToken ct = default);
 
         /// <summary>
+        /// Get the raw order book for a symbol
+        /// </summary>
+        /// <param name="symbol">The symbol</param>
+        /// <param name="limit">The amount of results in the book</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<WebCallResult<IEnumerable<BitfinexRawOrderBookEntry>>> GetRawOrderBookAsync(string symbol, int? limit = null, CancellationToken ct = default);
+
+        /// <summary>
         /// Get various stats for the symbol
         /// </summary>
         /// <param name="symbol">The symbol to request stats for</param>
