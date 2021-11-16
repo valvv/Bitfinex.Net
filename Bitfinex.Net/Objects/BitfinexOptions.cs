@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using Bitfinex.Net.Interfaces;
 using Bitfinex.Net.Interfaces.Clients.Socket;

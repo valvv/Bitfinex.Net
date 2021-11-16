@@ -11,6 +11,12 @@ using Moq;
 using System.Net;
 using System.Threading.Tasks;
 using Bitfinex.Net.Enums;
+using Bitfinex.Net.Clients.Rest;
+using System.Reflection;
+using System.Diagnostics;
+using Bitfinex.Net.Clients.Socket;
+using CryptoExchange.Net.Objects;
+using CryptoExchange.Net.Sockets;
 
 namespace Bitfinex.Net.UnitTests
 {
@@ -109,6 +115,47 @@ namespace Bitfinex.Net.UnitTests
                 Assert.DoesNotThrow(symbol.ValidateBitfinexSymbol);
             else
                 Assert.Throws(typeof(ArgumentException), symbol.ValidateBitfinexSymbol);
+        }
+
+        [Test]
+        public void CheckRestInterfaces()
+        {
+            var assembly = Assembly.GetAssembly(typeof(BitfinexClient));
+            var ignore = new string[] { "IBitfinexClient" };
+            var clientInterfaces = assembly.GetTypes().Where(t => t.Name.StartsWith("IBitfinexClient") && !ignore.Contains(t.Name));
+
+            foreach (var clientInterface in clientInterfaces)
+            {
+                var implementation = assembly.GetTypes().Single(t => t.IsAssignableTo(clientInterface) && t != clientInterface);
+                int methods = 0;
+                foreach (var method in implementation.GetMethods().Where(m => m.ReturnType.IsAssignableTo(typeof(Task))))
+                {
+                    var interfaceMethod = clientInterface.GetMethod(method.Name, method.GetParameters().Select(p => p.ParameterType).ToArray());
+                    Assert.NotNull(interfaceMethod);
+                    methods++;
+                }
+                Debug.WriteLine($"{clientInterface.Name} {methods} methods validated");
+            }
+        }
+
+        [Test]
+        public void CheckSocketInterfaces()
+        {
+            var assembly = Assembly.GetAssembly(typeof(BitfinexSocketClient));
+            var clientInterfaces = assembly.GetTypes().Where(t => t.Name.StartsWith("IBitfinexSocketClient"));
+
+            foreach (var clientInterface in clientInterfaces)
+            {
+                var implementation = assembly.GetTypes().Single(t => t.IsAssignableTo(clientInterface) && t != clientInterface);
+                int methods = 0;
+                foreach (var method in implementation.GetMethods().Where(m => m.ReturnType.IsAssignableTo(typeof(Task<CallResult<UpdateSubscription>>))))
+                {
+                    var interfaceMethod = clientInterface.GetMethod(method.Name, method.GetParameters().Select(p => p.ParameterType).ToArray());
+                    Assert.NotNull(interfaceMethod);
+                    methods++;
+                }
+                Debug.WriteLine($"{clientInterface.Name} {methods} methods validated");
+            }
         }
     }
 }
