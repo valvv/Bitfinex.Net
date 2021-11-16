@@ -1,11 +1,7 @@
-﻿using Bitfinex.Net.Converters;
-using Bitfinex.Net.Objects;
-using Bitfinex.Net.Objects.RestV1Objects;
+﻿using Bitfinex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
-using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.Objects;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -14,11 +10,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Bitfinex.Net.Interfaces;
 using CryptoExchange.Net.ExchangeInterfaces;
 using CryptoExchange.Net.Interfaces;
 using Bitfinex.Net.Enums;
 using Bitfinex.Net.Interfaces.Clients.Rest;
+using Bitfinex.Net.Objects.Internal;
+using Bitfinex.Net.Objects.Models;
 
 namespace Bitfinex.Net.Clients.Rest
 {

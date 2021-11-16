@@ -1,7 +1,7 @@
-﻿using CryptoExchange.Net.Interfaces;
-using System;
+﻿using System;
+using CryptoExchange.Net.Interfaces;
 
-namespace Bitfinex.Net.Objects
+namespace Bitfinex.Net.Objects.Internal
 {
     internal class BitfinexNonceProvider : INonceProvider
     {

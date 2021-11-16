@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using CryptoExchange.Net.ExchangeInterfaces;
 using CryptoExchange.Net.Interfaces;
 
-namespace Bitfinex.Net.Objects
+namespace Bitfinex.Net.Objects.Models
 {
     /// <summary>
     /// Order book

@@ -1,12 +1,12 @@
 ﻿using System;
 using Bitfinex.Net.Converters;
 using Bitfinex.Net.Enums;
-using Bitfinex.Net.Objects.SocketObjects;
+using Bitfinex.Net.Objects.Internal;
 using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
-namespace Bitfinex.Net.Objects
+namespace Bitfinex.Net.Objects.Models
 {
     /// <summary>
     /// Order info

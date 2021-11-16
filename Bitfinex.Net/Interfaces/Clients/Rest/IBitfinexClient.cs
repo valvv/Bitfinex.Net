@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Bitfinex.Net.Enums;
 using Bitfinex.Net.Objects;
-using Bitfinex.Net.Objects.RestV1Objects;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 

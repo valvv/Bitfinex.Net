@@ -4,7 +4,7 @@ using Bitfinex.Net.Converters;
 using CryptoExchange.Net.Converters;
 using Newtonsoft.Json;
 
-namespace Bitfinex.Net.Objects.RestV1Objects
+namespace Bitfinex.Net.Objects.Models.V1
 {
     /// <summary>
     /// Funding order book

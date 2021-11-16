@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Bitfinex.Net.Objects.Models;
 
 namespace Bitfinex.Net.Converters
 {

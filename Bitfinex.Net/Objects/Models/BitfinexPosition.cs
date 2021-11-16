@@ -4,7 +4,7 @@ using Bitfinex.Net.Enums;
 using CryptoExchange.Net.Converters;
 using Newtonsoft.Json;
 
-namespace Bitfinex.Net.Objects
+namespace Bitfinex.Net.Objects.Models
 {
     /// <summary>
     /// Position info

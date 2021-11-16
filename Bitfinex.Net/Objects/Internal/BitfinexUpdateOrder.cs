@@ -2,7 +2,7 @@
 using Bitfinex.Net.Enums;
 using Newtonsoft.Json;
 
-namespace Bitfinex.Net.Objects.SocketObjects
+namespace Bitfinex.Net.Objects.Internal
 {
     internal class BitfinexUpdateOrder
     {

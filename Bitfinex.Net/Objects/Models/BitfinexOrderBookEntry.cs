@@ -2,7 +2,7 @@
 using CryptoExchange.Net.Interfaces;
 using Newtonsoft.Json;
 
-namespace Bitfinex.Net.Objects
+namespace Bitfinex.Net.Objects.Models
 {
     /// <summary>
     /// Base for order book

@@ -1,8 +1,8 @@
-﻿using Bitfinex.Net.Converters;
+﻿using System.Collections.Generic;
+using Bitfinex.Net.Converters;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
-namespace Bitfinex.Net.Objects.SocketObjects
+namespace Bitfinex.Net.Objects.Internal
 {
     internal class BitfinexMultiCancel
     {

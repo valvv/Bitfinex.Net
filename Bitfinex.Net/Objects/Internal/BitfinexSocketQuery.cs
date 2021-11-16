@@ -1,9 +1,9 @@
-﻿using Bitfinex.Net.Enums;
+﻿using System.Linq;
+using Bitfinex.Net.Enums;
 using CryptoExchange.Net.Converters;
 using Newtonsoft.Json;
-using System.Linq;
 
-namespace Bitfinex.Net.Objects.SocketObjects
+namespace Bitfinex.Net.Objects.Internal
 {
     [JsonConverter(typeof(ArrayConverter))]
     internal class BitfinexSocketQuery

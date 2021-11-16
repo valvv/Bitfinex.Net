@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using System.Globalization;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Globalization;
 
-namespace Bitfinex.Net.Objects.SocketObjects
+namespace Bitfinex.Net.Objects.Internal
 {
     internal class BitfinexUnsubscribeRequest
     {

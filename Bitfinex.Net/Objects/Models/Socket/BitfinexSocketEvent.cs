@@ -2,7 +2,7 @@
 using CryptoExchange.Net.Converters;
 using Newtonsoft.Json;
 
-namespace Bitfinex.Net.Objects.SocketObjects
+namespace Bitfinex.Net.Objects.Models.Socket
 {
     /// <summary>
     /// Socket event wrapper

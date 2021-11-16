@@ -1,7 +1,7 @@
 ﻿using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
-namespace Bitfinex.Net.Objects.RestV1Objects
+namespace Bitfinex.Net.Objects.Models.V1
 {
     /// <summary>
     /// Symbol details

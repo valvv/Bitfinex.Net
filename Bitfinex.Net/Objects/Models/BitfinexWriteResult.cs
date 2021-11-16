@@ -1,8 +1,8 @@
-﻿using CryptoExchange.Net.Converters;
+﻿using System;
+using CryptoExchange.Net.Converters;
 using Newtonsoft.Json;
-using System;
 
-namespace Bitfinex.Net.Objects
+namespace Bitfinex.Net.Objects.Models
 {
     /// <summary>
     /// Result V2.

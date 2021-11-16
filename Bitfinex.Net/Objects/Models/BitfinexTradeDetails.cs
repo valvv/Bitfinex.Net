@@ -5,7 +5,7 @@ using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
-namespace Bitfinex.Net.Objects
+namespace Bitfinex.Net.Objects.Models
 {
     /// <summary>
     /// Details of a trade

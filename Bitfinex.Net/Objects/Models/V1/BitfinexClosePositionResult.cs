@@ -1,4 +1,4 @@
-﻿namespace Bitfinex.Net.Objects.RestV1Objects
+﻿namespace Bitfinex.Net.Objects.Models.V1
 {
     /// <summary>
     /// Close position result

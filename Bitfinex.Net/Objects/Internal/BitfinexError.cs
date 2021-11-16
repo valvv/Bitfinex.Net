@@ -1,7 +1,7 @@
 ﻿using CryptoExchange.Net.Converters;
 using Newtonsoft.Json;
 
-namespace Bitfinex.Net.Objects
+namespace Bitfinex.Net.Objects.Internal
 {
     [JsonConverter(typeof(ArrayConverter))]
     internal class BitfinexError

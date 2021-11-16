@@ -7,6 +7,7 @@ using Bitfinex.Net.Clients.Socket;
 using Bitfinex.Net.Enums;
 using Bitfinex.Net.Interfaces.Clients.Socket;
 using Bitfinex.Net.Objects;
+using Bitfinex.Net.Objects.Models;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.OrderBook;
@@ -14,7 +15,7 @@ using CryptoExchange.Net.Sockets;
 using Force.Crc32;
 using Microsoft.Extensions.Logging;
 
-namespace Bitfinex.Net
+namespace Bitfinex.Net.SymbolOrderBooks
 {
     /// <summary>
     /// Live order book implementation

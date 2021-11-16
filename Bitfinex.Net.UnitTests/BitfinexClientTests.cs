@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Bitfinex.Net.Objects;
-using Bitfinex.Net.Objects.RestV1Objects;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net;
 using NUnit.Framework;

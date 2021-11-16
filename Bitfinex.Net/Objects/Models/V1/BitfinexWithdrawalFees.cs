@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Bitfinex.Net.Objects.RestV1Objects
+namespace Bitfinex.Net.Objects.Models.V1
 {
     /// <summary>
     /// Withdrawal fee dictionary

@@ -1,6 +1,5 @@
 ﻿using Bitfinex.Net.Converters;
 using Bitfinex.Net.Objects;
-using Bitfinex.Net.Objects.SocketObjects;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
@@ -15,6 +14,9 @@ using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
 using Microsoft.Extensions.Logging;
 using Bitfinex.Net.Enums;
+using Bitfinex.Net.Objects.Internal;
+using Bitfinex.Net.Objects.Models;
+using Bitfinex.Net.Objects.Models.Socket;
 
 namespace Bitfinex.Net.UnitTests
 {

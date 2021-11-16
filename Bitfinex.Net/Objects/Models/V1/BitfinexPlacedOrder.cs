@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Globalization;
 using Bitfinex.Net.Converters;
 using Bitfinex.Net.Enums;
 using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
-namespace Bitfinex.Net.Objects.RestV1Objects
+namespace Bitfinex.Net.Objects.Models.V1
 {
     /// <summary>
     /// Placed order info

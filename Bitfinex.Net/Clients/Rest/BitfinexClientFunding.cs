@@ -2,7 +2,6 @@
 using Bitfinex.Net.Enums;
 using Bitfinex.Net.Interfaces.Clients.Rest;
 using Bitfinex.Net.Objects;
-using Bitfinex.Net.Objects.RestV1Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.Objects;
@@ -16,6 +15,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Bitfinex.Net.Objects.Models;
+using Bitfinex.Net.Objects.Models.V1;
 
 namespace Bitfinex.Net.Clients.Rest
 {

@@ -6,6 +6,7 @@ using Bitfinex.Net.UnitTests.TestImplementations;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CryptoExchange.Net.Interfaces;
 
 namespace Bitfinex.Net.UnitTests
 {
@@ -13,7 +14,7 @@ namespace Bitfinex.Net.UnitTests
     public class JsonTests
     {
         private JsonToObjectComparer<IBitfinexClient> _comparer = new JsonToObjectComparer<IBitfinexClient>((json) => TestHelpers.CreateResponseClient(json, new BitfinexClientOptions()
-        { ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "123"), OutputOriginalData = true }, System.Net.HttpStatusCode.OK));
+        { ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "123"), OutputOriginalData = true, RateLimiters = new List<IRateLimiter>() }, System.Net.HttpStatusCode.OK));
 
         [Test]
         public async Task ValidateSpotAccountCalls()
