@@ -13,6 +13,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
     {
         /// <summary>
         /// Get all balances
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-wallets</para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
@@ -20,6 +21,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get the base margin info
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-info-margin</para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
@@ -27,6 +29,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get the margin info for a symbol
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-info-margin</para>
         /// </summary>
         /// <param name="symbol">The symbol to get the info for</param>
         /// <param name="ct">Cancellation token</param>
@@ -35,6 +38,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get funding info for a symbol
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-info-funding</para>
         /// </summary>
         /// <param name="symbol">The symbol to get the info for</param>
         /// <param name="ct">Cancellation token</param>
@@ -43,6 +47,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get the withdrawal/deposit history
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-movements</para>
         /// </summary>
         /// <param name="symbol">Symbol to get history for</param>
         /// <param name="ct">Cancellation token</param>
@@ -51,6 +56,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get the list of alerts
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-alerts</para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
@@ -58,6 +64,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Set an alert
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-alert-set</para>
         /// </summary>
         /// <param name="symbol">The symbol to set the alert for</param>
         /// <param name="price">The price to set the alert for</param>
@@ -67,6 +74,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Delete an existing alert
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-alert-del</para>
         /// </summary>
         /// <param name="symbol">The symbol of the alert to delete</param>
         /// <param name="price">The price of the alert to delete</param>
@@ -76,6 +84,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Calculates the available balance for a symbol at a specific rate
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-calc-order-avail</para>
         /// </summary>
         /// <param name="symbol">The symbol</param>
         /// <param name="side">Buy or sell</param>
@@ -87,6 +96,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get changes in your balance for an asset
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-ledgers</para>
         /// </summary>
         /// <param name="asset">The asset to check the ledger for</param>
         /// <param name="startTime">Start time of the data to return</param>
@@ -99,6 +109,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets information about the user associated with the api key/secret
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-info-user</para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
@@ -106,6 +117,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get information about your account
+        /// <para>https://docs.bitfinex.com/v1/reference#rest-auth-account-info</para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
@@ -113,6 +125,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get withdrawal fees for this account
+        /// <para>https://docs.bitfinex.com/v1/reference#rest-auth-fees</para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
@@ -120,6 +133,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get 30-day summary on trading volume and margin funding
+        /// <para>https://docs.bitfinex.com/v1/reference#rest-auth-summary</para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
@@ -128,6 +142,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets a deposit address for an asset
+        /// <para>https://docs.bitfinex.com/v1/reference#rest-auth-deposit</para>
         /// </summary>
         /// <param name="asset">The asset to get address for</param>
         /// <param name="toWallet">The type of wallet the deposit is for</param>
@@ -138,6 +153,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Transfers funds from one wallet to another
+        /// <para>https://docs.bitfinex.com/v1/reference#rest-auth-transfer-between-wallets</para>
         /// </summary>
         /// <param name="asset">The asset to transfer</param>
         /// <param name="fromWallet">The wallet to remove funds from</param>
@@ -152,6 +168,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
         /// All withdrawals need the withdrawType, wallet and quantity parameters
         /// CryptoCurrency withdrawals need the address parameters, the paymentId can be used for Monero as payment id and for Ripple as tag
         /// Wire withdrawals need the bank parameters. In some cases your bank will require the use of an intermediary bank, if this is the case, please supply those fields as well.
+        /// <para>https://docs.bitfinex.com/v1/reference#rest-auth-withdrawal</para>
         /// </summary>
         /// <param name="withdrawType">The type of funds to withdraw</param>
         /// <param name="wallet">The wallet to withdraw from</param>

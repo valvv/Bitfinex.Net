@@ -13,6 +13,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
     {
         /// <summary>
         /// Get the active orders
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-orders</para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
@@ -20,6 +21,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get the order history for a symbol for this account
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-orders-history</para>
         /// </summary>
         /// <param name="symbol">The symbol to get the history for</param>
         /// <param name="startTime">Start time of the data to return</param>
@@ -31,6 +33,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get the individual trades for an order
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-order-trades</para>
         /// </summary>
         /// <param name="symbol">The symbol of the order</param>
         /// <param name="orderId">The order Id</param>
@@ -40,6 +43,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get the trade history for a symbol
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-trades</para>
         /// </summary>
         /// <param name="symbol">The symbol to get history for</param>
         /// <param name="startTime">Start time of the data to return</param>
@@ -52,6 +56,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get a list of historical positions
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-positions-hist</para>
         /// </summary>
         /// <param name="startTime">Start time of the data to return</param>
         /// <param name="endTime">End time of the data to return</param>
@@ -62,6 +67,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Place a new order
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-submit-order</para>
         /// </summary>
         /// <param name="symbol">Symbol to place order for</param>
         /// <param name="side">Side of the order</param>
@@ -98,6 +104,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Cancel a specific order
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-cancel-order</para>
         /// </summary>
         /// <param name="orderId">The id of the order to cancel</param>
         /// <param name="clientOrderId">The client order id of the order to cancel</param>
@@ -108,12 +115,14 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Cancels all open orders
+        /// <para>https://docs.bitfinex.com/v1/reference#rest-auth-cancel-all-orders</para>
         /// </summary>
         /// <param name="ct">Cancellation token</param><returns></returns>
         Task<WebCallResult<BitfinexResult>> CancelAllOrdersAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Get the status of a specific order
+        /// <para>https://docs.bitfinex.com/v1/reference#rest-auth-order-status</para>
         /// </summary>
         /// <param name="orderId">The order id of the order to get</param>
         /// <param name="ct">Cancellation token</param>
@@ -122,6 +131,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Claim a position
+        /// <para>https://docs.bitfinex.com/v1/reference#rest-auth-claim-position</para>
         /// </summary>
         /// <param name="id">The id of the position to claim</param>
         /// <param name="quantity">The (partial) quantity to be claimed</param>
@@ -131,6 +141,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Close a position
+        /// <para>https://docs.bitfinex.com/v1/reference#close-position</para>
         /// </summary>
         /// <param name="positionId">The id to close</param>
         /// <param name="ct">Cancellation token</param>
@@ -139,14 +150,15 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get the active positions
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-positions</para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         Task<WebCallResult<IEnumerable<BitfinexPosition>>> GetActivePositionsAsync(CancellationToken ct = default);
 
-
         /// <summary>
         /// Get positions by id
+        /// <para>https://docs.bitfinex.com/reference#rest-auth-positions-audit</para>
         /// </summary>
         /// <param name="ids">The id's of positions to return</param>
         /// <param name="startTime">Start time of the data to return</param>
