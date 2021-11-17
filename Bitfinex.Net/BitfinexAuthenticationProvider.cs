@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
-using Bitfinex.Net.Objects;
 using Bitfinex.Net.Objects.Internal;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
@@ -18,8 +17,8 @@ namespace Bitfinex.Net
     internal class BitfinexAuthenticationProvider: AuthenticationProvider
     {
         private readonly INonceProvider _nonceProvider;
-        private readonly HMACSHA384 encryptor;
-        private readonly object locker;
+        private readonly HMACSHA384 _encryptor;
+        private readonly object _locker;
 
         public long GetNonce() => _nonceProvider.GetNonce();
 
@@ -29,8 +28,8 @@ namespace Bitfinex.Net
                 throw new ArgumentException("ApiKey/Secret needed");
 
             _nonceProvider = nonceProvider ?? new BitfinexNonceProvider();
-            locker = new object();
-            encryptor = new HMACSHA384(Encoding.UTF8.GetBytes(credentials.Secret.GetString()));
+            _locker = new object();
+            _encryptor = new HMACSHA384(Encoding.UTF8.GetBytes(credentials.Secret.GetString()));
         }
 
         public override Dictionary<string, string> AddAuthenticationToHeaders(string uri, HttpMethod method, Dictionary<string, object> parameters, bool signed, HttpMethodParameterPosition parameterPosition, ArrayParametersSerialization arraySerialization)
@@ -88,8 +87,8 @@ namespace Bitfinex.Net
 
         public override string Sign(string toSign)
         {
-            lock(locker)
-                return ByteToString(encryptor.ComputeHash(Encoding.UTF8.GetBytes(toSign)));
+            lock(_locker)
+                return ByteToString(_encryptor.ComputeHash(Encoding.UTF8.GetBytes(toSign)));
         }
     }
 }

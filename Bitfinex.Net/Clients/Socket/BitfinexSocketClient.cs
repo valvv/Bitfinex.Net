@@ -255,8 +255,7 @@ namespace Bitfinex.Net.Clients.Socket
         {
             symbol.ValidateBitfinexSymbol();
             log.Write(LogLevel.Information, "Going to place order");
-            if (clientOrderId == null)
-                clientOrderId = GenerateClientOrderId();
+            clientOrderId ??= GenerateClientOrderId();
 
             var affCode = affiliateCode ?? _affCode;
             var query = new BitfinexSocketQuery(clientOrderId.ToString(), BitfinexEventType.OrderNew, new BitfinexNewOrder

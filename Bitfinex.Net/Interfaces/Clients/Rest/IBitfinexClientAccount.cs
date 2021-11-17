@@ -1,9 +1,7 @@
 ﻿using Bitfinex.Net.Enums;
-using Bitfinex.Net.Objects;
 using CryptoExchange.Net.Objects;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Bitfinex.Net.Objects.Models;

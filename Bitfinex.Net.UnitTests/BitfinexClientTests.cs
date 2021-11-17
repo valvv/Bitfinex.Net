@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Bitfinex.Net.Objects;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net;
@@ -9,7 +8,6 @@ using Bitfinex.Net.UnitTests.TestImplementations;
 using Moq;
 using System.Net;
 using System.Threading.Tasks;
-using Bitfinex.Net.Enums;
 using Bitfinex.Net.Clients.Rest;
 using System.Reflection;
 using System.Diagnostics;

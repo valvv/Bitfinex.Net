@@ -1,7 +1,6 @@
 ﻿using Bitfinex.Net.Converters;
 using Bitfinex.Net.Enums;
 using Bitfinex.Net.Interfaces.Clients.Rest;
-using Bitfinex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.Objects;
@@ -11,7 +10,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Bitfinex.Net.Objects.Models;

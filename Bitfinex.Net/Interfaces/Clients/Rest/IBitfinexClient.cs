@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Bitfinex.Net.Enums;
-using Bitfinex.Net.Objects;
-using CryptoExchange.Net.Interfaces;
-using CryptoExchange.Net.Objects;
+﻿using CryptoExchange.Net.Interfaces;
 
 namespace Bitfinex.Net.Interfaces.Clients.Rest
 {
