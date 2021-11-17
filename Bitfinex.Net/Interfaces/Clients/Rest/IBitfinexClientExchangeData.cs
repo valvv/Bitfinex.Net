@@ -13,7 +13,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
     {
         /// <summary>
         /// Gets the platform status
-        /// <para>https://docs.bitfinex.com/reference#rest-public-platform-status</para>
+        /// <para><a href="https://docs.bitfinex.com/reference#rest-public-platform-status" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Whether Bitfinex platform is running normally or not</returns>
@@ -21,7 +21,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets a list of supported assets
-        /// <para>https://docs.bitfinex.com/reference#rest-public-conf</para>
+        /// <para><a href="https://docs.bitfinex.com/reference#rest-public-conf" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
@@ -29,7 +29,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Returns basic market data for the provided symbols
-        /// <para>https://docs.bitfinex.com/reference#rest-public-ticker</para>
+        /// <para><a href="https://docs.bitfinex.com/reference#rest-public-ticker" /></para>
         /// </summary>
         /// <param name="symbol">The symbol to get data for</param>
         /// <param name="ct">Cancellation token</param>
@@ -38,7 +38,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Returns basic market data for the provided symbols
-        /// <para>https://docs.bitfinex.com/reference#rest-public-tickers</para>
+        /// <para><a href="https://docs.bitfinex.com/reference#rest-public-tickers" /></para>
         /// </summary>
         /// <param name="symbols">The symbols to get data for</param>
         /// <param name="ct">Cancellation token</param>
@@ -47,7 +47,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get recent trades for a symbol
-        /// <para>https://docs.bitfinex.com/reference#rest-public-trades</para>
+        /// <para><a href="https://docs.bitfinex.com/reference#rest-public-trades" /></para>
         /// </summary>
         /// <param name="symbol">The symbol to get trades for</param>
         /// <param name="limit">The amount of results</param>
@@ -60,7 +60,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets the order book for a symbol
-        /// <para>https://docs.bitfinex.com/reference#rest-public-book</para>
+        /// <para><a href="https://docs.bitfinex.com/reference#rest-public-book" /></para>
         /// </summary>
         /// <param name="symbol">The symbol to get the order book for</param>
         /// <param name="precision">The precision of the data</param>
@@ -71,7 +71,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get the raw order book for a symbol
-        /// <para>https://docs.bitfinex.com/reference#rest-public-book</para>
+        /// <para><a href="https://docs.bitfinex.com/reference#rest-public-book" /></para>
         /// </summary>
         /// <param name="symbol">The symbol</param>
         /// <param name="limit">The amount of results in the book</param>
@@ -81,7 +81,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get various stats for the symbol
-        /// <para>https://docs.bitfinex.com/reference#rest-public-stats1</para>
+        /// <para><a href="https://docs.bitfinex.com/reference#rest-public-stats1" /></para>
         /// </summary>
         /// <param name="symbol">The symbol to request stats for</param>
         /// <param name="key">The type of stats</param>
@@ -94,7 +94,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get the last kline for a symbol
-        /// <para>https://docs.bitfinex.com/reference#rest-public-candles</para>
+        /// <para><a href="https://docs.bitfinex.com/reference#rest-public-candles" /></para>
         /// </summary>
         /// <param name="interval">The time frame of the kline</param>
         /// <param name="symbol">The symbol to get the kline for</param>
@@ -105,7 +105,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets klines for a symbol
-        /// <para>https://docs.bitfinex.com/reference#rest-public-candles</para>
+        /// <para><a href="https://docs.bitfinex.com/reference#rest-public-candles" /></para>
         /// </summary>
         /// <param name="interval">The time frame of the klines</param>
         /// <param name="symbol">The symbol to get the klines for</param>
@@ -120,7 +120,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Calculate the average execution price
-        /// <para>https://docs.bitfinex.com/reference#rest-public-calc-market-average-price</para>
+        /// <para><a href="https://docs.bitfinex.com/reference#rest-public-calc-market-average-price" /></para>
         /// </summary>
         /// <param name="symbol">The symbol to calculate for</param>
         /// <param name="quantity">The quantity to execute</param>
@@ -132,7 +132,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Returns the exchange rate for the assets
-        /// <para>https://docs.bitfinex.com/reference#rest-public-calc-foreign-exchange-rate</para>
+        /// <para><a href="https://docs.bitfinex.com/reference#rest-public-calc-foreign-exchange-rate" /></para>
         /// </summary>
         /// <param name="asset1">The first asset</param>
         /// <param name="asset2">The second asset</param>
@@ -142,7 +142,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets the margin funding book
-        /// <para>https://docs.bitfinex.com/v1/reference#rest-public-fundingbook</para>
+        /// <para><a href="https://docs.bitfinex.com/v1/reference#rest-public-fundingbook" /></para>
         /// </summary>
         /// <param name="asset">Asset to get the book for</param>
         /// <param name="limit">Limit of the results</param>
@@ -152,7 +152,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets the most recent lends
-        /// <para>https://docs.bitfinex.com/v1/reference#rest-public-lends</para>
+        /// <para><a href="https://docs.bitfinex.com/v1/reference#rest-public-lends" /></para>
         /// </summary>
         /// <param name="asset">Asset to get the book for</param>
         /// <param name="startTime">Return data after this time</param>
@@ -163,7 +163,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets a list of all symbols
-        /// <para>https://docs.bitfinex.com/v1/reference#rest-public-symbols</para>
+        /// <para><a href="https://docs.bitfinex.com/v1/reference#rest-public-symbols" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
@@ -171,7 +171,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets details of all symbols
-        /// <para>https://docs.bitfinex.com/v1/reference#rest-public-symbol-details</para>
+        /// <para><a href="https://docs.bitfinex.com/v1/reference#rest-public-symbol-details" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
