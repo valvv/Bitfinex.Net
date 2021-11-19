@@ -3,13 +3,28 @@
 namespace Bitfinex.Net.Interfaces.Clients.Rest
 {
     /// <summary>
-    /// Interface for the Bitfinex client
+    /// Client for accessing the Bitfinex API. 
     /// </summary>
     public interface IBitfinexClient: IRestClient
     {
+        /// <summary>
+        /// Endpoints related to account settings, info or actions
+        /// </summary>
         public IBitfinexClientAccount Account { get; }
+
+        /// <summary>
+        /// Endpoints related to retrieving market and system data
+        /// </summary>
         public IBitfinexClientExchangeData ExchangeData { get; }
+
+        /// <summary>
+        /// Endpoints related to orders and trades
+        /// </summary>
         public IBitfinexClientTrading Trading { get; }
+
+        /// <summary>
+        /// Endpoints related to funding
+        /// </summary>
         public IBitfinexClientFunding Funding { get; }
 
         /// <summary>

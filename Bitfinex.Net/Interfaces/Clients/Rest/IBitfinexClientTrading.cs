@@ -9,6 +9,9 @@ using Bitfinex.Net.Objects.Models.V1;
 
 namespace Bitfinex.Net.Interfaces.Clients.Rest
 {
+    /// <summary>
+    /// Bitfinex trading endpoints, placing and mananging orders.
+    /// </summary>
     public interface IBitfinexClientTrading
     {
         /// <summary>

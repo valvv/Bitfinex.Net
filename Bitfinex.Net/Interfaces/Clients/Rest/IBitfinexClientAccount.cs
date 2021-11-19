@@ -9,6 +9,9 @@ using Bitfinex.Net.Objects.Models.V1;
 
 namespace Bitfinex.Net.Interfaces.Clients.Rest
 {
+    /// <summary>
+    /// Bitfinex account endpoints. Account endpoints include balance info, withdraw/deposit info and requesting and account settings
+    /// </summary>
     public interface IBitfinexClientAccount
     {
         /// <summary>
@@ -213,6 +216,5 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
             string? accountName = null,
             string? paymentId = null,
             CancellationToken ct = default);
-
     }
 }

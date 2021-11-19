@@ -9,6 +9,9 @@ using Bitfinex.Net.Objects.Models.V1;
 
 namespace Bitfinex.Net.Interfaces.Clients.Rest
 {
+    /// <summary>
+    /// Bitfinex funding endpoints.
+    /// </summary>
     public interface IBitfinexClientFunding
     {
         /// <summary>

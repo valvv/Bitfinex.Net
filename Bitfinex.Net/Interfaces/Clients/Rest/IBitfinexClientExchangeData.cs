@@ -9,6 +9,9 @@ using Bitfinex.Net.Objects.Models.V1;
 
 namespace Bitfinex.Net.Interfaces.Clients.Rest
 {
+    /// <summary>
+    /// Bitfinex exchange data endpoints. Exchange data includes market data (tickers, order books, etc) and system status.
+    /// </summary>
     public interface IBitfinexClientExchangeData
     {
         /// <summary>
