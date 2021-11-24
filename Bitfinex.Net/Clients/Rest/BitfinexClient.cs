@@ -220,8 +220,7 @@ namespace Bitfinex.Net.Clients.Rest
 
         internal Uri GetUrl(string endpoint, string version)
         {
-            var result = $"{ClientOptions.BaseAddress}v{version}/{endpoint}";
-            return new Uri(result);
+            return new Uri(ClientOptions.BaseAddress.AppendPath($"v{version}", endpoint));
         }
 
         internal new string FillPathParameter(string path, params string[] values) => BaseClient.FillPathParameter(path, values);
