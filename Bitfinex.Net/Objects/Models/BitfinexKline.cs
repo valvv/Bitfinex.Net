@@ -14,7 +14,7 @@ namespace Bitfinex.Net.Objects.Models
         /// <summary>
         /// The timestamp of the kline
         /// </summary>
-        [ArrayProperty(0), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(0), JsonConverter(typeof(DateTimeConverter))]
         public DateTime OpenTime { get; set; }
         /// <summary>
         /// The opening price

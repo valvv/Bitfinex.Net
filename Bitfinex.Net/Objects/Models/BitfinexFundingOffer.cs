@@ -27,13 +27,13 @@ namespace Bitfinex.Net.Objects.Models
         /// <summary>
         /// The creation timestamp
         /// </summary>
-        [ArrayProperty(2), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(2), JsonConverter(typeof(DateTimeConverter))]
         public DateTime CreateTime { get; set; }
 
         /// <summary>
         /// The last update timestamp
         /// </summary>
-        [ArrayProperty(3), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(3), JsonConverter(typeof(DateTimeConverter))]
         public DateTime UpdateTime { get; set; }
 
         /// <summary>

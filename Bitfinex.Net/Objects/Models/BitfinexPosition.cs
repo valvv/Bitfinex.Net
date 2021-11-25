@@ -88,12 +88,12 @@ namespace Bitfinex.Net.Objects.Models
         /// <summary>
         /// The creation time
         /// </summary>
-        [ArrayProperty(12), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(12), JsonConverter(typeof(DateTimeConverter))]
         public DateTime CreateTime { get; set; }
         /// <summary>
         /// The update time
         /// </summary>
-        [ArrayProperty(13), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(13), JsonConverter(typeof(DateTimeConverter))]
         public DateTime UpdateTime { get; set; }
     }
 }

@@ -33,13 +33,13 @@ namespace Bitfinex.Net.Objects.Models
         /// <summary>
         /// The creation timestamp
         /// </summary>
-        [ArrayProperty(3), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(3), JsonConverter(typeof(DateTimeConverter))]
         public DateTime CreateTime { get; set; }
 
         /// <summary>
         /// The last update timestamp
         /// </summary>
-        [ArrayProperty(4), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(4), JsonConverter(typeof(DateTimeConverter))]
         public DateTime UpdateTime { get; set; }
 
         /// <summary>
@@ -90,13 +90,13 @@ namespace Bitfinex.Net.Objects.Models
         /// <summary>
         /// The timestamp when the funding was opened
         /// </summary>
-        [ArrayProperty(13), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(13), JsonConverter(typeof(DateTimeConverter))]
         public DateTime OpenTime { get; set; }
 
         /// <summary>
         /// The timestamp of the last payout
         /// </summary>
-        [ArrayProperty(14), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(14), JsonConverter(typeof(DateTimeConverter))]
         public DateTime LastPayoutTime { get; set; }
 
         /// <summary>

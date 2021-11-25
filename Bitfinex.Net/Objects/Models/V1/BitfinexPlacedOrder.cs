@@ -46,7 +46,7 @@ namespace Bitfinex.Net.Objects.Models.V1
         /// <summary>
         /// The timestamp of the order
         /// </summary>
-        [JsonConverter(typeof(TimestampSecondsConverter))]
+        [JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
         /// <summary>
         /// If the order is live

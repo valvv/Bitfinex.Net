@@ -43,7 +43,7 @@ namespace Bitfinex.Net.Objects.Models.V1
         /// <summary>
         /// The timestamp of the entry
         /// </summary>
-        [JsonConverter(typeof(TimestampSecondsConverter))]
+        [JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
         /// <summary>
         /// Whether the offer is at ffr

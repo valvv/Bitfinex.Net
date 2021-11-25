@@ -139,8 +139,8 @@ namespace Bitfinex.Net.Clients.Rest
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("category", category);
             parameters.AddOptionalParameter("limit", limit?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("start", startTime != null ? JsonConvert.SerializeObject(startTime, new TimestampConverter()) : null);
-            parameters.AddOptionalParameter("end", endTime != null ? JsonConvert.SerializeObject(endTime, new TimestampConverter()) : null);
+            parameters.AddOptionalParameter("start",  DateTimeConverter.ConvertToMilliseconds(startTime));
+            parameters.AddOptionalParameter("end", DateTimeConverter.ConvertToMilliseconds(endTime));
 
             var url = string.IsNullOrEmpty(asset)
                 ? LedgerEntriesSingleEndpoint : _baseClient.FillPathParameter(LedgerEntriesEndpoint, asset!);

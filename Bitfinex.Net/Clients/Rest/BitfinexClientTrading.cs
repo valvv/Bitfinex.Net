@@ -59,8 +59,8 @@ namespace Bitfinex.Net.Clients.Rest
 
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("limit", limit?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("start", startTime != null ? JsonConvert.SerializeObject(startTime, new TimestampConverter()) : null);
-            parameters.AddOptionalParameter("end", endTime != null ? JsonConvert.SerializeObject(endTime, new TimestampConverter()) : null);
+            parameters.AddOptionalParameter("start",  DateTimeConverter.ConvertToMilliseconds(startTime));
+            parameters.AddOptionalParameter("end", DateTimeConverter.ConvertToMilliseconds(endTime));
 
             var url = string.IsNullOrEmpty(symbol)
                 ? OrderHistorySingleEndpoint : _baseClient.FillPathParameter(OrderHistoryEndpoint, symbol!);
@@ -83,8 +83,8 @@ namespace Bitfinex.Net.Clients.Rest
 
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("limit", limit?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("start", startTime != null ? JsonConvert.SerializeObject(startTime, new TimestampConverter()) : null);
-            parameters.AddOptionalParameter("end", endTime != null ? JsonConvert.SerializeObject(endTime, new TimestampConverter()) : null);
+            parameters.AddOptionalParameter("start",  DateTimeConverter.ConvertToMilliseconds(startTime));
+            parameters.AddOptionalParameter("end", DateTimeConverter.ConvertToMilliseconds(endTime));
 
             var url = string.IsNullOrEmpty(symbol)
                 ? MyTradesSingleEndpoint : _baseClient.FillPathParameter(MyTradesEndpoint, symbol!);
@@ -202,8 +202,8 @@ namespace Bitfinex.Net.Clients.Rest
             limit?.ValidateIntBetween(nameof(limit), 1, 50);
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("limit", limit?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("start", startTime != null ? JsonConvert.SerializeObject(startTime, new TimestampConverter()) : null);
-            parameters.AddOptionalParameter("end", endTime != null ? JsonConvert.SerializeObject(endTime, new TimestampConverter()) : null);
+            parameters.AddOptionalParameter("start",  DateTimeConverter.ConvertToMilliseconds(startTime));
+            parameters.AddOptionalParameter("end", DateTimeConverter.ConvertToMilliseconds(endTime));
 
             return await _baseClient.SendRequestAsync<IEnumerable<BitfinexPositionExtended>>(_baseClient.GetUrl(PositionHistoryEndpoint, "2"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
         }
@@ -245,8 +245,8 @@ namespace Bitfinex.Net.Clients.Rest
                 { "id", ids }
             };
             parameters.AddOptionalParameter("limit", limit?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("start", startTime != null ? JsonConvert.SerializeObject(startTime, new TimestampConverter()) : null);
-            parameters.AddOptionalParameter("end", endTime != null ? JsonConvert.SerializeObject(endTime, new TimestampConverter()) : null);
+            parameters.AddOptionalParameter("start",  DateTimeConverter.ConvertToMilliseconds(startTime));
+            parameters.AddOptionalParameter("end", DateTimeConverter.ConvertToMilliseconds(endTime));
 
             return await _baseClient.SendRequestAsync<IEnumerable<BitfinexPositionExtended>>(_baseClient.GetUrl(PositionAuditEndpoint, "2"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
         }

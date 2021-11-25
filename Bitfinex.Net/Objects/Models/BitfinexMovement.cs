@@ -28,12 +28,12 @@ namespace Bitfinex.Net.Objects.Models
         /// <summary>
         /// The initial creation time
         /// </summary>
-        [ArrayProperty(5), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(5), JsonConverter(typeof(DateTimeConverter))]
         public DateTime StartTime { get; set; }
         /// <summary>
         /// The last update time
         /// </summary>
-        [ArrayProperty(6), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(6), JsonConverter(typeof(DateTimeConverter))]
         public DateTime UpdateTime { get; set; }
         /// <summary>
         /// The status of the movement

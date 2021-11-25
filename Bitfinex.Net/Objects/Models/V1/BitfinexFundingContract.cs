@@ -40,7 +40,7 @@ namespace Bitfinex.Net.Objects.Models.V1
         /// <summary>
         /// The timestamp
         /// </summary>
-        [JsonConverter(typeof(TimestampSecondsConverter))]
+        [JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
         /// <summary>
         /// If it is auto close

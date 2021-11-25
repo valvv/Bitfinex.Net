@@ -24,7 +24,7 @@ namespace Bitfinex.Net.Objects.Models
         /// <summary>
         /// The timestamp
         /// </summary>
-        [ArrayProperty(2), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(2), JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
         /// <summary>
         /// The offer id

@@ -54,8 +54,8 @@ namespace Bitfinex.Net.Clients.Rest
             limit?.ValidateIntBetween(nameof(limit), 1, 500);
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("limit", limit?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("start", startTime != null ? JsonConvert.SerializeObject(startTime, new TimestampConverter()) : null);
-            parameters.AddOptionalParameter("end", endTime != null ? JsonConvert.SerializeObject(endTime, new TimestampConverter()) : null);
+            parameters.AddOptionalParameter("start",  DateTimeConverter.ConvertToMilliseconds(startTime));
+            parameters.AddOptionalParameter("end", DateTimeConverter.ConvertToMilliseconds(endTime));
 
             return await _baseClient.SendRequestAsync<IEnumerable<BitfinexFundingOffer>>(_baseClient.GetUrl(_baseClient.FillPathParameter(FundingOfferHistoryEndpoint, symbol), "2"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
         }
@@ -101,8 +101,8 @@ namespace Bitfinex.Net.Clients.Rest
             limit?.ValidateIntBetween(nameof(limit), 1, 500);
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("limit", limit?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("start", startTime != null ? JsonConvert.SerializeObject(startTime, new TimestampConverter()) : null);
-            parameters.AddOptionalParameter("end", endTime != null ? JsonConvert.SerializeObject(endTime, new TimestampConverter()) : null);
+            parameters.AddOptionalParameter("start",  DateTimeConverter.ConvertToMilliseconds(startTime));
+            parameters.AddOptionalParameter("end", DateTimeConverter.ConvertToMilliseconds(endTime));
 
             return await _baseClient.SendRequestAsync<IEnumerable<BitfinexFunding>>(_baseClient.GetUrl(_baseClient.FillPathParameter(FundingLoansHistoryEndpoint, symbol), "2"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
         }
@@ -121,8 +121,8 @@ namespace Bitfinex.Net.Clients.Rest
             limit?.ValidateIntBetween(nameof(limit), 1, 500);
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("limit", limit?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("start", startTime != null ? JsonConvert.SerializeObject(startTime, new TimestampConverter()) : null);
-            parameters.AddOptionalParameter("end", endTime != null ? JsonConvert.SerializeObject(endTime, new TimestampConverter()) : null);
+            parameters.AddOptionalParameter("start",  DateTimeConverter.ConvertToMilliseconds(startTime));
+            parameters.AddOptionalParameter("end", DateTimeConverter.ConvertToMilliseconds(endTime));
 
             return await _baseClient.SendRequestAsync<IEnumerable<BitfinexFundingCredit>>(_baseClient.GetUrl(_baseClient.FillPathParameter(FundingCreditsHistoryEndpoint, symbol), "2"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
         }
@@ -134,8 +134,8 @@ namespace Bitfinex.Net.Clients.Rest
             limit?.ValidateIntBetween(nameof(limit), 1, 500);
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("limit", limit?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("start", startTime != null ? JsonConvert.SerializeObject(startTime, new TimestampConverter()) : null);
-            parameters.AddOptionalParameter("end", endTime != null ? JsonConvert.SerializeObject(endTime, new TimestampConverter()) : null);
+            parameters.AddOptionalParameter("start",  DateTimeConverter.ConvertToMilliseconds(startTime));
+            parameters.AddOptionalParameter("end", DateTimeConverter.ConvertToMilliseconds(endTime));
 
             return await _baseClient.SendRequestAsync<IEnumerable<BitfinexFundingTrade>>(_baseClient.GetUrl(_baseClient.FillPathParameter(FundingTradesEndpoint, symbol), "2"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
         }

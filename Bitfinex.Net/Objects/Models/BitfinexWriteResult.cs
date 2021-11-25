@@ -14,7 +14,7 @@ namespace Bitfinex.Net.Objects.Models
         /// <summary>
         /// Millisecond Time Stamp of the update.
         /// </summary>
-        [ArrayProperty(0), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(0), JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
 
         /// <summary>

@@ -23,7 +23,7 @@ namespace Bitfinex.Net.Objects.Models
         /// <summary>
         /// The timestamp of the event
         /// </summary>
-        [ArrayProperty(3), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(3), JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
         /// <summary>
         /// The change quantity

@@ -20,7 +20,7 @@ namespace Bitfinex.Net.Objects.Models
         /// <summary>
         /// The timestamp of the trade
         /// </summary>
-        [ArrayProperty(1), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(1), JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
         /// <summary>
         /// The quantity of the trade

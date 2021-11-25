@@ -13,7 +13,7 @@ namespace Bitfinex.Net.Objects.Models
         /// <summary>
         /// The timestamp of the calculation
         /// </summary>
-        [ArrayProperty(0), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(0), JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
 
         /// <summary>

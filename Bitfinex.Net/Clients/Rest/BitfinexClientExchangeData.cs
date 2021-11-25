@@ -87,8 +87,8 @@ namespace Bitfinex.Net.Clients.Rest
             limit?.ValidateIntBetween(nameof(limit), 1, 5000);
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("limit", limit?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("start", startTime != null ? JsonConvert.SerializeObject(startTime, new TimestampConverter()) : null);
-            parameters.AddOptionalParameter("end", endTime != null ? JsonConvert.SerializeObject(endTime, new TimestampConverter()) : null);
+            parameters.AddOptionalParameter("start",  DateTimeConverter.ConvertToMilliseconds(startTime));
+            parameters.AddOptionalParameter("end", DateTimeConverter.ConvertToMilliseconds(endTime));
             parameters.AddOptionalParameter("sort", sorting != null ? JsonConvert.SerializeObject(sorting, new SortingConverter(false)) : null);
 
             return await _baseClient.SendRequestAsync<IEnumerable<BitfinexTradeSimple>>(_baseClient.GetUrl(_baseClient.FillPathParameter(TradesEndpoint, symbol), "2"), HttpMethod.Get, ct, parameters).ConfigureAwait(false);
@@ -154,8 +154,8 @@ namespace Bitfinex.Net.Clients.Rest
 
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("limit", limit?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("start", startTime != null ? JsonConvert.SerializeObject(startTime, new TimestampConverter()) : null);
-            parameters.AddOptionalParameter("end", endTime != null ? JsonConvert.SerializeObject(endTime, new TimestampConverter()) : null);
+            parameters.AddOptionalParameter("start",  DateTimeConverter.ConvertToMilliseconds(startTime));
+            parameters.AddOptionalParameter("end", DateTimeConverter.ConvertToMilliseconds(endTime));
             parameters.AddOptionalParameter("sort", sorting != null ? JsonConvert.SerializeObject(sorting, new SortingConverter(false)) : null);
 
             string endpoint;
@@ -233,7 +233,7 @@ namespace Bitfinex.Net.Clients.Rest
             asset.ValidateNotNull(nameof(asset));
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("limit_lends", limit?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("timestamp", startTime == null ? null : JsonConvert.SerializeObject(startTime, new TimestampSecondsConverter()));
+            parameters.AddOptionalParameter("timestamp", DateTimeConverter.ConvertToSeconds(startTime));
             return await _baseClient.SendRequestAsync<IEnumerable<BitfinexLend>>(_baseClient.GetUrl(_baseClient.FillPathParameter(LendsEndpoint, asset), "1"), HttpMethod.Get, ct, parameters).ConfigureAwait(false);
         }
 

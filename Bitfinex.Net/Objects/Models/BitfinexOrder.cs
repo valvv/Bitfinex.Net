@@ -41,13 +41,13 @@ namespace Bitfinex.Net.Objects.Models
         /// <summary>
         /// The creation time of the order
         /// </summary>
-        [ArrayProperty(4), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(4), JsonConverter(typeof(DateTimeConverter))]
         public DateTime CreateTime { get; set; }
 
         /// <summary>
         /// The last update time
         /// </summary>
-        [ArrayProperty(5), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(5), JsonConverter(typeof(DateTimeConverter))]
         public DateTime UpdateTime { get; set; }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Bitfinex.Net.Objects.Models
         /// <summary>
         /// Tif timestamp
         /// </summary>
-        [ArrayProperty(10), JsonConverter(typeof(TimestampConverter))]
+        [ArrayProperty(10), JsonConverter(typeof(DateTimeConverter))]
         public DateTime TimestampTif { get; set; }
 
         /// <summary>
