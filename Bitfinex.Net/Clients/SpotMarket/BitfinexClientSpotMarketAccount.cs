@@ -17,7 +17,7 @@ using Bitfinex.Net.Objects.Models.V1;
 
 namespace Bitfinex.Net.Clients.Rest
 {
-    public class BitfinexClientAccount: IBitfinexClientAccount
+    public class BitfinexClientSpotMarketAccount: IBitfinexClientSpotMarketAccount
     {
         private const string WalletsEndpoint = "auth/r/wallets";
         private const string CalcAvailableBalanceEndpoint = "auth/calc/order/avail"; 
@@ -40,9 +40,9 @@ namespace Bitfinex.Net.Clients.Rest
         private const string SummaryEndpoint = "summary";
         private const string WithdrawalFeeEndpoint = "account_fees";
 
-        private readonly BitfinexClient _baseClient;
+        private readonly BitfinexClientSpotMarket _baseClient;
 
-        internal BitfinexClientAccount(BitfinexClient baseClient)
+        internal BitfinexClientSpotMarketAccount(BitfinexClientSpotMarket baseClient)
         {
             _baseClient = baseClient;
         }
@@ -65,20 +65,20 @@ namespace Bitfinex.Net.Clients.Rest
         public async Task<WebCallResult<BitfinexMarginSymbol>> GetSymbolMarginInfoAsync(string symbol, CancellationToken ct = default)
         {
             symbol.ValidateBitfinexSymbol();
-            return await _baseClient.SendRequestAsync<BitfinexMarginSymbol>(_baseClient.GetUrl(_baseClient.FillPathParameter(MarginInfoSymbolEndpoint, symbol), "2"), HttpMethod.Post, ct, null, true).ConfigureAwait(false);
+            return await _baseClient.SendRequestAsync<BitfinexMarginSymbol>(_baseClient.GetUrl(MarginInfoSymbolEndpoint.FillPathParameters(symbol), "2"), HttpMethod.Post, ct, null, true).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<WebCallResult<BitfinexFundingInfo>> GetFundingInfoAsync(string symbol, CancellationToken ct = default)
         {
             symbol.ValidateBitfinexSymbol();
-            return await _baseClient.SendRequestAsync<BitfinexFundingInfo>(_baseClient.GetUrl(_baseClient.FillPathParameter(FundingInfoEndpoint, symbol), "2"), HttpMethod.Post, ct, null, true).ConfigureAwait(false);
+            return await _baseClient.SendRequestAsync<BitfinexFundingInfo>(_baseClient.GetUrl(FundingInfoEndpoint.FillPathParameters(symbol), "2"), HttpMethod.Post, ct, null, true).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<BitfinexMovement>>> GetMovementsAsync(string? symbol = null, CancellationToken ct = default)
         {
-            var url = _baseClient.GetUrl(symbol == null ? AllMovementsEndpoint : _baseClient.FillPathParameter(MovementsEndpoint, symbol), "2");
+            var url = _baseClient.GetUrl(symbol == null ? AllMovementsEndpoint : MovementsEndpoint.FillPathParameters(symbol), "2");
             return await _baseClient.SendRequestAsync<IEnumerable<BitfinexMovement>>(url, HttpMethod.Post, ct, null, true).ConfigureAwait(false);
         }
 
@@ -113,7 +113,7 @@ namespace Bitfinex.Net.Clients.Rest
         {
             symbol.ValidateBitfinexSymbol();
 
-            return await _baseClient.SendRequestAsync<BitfinexSuccessResult>(_baseClient.GetUrl(_baseClient.FillPathParameter(DeleteAlertEndpoint, symbol, price.ToString(CultureInfo.InvariantCulture)), "2"), HttpMethod.Post, ct, null, true).ConfigureAwait(false);
+            return await _baseClient.SendRequestAsync<BitfinexSuccessResult>(_baseClient.GetUrl(DeleteAlertEndpoint.FillPathParameters(symbol, price.ToString(CultureInfo.InvariantCulture)), "2"), HttpMethod.Post, ct, null, true).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -143,7 +143,7 @@ namespace Bitfinex.Net.Clients.Rest
             parameters.AddOptionalParameter("end", DateTimeConverter.ConvertToMilliseconds(endTime));
 
             var url = string.IsNullOrEmpty(asset)
-                ? LedgerEntriesSingleEndpoint : _baseClient.FillPathParameter(LedgerEntriesEndpoint, asset!);
+                ? LedgerEntriesSingleEndpoint : LedgerEntriesEndpoint.FillPathParameters(asset!);
 
             return await _baseClient.SendRequestAsync<IEnumerable<BitfinexLedgerEntry>>(_baseClient.GetUrl(url, "2"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
         }

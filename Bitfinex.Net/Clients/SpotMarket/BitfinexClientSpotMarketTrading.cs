@@ -18,7 +18,7 @@ using Bitfinex.Net.Objects.Models.V1;
 
 namespace Bitfinex.Net.Clients.Rest
 {
-    public class BitfinexClientTrading: IBitfinexClientTrading
+    public class BitfinexClientSpotMarketTrading: IBitfinexClientSpotMarketTrading
     {
         private const string OpenOrdersEndpoint = "auth/r/orders";
         private const string OrderHistorySingleEndpoint = "auth/r/orders/hist";
@@ -37,9 +37,9 @@ namespace Bitfinex.Net.Clients.Rest
         private const string PositionAuditEndpoint = "auth/r/positions/audit";
         private const string ActivePositionsEndpoint = "auth/r/positions";
 
-        private readonly BitfinexClient _baseClient;
+        private readonly BitfinexClientSpotMarket _baseClient;
 
-        internal BitfinexClientTrading(BitfinexClient baseClient)
+        internal BitfinexClientSpotMarketTrading(BitfinexClientSpotMarket baseClient)
         {
             _baseClient = baseClient;
         }
@@ -63,7 +63,7 @@ namespace Bitfinex.Net.Clients.Rest
             parameters.AddOptionalParameter("end", DateTimeConverter.ConvertToMilliseconds(endTime));
 
             var url = string.IsNullOrEmpty(symbol)
-                ? OrderHistorySingleEndpoint : _baseClient.FillPathParameter(OrderHistoryEndpoint, symbol!);
+                ? OrderHistorySingleEndpoint : OrderHistoryEndpoint.FillPathParameters(symbol!);
             return await _baseClient.SendRequestAsync<IEnumerable<BitfinexOrder>>(_baseClient.GetUrl(url, "2"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
         }
 
@@ -72,7 +72,7 @@ namespace Bitfinex.Net.Clients.Rest
         {
             symbol.ValidateBitfinexSymbol();
 
-            return await _baseClient.SendRequestAsync<IEnumerable<BitfinexTradeDetails>>(_baseClient.GetUrl(_baseClient.FillPathParameter(OrderTradesEndpoint, symbol, orderId.ToString(CultureInfo.InvariantCulture)), "2"), HttpMethod.Post, ct, null, true).ConfigureAwait(false);
+            return await _baseClient.SendRequestAsync<IEnumerable<BitfinexTradeDetails>>(_baseClient.GetUrl(OrderTradesEndpoint.FillPathParameters(symbol, orderId.ToString(CultureInfo.InvariantCulture)), "2"), HttpMethod.Post, ct, null, true).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -87,7 +87,7 @@ namespace Bitfinex.Net.Clients.Rest
             parameters.AddOptionalParameter("end", DateTimeConverter.ConvertToMilliseconds(endTime));
 
             var url = string.IsNullOrEmpty(symbol)
-                ? MyTradesSingleEndpoint : _baseClient.FillPathParameter(MyTradesEndpoint, symbol!);
+                ? MyTradesSingleEndpoint : MyTradesEndpoint.FillPathParameters(symbol!);
             return await _baseClient.SendRequestAsync<IEnumerable<BitfinexTradeDetails>>(_baseClient.GetUrl(url, "2"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
         }
 

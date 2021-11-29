@@ -1,38 +1,34 @@
-﻿using Bitfinex.Net.Objects;
+﻿using Bitfinex.Net.Clients.Rest;
+using Bitfinex.Net.Enums;
+using Bitfinex.Net.Interfaces.Clients.Rest;
+using Bitfinex.Net.Interfaces.Clients.Spot;
+using Bitfinex.Net.Objects;
+using Bitfinex.Net.Objects.Models;
 using CryptoExchange.Net;
-using CryptoExchange.Net.Authentication;
+using CryptoExchange.Net.ExchangeInterfaces;
 using CryptoExchange.Net.Objects;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using CryptoExchange.Net.ExchangeInterfaces;
-using CryptoExchange.Net.Interfaces;
-using Bitfinex.Net.Enums;
-using Bitfinex.Net.Interfaces.Clients.Rest;
-using Bitfinex.Net.Objects.Internal;
-using Bitfinex.Net.Objects.Models;
 
-namespace Bitfinex.Net.Clients.Rest
+namespace Bitfinex.Net.Clients
 {
-    /// <summary>
-    /// Client for the Bitfinex API
-    /// </summary>
-    public class BitfinexClient : RestClient, IBitfinexClient, IExchangeClient
+    public class BitfinexClientSpotMarket: RestSubClient, IBitfinexClientSpotMarket, IExchangeClient
     {
         #region fields
         internal string? AffiliateCode { get; set; }
+        private readonly BitfinexClient _baseClient;
         #endregion
 
         #region Subclient
-        public IBitfinexClientAccount Account { get; }
-        public IBitfinexClientExchangeData ExchangeData { get; }
-        public IBitfinexClientTrading Trading { get; }
-        public IBitfinexClientFunding Funding { get; }
+        public IBitfinexClientSpotMarketAccount Account { get; }
+        public IBitfinexClientSpotMarketExchangeData ExchangeData { get; }
+        public IBitfinexClientSpotMarketTrading Trading { get; }
         #endregion
 
         /// <summary>
@@ -44,54 +40,33 @@ namespace Bitfinex.Net.Clients.Rest
         /// </summary>
         public event Action<ICommonOrderId>? OnOrderCanceled;
 
-        #region constructor/destructor
-        /// <summary>
-        /// Create a new instance of BitfinexClient using the default options
-        /// </summary>
-        public BitfinexClient() : this(BitfinexClientOptions.Default)
-        {
-        }
+        #region ctor
 
-        /// <summary>
-        /// Create a new instance of BitfinexClient using provided options
-        /// </summary>
-        /// <param name="options">The options to use for this client</param>
-        public BitfinexClient(BitfinexClientOptions options) : base("Bitfinex", options, options.ApiCredentials == null ? null : new BitfinexAuthenticationProvider(options.ApiCredentials, options.NonceProvider))
+        internal BitfinexClientSpotMarket(BitfinexClient baseClient,  BitfinexClientOptions options): 
+            base(options.OptionsSpot, options.OptionsSpot.ApiCredentials == null ? null : new BitfinexAuthenticationProvider(options.OptionsSpot.ApiCredentials, options.NonceProvider))
         {
-            if (options == null)
-                throw new ArgumentException("Cant pass null options, use empty constructor for default");
+            _baseClient = baseClient;
 
-            Account = new BitfinexClientAccount(this);
-            ExchangeData = new BitfinexClientExchangeData(this);
-            Trading = new BitfinexClientTrading(this);
-            Funding = new BitfinexClientFunding(this);
+            Account = new BitfinexClientSpotMarketAccount(this);
+            ExchangeData = new BitfinexClientSpotMarketExchangeData(this);
+            Trading = new BitfinexClientSpotMarketTrading(this);
 
             AffiliateCode = options.AffiliateCode;
         }
+
         #endregion
 
-        #region methods
-        /// <summary>
-        /// Sets the default options to use for new clients
-        /// </summary>
-        /// <param name="options">The options to use for new clients</param>
-        public static void SetDefaultOptions(BitfinexClientOptions options)
-        {
-            BitfinexClientOptions.Default = options;
-        }
-
-        /// <summary>
-        /// Set the API key and secret
-        /// </summary>
-        /// <param name="apiKey">The api key</param>
-        /// <param name="apiSecret">The api secret</param>
-        /// <param name="nonceProvider">Optional nonce provider for signing requests. Careful providing a custom provider; once a nonce is sent to the server, every request after that needs a higher nonce than that</param>
-        public void SetApiCredentials(string apiKey, string apiSecret, INonceProvider? nonceProvider = null)
-        {
-            SetAuthenticationProvider(new BitfinexAuthenticationProvider(new ApiCredentials(apiKey, apiSecret), nonceProvider));
-        }
-
         #region common interface
+
+        /// <summary>
+        /// Get the name of a symbol for Bitfinex based on the base and quote asset
+        /// </summary>
+        /// <param name="baseAsset"></param>
+        /// <param name="quoteAsset"></param>
+        /// <returns></returns>
+        public string GetSymbolName(string baseAsset, string quoteAsset) =>
+            "t" + (baseAsset + quoteAsset).ToUpper(CultureInfo.InvariantCulture);
+
 #pragma warning disable 1066
         async Task<WebCallResult<IEnumerable<ICommonSymbol>>> IExchangeClient.GetSymbolsAsync()
         {
@@ -126,13 +101,13 @@ namespace Bitfinex.Net.Clients.Rest
             var isFunding = symbol.StartsWith("f");
             var result = new BitfinexOrderBook
             {
-                Asks = orderBookResult.Data.Where(d => isFunding ? d.Quantity < 0: d.Quantity > 0),
-                Bids = orderBookResult.Data.Where(d => isFunding? d.Quantity > 0: d.Quantity < 0)
+                Asks = orderBookResult.Data.Where(d => isFunding ? d.Quantity < 0 : d.Quantity > 0),
+                Bids = orderBookResult.Data.Where(d => isFunding ? d.Quantity > 0 : d.Quantity < 0)
             };
 
             return orderBookResult.As<ICommonOrderBook>(result);
         }
-        
+
         async Task<WebCallResult<IEnumerable<ICommonKline>>> IExchangeClient.GetKlinesAsync(string symbol, TimeSpan timespan, DateTime? startTime = null, DateTime? endTime = null, int? limit = null)
         {
             var klines = await ExchangeData.GetKlinesAsync(symbol, GetTimeFrameFromTimeSpan(timespan), startTime: startTime, endTime: endTime, limit: limit).ConfigureAwait(false);
@@ -185,54 +160,6 @@ namespace Bitfinex.Net.Clients.Rest
         }
 #pragma warning restore 1066
 
-        /// <summary>
-        /// Get the name of a symbol for Bitfinex based on the base and quote asset
-        /// </summary>
-        /// <param name="baseAsset"></param>
-        /// <param name="quoteAsset"></param>
-        /// <returns></returns>
-        public string GetSymbolName(string baseAsset, string quoteAsset) =>
-            "t" + (baseAsset + quoteAsset).ToUpper(CultureInfo.InvariantCulture);
-
-        #endregion
-
-        #region private methods
-        /// <summary>
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        protected override Error ParseErrorResponse(JToken data)
-        {
-            if (!(data is JArray))
-            {
-                if (data["error"] != null && data["code"] != null && data["error_description"] != null)
-                    return new ServerError((int)data["code"]!, data["error"] + ": " + data["error_description"]);
-                if (data["message"] != null)
-                    return new ServerError(data["message"]!.ToString());
-                else
-                    return new ServerError(data.ToString());
-            }
-
-            var error = data.ToObject<BitfinexError>();
-            return new ServerError(error!.ErrorCode, error.ErrorMessage);
-
-        }
-
-        internal Uri GetUrl(string endpoint, string version)
-        {
-            return new Uri(ClientOptions.BaseAddress.AppendPath($"v{version}", endpoint));
-        }
-
-        internal new string FillPathParameter(string path, params string[] values) => BaseClient.FillPathParameter(path, values);
-
-        internal Task<WebCallResult<T>> SendRequestAsync<T>(
-            Uri uri,
-            HttpMethod method,
-            CancellationToken cancellationToken,
-            Dictionary<string, object>? parameters = null,
-            bool signed = false) where T : class
-                => base.SendRequestAsync<T>(uri, method, cancellationToken, parameters, signed);
-
         internal void InvokeOrderPlaced(ICommonOrderId id)
         {
             OnOrderPlaced?.Invoke(id);
@@ -276,7 +203,19 @@ namespace Bitfinex.Net.Clients.Rest
 
             throw new ArgumentException("Unsupported order type for Bitfinex order: " + type);
         }
-        #endregion
+
+        internal Task<WebCallResult<T>> SendRequestAsync<T>(
+            Uri uri,
+            HttpMethod method,
+            CancellationToken cancellationToken,
+            Dictionary<string, object>? parameters = null,
+            bool signed = false) where T : class
+                => _baseClient.SendRequestAsync<T>(this, uri, method, cancellationToken, parameters, signed);
+
+        internal Uri GetUrl(string endpoint, string version)
+        {
+            return new Uri(BaseAddress.AppendPath($"v{version}", endpoint));
+        }
         #endregion
     }
 }
