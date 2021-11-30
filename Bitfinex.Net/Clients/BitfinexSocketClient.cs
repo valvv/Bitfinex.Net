@@ -433,5 +433,11 @@ namespace Bitfinex.Net.Clients.Socket
 
             return false;
         }
+
+        public override void Dispose()
+        {
+            SpotMarket.Dispose();
+            base.Dispose();
+        }
     }
 }

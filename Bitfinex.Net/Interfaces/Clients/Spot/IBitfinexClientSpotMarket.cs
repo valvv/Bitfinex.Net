@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Bitfinex.Net.Interfaces.Clients.Spot
 {
-    public interface IBitfinexClientSpotMarket
+    public interface IBitfinexClientSpotMarket : IDisposable
     {
         /// <summary>
         /// Endpoints related to account settings, info or actions

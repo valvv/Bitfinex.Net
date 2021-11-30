@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Bitfinex.Net.Interfaces.Clients.General
 {
-    public interface IBitfinexClientGeneral
+    public interface IBitfinexClientGeneral : IDisposable
     {
         /// <summary>
         /// Endpoints related to funding

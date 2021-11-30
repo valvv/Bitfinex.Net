@@ -99,6 +99,11 @@ namespace Bitfinex.Net.Clients.Rest
                 => base.SendRequestAsync<T>(subClient, uri, method, cancellationToken, parameters, signed);
         #endregion
 
-
+        public override void Dispose()
+        {
+            SpotMarket.Dispose();
+            General.Dispose();
+            base.Dispose();
+        }
     }
 }

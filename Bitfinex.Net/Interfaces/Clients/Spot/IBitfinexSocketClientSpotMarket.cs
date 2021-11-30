@@ -14,7 +14,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Socket
     /// <summary>
     /// Interface for the Bitfinex socket client
     /// </summary>
-    public interface IBitfinexSocketClientSpotMarket
+    public interface IBitfinexSocketClientSpotMarket : IDisposable
     {
         /// <summary>
         /// Subscribes to ticker updates for a symbol

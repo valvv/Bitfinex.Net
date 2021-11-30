@@ -72,7 +72,7 @@ namespace Bitfinex.Net.Objects
         /// </summary>
         public static BitfinexSocketClientOptions Default { get; set; } = new BitfinexSocketClientOptions()
         {
-            OptionsSpot = new SocketSubClientOptions
+            OptionsSpot = new SubClientOptions
             {
                 BaseAddress = "wss://api.bitfinex.com/ws/2",
             },
@@ -90,7 +90,7 @@ namespace Bitfinex.Net.Objects
         /// </summary>
         public INonceProvider? NonceProvider { get; set; }
 
-        public SocketSubClientOptions OptionsSpot { get; set; }
+        public SubClientOptions OptionsSpot { get; set; }
 
         /// <summary>
         /// Ctor
@@ -116,7 +116,7 @@ namespace Bitfinex.Net.Objects
             input.AffiliateCode = def.AffiliateCode;
             input.NonceProvider = def.NonceProvider;
 
-            input.OptionsSpot = new SocketSubClientOptions();
+            input.OptionsSpot = new SubClientOptions();
             def.OptionsSpot.Copy(input.OptionsSpot, def.OptionsSpot);
         }
     }
