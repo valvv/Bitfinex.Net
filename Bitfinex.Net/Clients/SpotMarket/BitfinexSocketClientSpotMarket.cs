@@ -26,10 +26,11 @@ namespace Bitfinex.Net.Clients.Socket
     /// <summary>
     /// Socket client for the Bitfinex API
     /// </summary>
-    public class BitfinexSocketClientSpotMarket : SocketSubClient, IBitfinexSocketClientSpotMarket
+    public class BitfinexSocketClientSpotMarket : SocketApiClient, IBitfinexSocketClientSpotMarket
     {
         #region fields
         private readonly BitfinexSocketClient _baseClient;
+        private readonly BitfinexSocketClientOptions _options;
         private readonly Log _log;
 
         private readonly JsonSerializer _bookSerializer = new JsonSerializer();
@@ -42,15 +43,20 @@ namespace Bitfinex.Net.Clients.Socket
         /// Create a new instance of BitfinexSocketClient using provided options
         /// </summary>
         /// <param name="options">The options to use for this client</param>
-        public BitfinexSocketClientSpotMarket(Log log, BitfinexSocketClient baseClient, BitfinexSocketClientOptions options) : base(options.OptionsSpot, options.OptionsSpot.ApiCredentials == null ? null : new BitfinexAuthenticationProvider(options.OptionsSpot.ApiCredentials, options.NonceProvider))
+        public BitfinexSocketClientSpotMarket(Log log, BitfinexSocketClient baseClient, BitfinexSocketClientOptions options) : 
+            base(options, options.SpotStreamsOptions)
         {
             _log = log;
             _baseClient = baseClient;
+            _options = options;
 
             _affCode = options.AffiliateCode;
             _bookSerializer.Converters.Add(new OrderBookEntryConverter());
         }
         #endregion
+
+        public override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
+            => new BitfinexAuthenticationProvider(credentials, _options.NonceProvider ?? new BitfinexNonceProvider());
 
         #region public methods
 

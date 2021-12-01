@@ -16,6 +16,6 @@ namespace Bitfinex.Net.Interfaces.Clients.Socket
     /// </summary>
     public interface IBitfinexSocketClient: ISocketClient
     {
-        IBitfinexSocketClientSpotMarket SpotMarket { get; }
+        IBitfinexSocketClientSpotMarket SpotStreams { get; }
     }
 }

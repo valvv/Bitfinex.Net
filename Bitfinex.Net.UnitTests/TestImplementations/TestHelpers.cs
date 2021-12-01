@@ -109,7 +109,7 @@ namespace Bitfinex.Net.UnitTests.TestImplementations
             return client;
         }
 
-        public static Mock<IRequest> SetResponse(RestClient client, string responseData, HttpStatusCode code = HttpStatusCode.OK)
+        public static Mock<IRequest> SetResponse(BaseRestClient client, string responseData, HttpStatusCode code = HttpStatusCode.OK)
         {
             var expectedBytes = Encoding.UTF8.GetBytes(responseData);
             var responseStream = new MemoryStream();

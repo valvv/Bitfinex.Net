@@ -25,11 +25,11 @@ namespace Bitfinex.Net.Clients.Socket
     /// <summary>
     /// Socket client for the Bitfinex API
     /// </summary>
-    public class BitfinexSocketClient : SocketClient, IBitfinexSocketClient
+    public class BitfinexSocketClient : BaseSocketClient, IBitfinexSocketClient
     {
-        #region SubClients
+        #region Api clients
 
-        public IBitfinexSocketClientSpotMarket SpotMarket { get; }
+        public IBitfinexSocketClientSpotMarket SpotStreams { get; }
 
         #endregion
 
@@ -53,7 +53,7 @@ namespace Bitfinex.Net.Clients.Socket
             ContinueOnQueryResponse = true;
             UnhandledMessageExpected = true;
 
-            SpotMarket = new BitfinexSocketClientSpotMarket(log, this, options);
+            SpotStreams = new BitfinexSocketClientSpotMarket(log, this, options);
 
             AddGenericHandler("HB", (messageEvent) => { });
             AddGenericHandler("Info", InfoHandler);
@@ -116,13 +116,13 @@ namespace Bitfinex.Net.Clients.Socket
                     break;
             }
         }
-        internal Task<CallResult<UpdateSubscription>> SubscribeInternalAsync<T>(SocketSubClient subClient, object? request, string? identifier, bool authenticated, Action<DataEvent<T>> dataHandler, CancellationToken ct)
+        internal Task<CallResult<UpdateSubscription>> SubscribeInternalAsync<T>(SocketApiClient apiClient, object? request, string? identifier, bool authenticated, Action<DataEvent<T>> dataHandler, CancellationToken ct)
         {
-            return SubscribeAsync(subClient, request, identifier, authenticated, dataHandler, ct);
+            return SubscribeAsync(apiClient, request, identifier, authenticated, dataHandler, ct);
         }
 
-        internal Task<CallResult<T>> QueryInternalAsync<T>(SocketSubClient subClient, object request, bool authenticated)
-            => QueryAsync<T>(subClient, request, authenticated);
+        internal Task<CallResult<T>> QueryInternalAsync<T>(SocketApiClient apiClient, object request, bool authenticated)
+            => QueryAsync<T>(apiClient, request, authenticated);
 
         internal CallResult<T> DeserializeInternal<T>(JToken obj, JsonSerializer? serializer = null, int? requestId = null)
             => Deserialize<T>(obj, serializer, requestId);
@@ -159,19 +159,19 @@ namespace Bitfinex.Net.Clients.Socket
             return result;
         }
 
-        private BitfinexAuthentication GetAuthObject(SocketSubClient subClient, params string[] filter)
+        private BitfinexAuthentication GetAuthObject(SocketApiClient apiClient, params string[] filter)
         {
-            var n = ((BitfinexAuthenticationProvider)subClient.AuthenticationProvider!).GetNonce().ToString();
+            var n = ((BitfinexAuthenticationProvider)apiClient.AuthenticationProvider!).GetNonce().ToString();
             var authentication = new BitfinexAuthentication
             {
                 Event = "auth",
-                ApiKey = subClient.AuthenticationProvider!.Credentials.Key!.GetString(),
+                ApiKey = apiClient.AuthenticationProvider!.Credentials.Key!.GetString(),
                 Nonce = n,
                 Payload = "AUTH" + n
             };
             if (filter.Any())
                 authentication.Filter = filter;
-            authentication.Signature = subClient.AuthenticationProvider.Sign(authentication.Payload).ToLower(CultureInfo.InvariantCulture);
+            authentication.Signature = apiClient.AuthenticationProvider.Sign(authentication.Payload).ToLower(CultureInfo.InvariantCulture);
             return authentication;
         }
 
@@ -180,10 +180,10 @@ namespace Bitfinex.Net.Clients.Socket
         /// <inheritdoc />
         protected override async Task<CallResult<bool>> AuthenticateSocketAsync(SocketConnection s)
         {
-            if (s.SubClient.AuthenticationProvider == null)
+            if (s.ApiClient.AuthenticationProvider == null)
                 return new CallResult<bool>(false, new NoApiCredentialsError());
 
-            var authObject = GetAuthObject(s.SubClient);
+            var authObject = GetAuthObject(s.ApiClient);
             var result = new CallResult<bool>(false, new ServerError("No response from server"));
             await s.SendAndWaitAsync(authObject, ClientOptions.SocketResponseTimeout, tokenData =>
             {
@@ -436,7 +436,7 @@ namespace Bitfinex.Net.Clients.Socket
 
         public override void Dispose()
         {
-            SpotMarket.Dispose();
+            SpotStreams.Dispose();
             base.Dispose();
         }
     }

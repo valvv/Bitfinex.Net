@@ -10,8 +10,8 @@ namespace Bitfinex.Net.Interfaces.Clients.Rest
     public interface IBitfinexClient: IRestClient
     {
 
-        IBitfinexClientGeneral General { get; }
+        IBitfinexClientGeneral GeneralApi { get; }
 
-        IBitfinexClientSpotMarket SpotMarket { get; }
+        IBitfinexClientSpotMarket SpotApi { get; }
     }
 }

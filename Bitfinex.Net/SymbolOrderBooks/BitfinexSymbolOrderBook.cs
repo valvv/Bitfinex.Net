@@ -54,7 +54,7 @@ namespace Bitfinex.Net.SymbolOrderBooks
                 throw new ArgumentException("Invalid precision: R0");
 
 
-            var result = await socketClient.SpotMarket.SubscribeToOrderBookUpdatesAsync(Symbol, precision, Frequency.Realtime, Levels!.Value, ProcessUpdate, ProcessChecksum).ConfigureAwait(false);
+            var result = await socketClient.SpotStreams.SubscribeToOrderBookUpdatesAsync(Symbol, precision, Frequency.Realtime, Levels!.Value, ProcessUpdate, ProcessChecksum).ConfigureAwait(false);
             if (!result)
                 return result;
 

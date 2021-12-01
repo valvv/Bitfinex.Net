@@ -3,8 +3,10 @@ using Bitfinex.Net.Enums;
 using Bitfinex.Net.Interfaces.Clients.General;
 using Bitfinex.Net.Interfaces.Clients.Rest;
 using Bitfinex.Net.Objects;
+using Bitfinex.Net.Objects.Internal;
 using Bitfinex.Net.Objects.Models;
 using CryptoExchange.Net;
+using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.ExchangeInterfaces;
 using CryptoExchange.Net.Objects;
 using System;
@@ -17,14 +19,16 @@ using System.Threading.Tasks;
 
 namespace Bitfinex.Net.Clients
 {
-    public class BitfinexClientGeneral : RestSubClient, IBitfinexClientGeneral
+    public class BitfinexClientGeneral : RestApiClient, IBitfinexClientGeneral
     {
         #region fields
         internal string? AffiliateCode { get; set; }
+
+        private readonly BitfinexClientOptions _options;
         private readonly BitfinexClient _baseClient;
         #endregion
 
-        #region Subclient
+        #region Api clients
         public IBitfinexClientGeneralFunding Funding { get; }
         #endregion
 
@@ -40,15 +44,20 @@ namespace Bitfinex.Net.Clients
         #region ctor
 
         internal BitfinexClientGeneral(BitfinexClient baseClient, BitfinexClientOptions options) :
-            base(options.OptionsSpot, options.OptionsSpot.ApiCredentials == null ? null : new BitfinexAuthenticationProvider(options.OptionsSpot.ApiCredentials, options.NonceProvider))
+            base(options, options.SpotApiOptions)
         {
             _baseClient = baseClient;
+            _options = options;
+
             Funding = new BitfinexClientGeneralFunding(this);
 
             AffiliateCode = options.AffiliateCode;
         }
 
         #endregion
+
+        public override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
+            => new BitfinexAuthenticationProvider(credentials, _options.NonceProvider ?? new BitfinexNonceProvider());
 
         internal Task<WebCallResult<T>> SendRequestAsync<T>(
             Uri uri,

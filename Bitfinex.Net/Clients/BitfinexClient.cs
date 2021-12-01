@@ -24,12 +24,12 @@ namespace Bitfinex.Net.Clients.Rest
     /// <summary>
     /// Client for the Bitfinex API
     /// </summary>
-    public class BitfinexClient : RestClient, IBitfinexClient
+    public class BitfinexClient : BaseRestClient, IBitfinexClient
     {
-        #region Subclients
+        #region Api clients
 
-        public IBitfinexClientGeneral General { get; }
-        public IBitfinexClientSpotMarket SpotMarket { get; }
+        public IBitfinexClientGeneral GeneralApi { get; }
+        public IBitfinexClientSpotMarket SpotApi { get; }
 
         #endregion
 
@@ -50,8 +50,8 @@ namespace Bitfinex.Net.Clients.Rest
             if (options == null)
                 throw new ArgumentException("Cant pass null options, use empty constructor for default");
 
-            General = new BitfinexClientGeneral(this, options);
-            SpotMarket = new BitfinexClientSpotMarket(this, options);
+            GeneralApi = new BitfinexClientGeneral(this, options);
+            SpotApi = new BitfinexClientSpotMarket(this, options);
         }
         #endregion
 
@@ -90,19 +90,19 @@ namespace Bitfinex.Net.Clients.Rest
         }
 
         internal Task<WebCallResult<T>> SendRequestAsync<T>(
-            RestSubClient subClient,
+            RestApiClient apiClient,
             Uri uri,
             HttpMethod method,
             CancellationToken cancellationToken,
             Dictionary<string, object>? parameters = null,
             bool signed = false) where T : class
-                => base.SendRequestAsync<T>(subClient, uri, method, cancellationToken, parameters, signed);
+                => base.SendRequestAsync<T>(apiClient, uri, method, cancellationToken, parameters, signed);
         #endregion
 
         public override void Dispose()
         {
-            SpotMarket.Dispose();
-            General.Dispose();
+            SpotApi.Dispose();
+            GeneralApi.Dispose();
             base.Dispose();
         }
     }
