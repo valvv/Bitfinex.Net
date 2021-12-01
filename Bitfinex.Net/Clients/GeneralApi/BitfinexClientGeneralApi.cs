@@ -1,25 +1,20 @@
 ﻿using Bitfinex.Net.Clients.Rest;
-using Bitfinex.Net.Enums;
-using Bitfinex.Net.Interfaces.Clients.General;
-using Bitfinex.Net.Interfaces.Clients.Rest;
+using Bitfinex.Net.Interfaces.Clients.GeneralApi;
 using Bitfinex.Net.Objects;
 using Bitfinex.Net.Objects.Internal;
-using Bitfinex.Net.Objects.Models;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.ExchangeInterfaces;
 using CryptoExchange.Net.Objects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bitfinex.Net.Clients
+namespace Bitfinex.Net.Clients.GeneralApi
 {
-    public class BitfinexClientGeneral : RestApiClient, IBitfinexClientGeneral
+    public class BitfinexClientGeneralApi : RestApiClient, IBitfinexClientGeneralApi
     {
         #region fields
         internal string? AffiliateCode { get; set; }
@@ -29,7 +24,7 @@ namespace Bitfinex.Net.Clients
         #endregion
 
         #region Api clients
-        public IBitfinexClientGeneralFunding Funding { get; }
+        public IBitfinexClientGeneralApiFunding Funding { get; }
         #endregion
 
         /// <summary>
@@ -43,13 +38,13 @@ namespace Bitfinex.Net.Clients
 
         #region ctor
 
-        internal BitfinexClientGeneral(BitfinexClient baseClient, BitfinexClientOptions options) :
+        internal BitfinexClientGeneralApi(BitfinexClient baseClient, BitfinexClientOptions options) :
             base(options, options.SpotApiOptions)
         {
             _baseClient = baseClient;
             _options = options;
 
-            Funding = new BitfinexClientGeneralFunding(this);
+            Funding = new BitfinexClientGeneralApiFunding(this);
 
             AffiliateCode = options.AffiliateCode;
         }

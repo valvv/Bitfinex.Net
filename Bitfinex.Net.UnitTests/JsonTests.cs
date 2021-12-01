@@ -1,5 +1,4 @@
 ﻿using Bitfinex.Net.Interfaces;
-using Bitfinex.Net.Interfaces.Clients.Rest;
 using Bitfinex.Net.Objects;
 using Bitfinex.Net.UnitTests;
 using Bitfinex.Net.UnitTests.TestImplementations;
@@ -7,6 +6,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CryptoExchange.Net.Interfaces;
+using Bitfinex.Net.Interfaces.Clients;
 
 namespace Bitfinex.Net.UnitTests
 {

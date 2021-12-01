@@ -5,16 +5,15 @@ using System.Threading.Tasks;
 using Bitfinex.Net.Enums;
 using Bitfinex.Net.Objects.Models;
 using Bitfinex.Net.Objects.Models.Socket;
-using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
 
-namespace Bitfinex.Net.Interfaces.Clients.Socket
+namespace Bitfinex.Net.Interfaces.Clients.SpotApi
 {
     /// <summary>
     /// Interface for the Bitfinex socket client
     /// </summary>
-    public interface IBitfinexSocketClientSpotMarket : IDisposable
+    public interface IBitfinexSocketClientSpotStreams : IDisposable
     {
         /// <summary>
         /// Subscribes to ticker updates for a symbol
@@ -79,7 +78,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Socket
         Task<CallResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexOrder>>>> orderHandler,
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexTradeDetails>>>> tradeHandler,
-            Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexPosition>>>> positionHandler, 
+            Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexPosition>>>> positionHandler,
             CancellationToken ct = default);
 
         /// <summary>
@@ -101,7 +100,7 @@ namespace Bitfinex.Net.Interfaces.Clients.Socket
         Task<CallResult<UpdateSubscription>> SubscribeToFundingUpdatesAsync(
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexFundingOffer>>>> fundingOfferHandler,
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexFundingCredit>>>> fundingCreditHandler,
-            Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexFunding>>>> fundingLoanHandler, 
+            Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexFunding>>>> fundingLoanHandler,
             CancellationToken ct = default);
 
         /// <summary>

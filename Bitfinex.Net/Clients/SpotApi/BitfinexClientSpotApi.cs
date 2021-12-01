@@ -1,7 +1,6 @@
 ﻿using Bitfinex.Net.Clients.Rest;
 using Bitfinex.Net.Enums;
-using Bitfinex.Net.Interfaces.Clients.Rest;
-using Bitfinex.Net.Interfaces.Clients.Spot;
+using Bitfinex.Net.Interfaces.Clients.SpotApi;
 using Bitfinex.Net.Objects;
 using Bitfinex.Net.Objects.Internal;
 using Bitfinex.Net.Objects.Models;
@@ -14,13 +13,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bitfinex.Net.Clients
+namespace Bitfinex.Net.Clients.SpotApi
 {
-    public class BitfinexClientSpotMarket: RestApiClient, IBitfinexClientSpotMarket, IExchangeClient
+    public class BitfinexClientSpotApi : RestApiClient, IBitfinexClientSpotApi, IExchangeClient
     {
         #region fields
         internal string? AffiliateCode { get; set; }
@@ -30,9 +28,9 @@ namespace Bitfinex.Net.Clients
         #endregion
 
         #region Api clients
-        public IBitfinexClientSpotMarketAccount Account { get; }
-        public IBitfinexClientSpotMarketExchangeData ExchangeData { get; }
-        public IBitfinexClientSpotMarketTrading Trading { get; }
+        public IBitfinexClientSpotApiAccount Account { get; }
+        public IBitfinexClientSpotApiExchangeData ExchangeData { get; }
+        public IBitfinexClientSpotApiTrading Trading { get; }
         #endregion
 
         /// <summary>
@@ -46,15 +44,15 @@ namespace Bitfinex.Net.Clients
 
         #region ctor
 
-        internal BitfinexClientSpotMarket(BitfinexClient baseClient,  BitfinexClientOptions options): 
+        internal BitfinexClientSpotApi(BitfinexClient baseClient, BitfinexClientOptions options) :
             base(options, options.SpotApiOptions)
         {
             _baseClient = baseClient;
             _options = options;
 
-            Account = new BitfinexClientSpotMarketAccount(this);
-            ExchangeData = new BitfinexClientSpotMarketExchangeData(this);
-            Trading = new BitfinexClientSpotMarketTrading(this);
+            Account = new BitfinexClientSpotApiAccount(this);
+            ExchangeData = new BitfinexClientSpotApiExchangeData(this);
+            Trading = new BitfinexClientSpotApiTrading(this);
 
             AffiliateCode = options.AffiliateCode;
         }

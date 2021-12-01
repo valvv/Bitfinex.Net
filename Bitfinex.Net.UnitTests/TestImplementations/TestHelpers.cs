@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using Bitfinex.Net.Clients.Rest;
 using Bitfinex.Net.Clients.Socket;
 using Bitfinex.Net.Interfaces;
-using Bitfinex.Net.Interfaces.Clients.Rest;
+using Bitfinex.Net.Interfaces.Clients;
 using Bitfinex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;

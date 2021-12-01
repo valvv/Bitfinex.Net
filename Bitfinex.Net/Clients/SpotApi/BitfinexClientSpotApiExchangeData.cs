@@ -1,6 +1,5 @@
 ﻿using Bitfinex.Net.Converters;
 using Bitfinex.Net.Enums;
-using Bitfinex.Net.Interfaces.Clients.Rest;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.Objects;
@@ -14,10 +13,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Bitfinex.Net.Objects.Models;
 using Bitfinex.Net.Objects.Models.V1;
+using Bitfinex.Net.Interfaces.Clients.SpotApi;
 
-namespace Bitfinex.Net.Clients.Rest
+namespace Bitfinex.Net.Clients.SpotApi
 {
-    public class BitfinexClientSpotMarketExchangeData: IBitfinexClientSpotMarketExchangeData
+    public class BitfinexClientSpotApiExchangeData : IBitfinexClientSpotApiExchangeData
     {
         private const string StatusEndpoint = "platform/status";
         private const string SymbolsEndpoint = "symbols";
@@ -37,9 +37,9 @@ namespace Bitfinex.Net.Clients.Rest
         private const string FundingCandlesEndpoint = "candles/trade:{}:{}:{}/hist";
         private const string MarketAverageEndpoint = "calc/trade/avg";
 
-        private readonly BitfinexClientSpotMarket _baseClient;
+        private readonly BitfinexClientSpotApi _baseClient;
 
-        internal BitfinexClientSpotMarketExchangeData(BitfinexClientSpotMarket baseClient)
+        internal BitfinexClientSpotApiExchangeData(BitfinexClientSpotApi baseClient)
         {
             _baseClient = baseClient;
         }
@@ -87,7 +87,7 @@ namespace Bitfinex.Net.Clients.Rest
             limit?.ValidateIntBetween(nameof(limit), 1, 5000);
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("limit", limit?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("start",  DateTimeConverter.ConvertToMilliseconds(startTime));
+            parameters.AddOptionalParameter("start", DateTimeConverter.ConvertToMilliseconds(startTime));
             parameters.AddOptionalParameter("end", DateTimeConverter.ConvertToMilliseconds(endTime));
             parameters.AddOptionalParameter("sort", sorting != null ? JsonConvert.SerializeObject(sorting, new SortingConverter(false)) : null);
 
@@ -154,7 +154,7 @@ namespace Bitfinex.Net.Clients.Rest
 
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("limit", limit?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("start",  DateTimeConverter.ConvertToMilliseconds(startTime));
+            parameters.AddOptionalParameter("start", DateTimeConverter.ConvertToMilliseconds(startTime));
             parameters.AddOptionalParameter("end", DateTimeConverter.ConvertToMilliseconds(endTime));
             parameters.AddOptionalParameter("sort", sorting != null ? JsonConvert.SerializeObject(sorting, new SortingConverter(false)) : null);
 

@@ -1,24 +1,20 @@
-﻿using Bitfinex.Net.Converters;
-using Bitfinex.Net.Objects;
+﻿using Bitfinex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using CryptoExchange.Net.Authentication;
-using CryptoExchange.Net.Interfaces;
 using Bitfinex.Net.Enums;
 using System.Threading;
-using Bitfinex.Net.Interfaces.Clients.Socket;
 using Bitfinex.Net.Objects.Internal;
-using Bitfinex.Net.Objects.Models;
-using Bitfinex.Net.Objects.Models.Socket;
+using Bitfinex.Net.Interfaces.Clients;
+using Bitfinex.Net.Interfaces.Clients.SpotApi;
+using Bitfinex.Net.Clients.SpotApi;
 
 namespace Bitfinex.Net.Clients.Socket
 {
@@ -29,7 +25,7 @@ namespace Bitfinex.Net.Clients.Socket
     {
         #region Api clients
 
-        public IBitfinexSocketClientSpotMarket SpotStreams { get; }
+        public IBitfinexSocketClientSpotStreams SpotStreams { get; }
 
         #endregion
 
@@ -53,7 +49,7 @@ namespace Bitfinex.Net.Clients.Socket
             ContinueOnQueryResponse = true;
             UnhandledMessageExpected = true;
 
-            SpotStreams = new BitfinexSocketClientSpotMarket(log, this, options);
+            SpotStreams = new BitfinexSocketClientSpotStreams(log, this, options);
 
             AddGenericHandler("HB", (messageEvent) => { });
             AddGenericHandler("Info", InfoHandler);

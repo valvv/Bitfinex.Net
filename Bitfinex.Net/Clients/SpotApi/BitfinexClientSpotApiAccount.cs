@@ -1,6 +1,5 @@
 ﻿using Bitfinex.Net.Converters;
 using Bitfinex.Net.Enums;
-using Bitfinex.Net.Interfaces.Clients.Rest;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.Objects;
@@ -14,13 +13,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using Bitfinex.Net.Objects.Models;
 using Bitfinex.Net.Objects.Models.V1;
+using Bitfinex.Net.Interfaces.Clients.SpotApi;
 
-namespace Bitfinex.Net.Clients.Rest
+namespace Bitfinex.Net.Clients.SpotApi
 {
-    public class BitfinexClientSpotMarketAccount: IBitfinexClientSpotMarketAccount
+    public class BitfinexClientSpotApiAccount : IBitfinexClientSpotApiAccount
     {
         private const string WalletsEndpoint = "auth/r/wallets";
-        private const string CalcAvailableBalanceEndpoint = "auth/calc/order/avail"; 
+        private const string CalcAvailableBalanceEndpoint = "auth/calc/order/avail";
         private const string UserInfoEndpoint = "auth/r/info/user";
         private const string LedgerEntriesSingleEndpoint = "auth/r/ledgers/hist";
         private const string LedgerEntriesEndpoint = "auth/r/ledgers/{}/hist";
@@ -40,9 +40,9 @@ namespace Bitfinex.Net.Clients.Rest
         private const string SummaryEndpoint = "summary";
         private const string WithdrawalFeeEndpoint = "account_fees";
 
-        private readonly BitfinexClientSpotMarket _baseClient;
+        private readonly BitfinexClientSpotApi _baseClient;
 
-        internal BitfinexClientSpotMarketAccount(BitfinexClientSpotMarket baseClient)
+        internal BitfinexClientSpotApiAccount(BitfinexClientSpotApi baseClient)
         {
             _baseClient = baseClient;
         }
@@ -139,7 +139,7 @@ namespace Bitfinex.Net.Clients.Rest
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("category", category);
             parameters.AddOptionalParameter("limit", limit?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("start",  DateTimeConverter.ConvertToMilliseconds(startTime));
+            parameters.AddOptionalParameter("start", DateTimeConverter.ConvertToMilliseconds(startTime));
             parameters.AddOptionalParameter("end", DateTimeConverter.ConvertToMilliseconds(endTime));
 
             var url = string.IsNullOrEmpty(asset)

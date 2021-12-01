@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Bitfinex.Net.Clients.Socket;
 using Bitfinex.Net.Enums;
-using Bitfinex.Net.Interfaces.Clients.Socket;
+using Bitfinex.Net.Interfaces.Clients;
 using Bitfinex.Net.Objects;
 using Bitfinex.Net.Objects.Models;
 using CryptoExchange.Net.Interfaces;

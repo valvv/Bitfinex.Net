@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Bitfinex.Net.Objects.Models;
 using Bitfinex.Net.Objects.Models.V1;
 
-namespace Bitfinex.Net.Interfaces.Clients.Rest
+namespace Bitfinex.Net.Interfaces.Clients.SpotApi
 {
     /// <summary>
     /// Bitfinex account endpoints. Account endpoints include balance info, withdraw/deposit info and requesting and account settings
     /// </summary>
-    public interface IBitfinexClientSpotMarketAccount
+    public interface IBitfinexClientSpotApiAccount
     {
         /// <summary>
         /// Get all balances

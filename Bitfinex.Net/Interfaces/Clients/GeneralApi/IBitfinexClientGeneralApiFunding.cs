@@ -4,16 +4,15 @@ using Bitfinex.Net.Objects.Models.V1;
 using CryptoExchange.Net.Objects;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bitfinex.Net.Interfaces.Clients.General
+namespace Bitfinex.Net.Interfaces.Clients.GeneralApi
 {
     /// <summary>
     /// Bitfinex funding endpoints.
     /// </summary>
-    public interface IBitfinexClientGeneralFunding
+    public interface IBitfinexClientGeneralApiFunding
     {
         /// <summary>
         /// Get the active funding offers

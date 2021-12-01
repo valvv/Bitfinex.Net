@@ -12,21 +12,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using CryptoExchange.Net.Authentication;
-using CryptoExchange.Net.Interfaces;
 using Bitfinex.Net.Enums;
 using System.Threading;
-using Bitfinex.Net.Interfaces.Clients.Socket;
 using Bitfinex.Net.Objects.Internal;
 using Bitfinex.Net.Objects.Models;
 using Bitfinex.Net.Objects.Models.Socket;
 using CryptoExchange.Net.Logging;
+using Bitfinex.Net.Interfaces.Clients.SpotApi;
+using Bitfinex.Net.Clients.Socket;
 
-namespace Bitfinex.Net.Clients.Socket
+namespace Bitfinex.Net.Clients.SpotApi
 {
     /// <summary>
     /// Socket client for the Bitfinex API
     /// </summary>
-    public class BitfinexSocketClientSpotMarket : SocketApiClient, IBitfinexSocketClientSpotMarket
+    public class BitfinexSocketClientSpotStreams : SocketApiClient, IBitfinexSocketClientSpotStreams
     {
         #region fields
         private readonly BitfinexSocketClient _baseClient;
@@ -43,7 +43,7 @@ namespace Bitfinex.Net.Clients.Socket
         /// Create a new instance of BitfinexSocketClient using provided options
         /// </summary>
         /// <param name="options">The options to use for this client</param>
-        public BitfinexSocketClientSpotMarket(Log log, BitfinexSocketClient baseClient, BitfinexSocketClientOptions options) : 
+        public BitfinexSocketClientSpotStreams(Log log, BitfinexSocketClient baseClient, BitfinexSocketClientOptions options) :
             base(options, options.SpotStreamsOptions)
         {
             _log = log;
@@ -66,7 +66,7 @@ namespace Bitfinex.Net.Clients.Socket
             symbol.ValidateBitfinexSymbol();
             var internalHandler = new Action<DataEvent<JToken>>(data =>
             {
-                HandleData("Ticker", (JArray) data.Data[1]!, symbol, data, handler);
+                HandleData("Ticker", (JArray)data.Data[1]!, symbol, data, handler);
             });
             return await _baseClient.SubscribeInternalAsync(this, new BitfinexSubscriptionRequest("ticker", symbol), null, false, internalHandler, ct).ConfigureAwait(false);
         }
@@ -185,7 +185,7 @@ namespace Bitfinex.Net.Clients.Socket
         public async Task<CallResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexOrder>>>> orderHandler,
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexTradeDetails>>>> tradeHandler,
-             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexPosition>>>> positionHandler, 
+             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexPosition>>>> positionHandler,
              CancellationToken ct = default)
         {
             var tokenHandler = new Action<DataEvent<JToken>>(tokenData =>
@@ -213,7 +213,7 @@ namespace Bitfinex.Net.Clients.Socket
         public async Task<CallResult<UpdateSubscription>> SubscribeToFundingUpdatesAsync(
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexFundingOffer>>>> fundingOfferHandler,
             Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexFundingCredit>>>> fundingCreditHandler,
-            Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexFunding>>>> fundingLoanHandler, 
+            Action<DataEvent<BitfinexSocketEvent<IEnumerable<BitfinexFunding>>>> fundingLoanHandler,
             CancellationToken ct = default)
         {
             var tokenHandler = new Action<DataEvent<JToken>>(tokenData =>
@@ -246,7 +246,7 @@ namespace Bitfinex.Net.Clients.Socket
                 PriceAuxiliaryLimit = priceAuxiliaryLimit,
                 PriceOCOStop = priceOcoStop,
                 PriceTrailing = priceTrailing,
-                Meta = affCode == null ? null: new BitfinexMeta() { AffiliateCode = affCode }
+                Meta = affCode == null ? null : new BitfinexMeta() { AffiliateCode = affCode }
             });
 
             return await _baseClient.QueryInternalAsync<BitfinexOrder>(this, query, true).ConfigureAwait(false);
@@ -338,7 +338,7 @@ namespace Bitfinex.Net.Clients.Socket
 
         private void HandleSingleToArrayData<T>(string name, JArray dataArray, string? symbol, DataEvent<JToken> dataEvent, Action<DataEvent<IEnumerable<T>>> handler, JsonSerializer? serializer = null)
         {
-            var wrapperArray = new JArray {dataArray};
+            var wrapperArray = new JArray { dataArray };
 
             var desResult = _baseClient.DeserializeInternal<IEnumerable<T>>(wrapperArray, serializer: serializer);
             if (!desResult)
@@ -375,7 +375,7 @@ namespace Bitfinex.Net.Clients.Socket
             var query = new BitfinexSocketQuery(null, BitfinexEventType.OrderCancelMulti, cancelObject);
             return await _baseClient.QueryInternalAsync<bool>(this, query, true).ConfigureAwait(false);
         }
-        
+
         private void HandleAuthUpdate<T>(DataEvent<JToken> token, Action<DataEvent<BitfinexSocketEvent<IEnumerable<T>>>> action, string category)
         {
             var evntStr = token.Data[1]?.ToString();

@@ -1,23 +1,18 @@
 ﻿using Bitfinex.Net.Objects;
 using CryptoExchange.Net;
-using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using CryptoExchange.Net.ExchangeInterfaces;
-using CryptoExchange.Net.Interfaces;
-using Bitfinex.Net.Enums;
-using Bitfinex.Net.Interfaces.Clients.Rest;
 using Bitfinex.Net.Objects.Internal;
-using Bitfinex.Net.Objects.Models;
-using Bitfinex.Net.Interfaces.Clients.Spot;
-using Bitfinex.Net.Interfaces.Clients.General;
+using Bitfinex.Net.Interfaces.Clients;
+using Bitfinex.Net.Interfaces.Clients.SpotApi;
+using Bitfinex.Net.Interfaces.Clients.GeneralApi;
+using Bitfinex.Net.Clients.GeneralApi;
+using Bitfinex.Net.Clients.SpotApi;
 
 namespace Bitfinex.Net.Clients.Rest
 {
@@ -28,8 +23,8 @@ namespace Bitfinex.Net.Clients.Rest
     {
         #region Api clients
 
-        public IBitfinexClientGeneral GeneralApi { get; }
-        public IBitfinexClientSpotMarket SpotApi { get; }
+        public IBitfinexClientGeneralApi GeneralApi { get; }
+        public IBitfinexClientSpotApi SpotApi { get; }
 
         #endregion
 
@@ -50,8 +45,8 @@ namespace Bitfinex.Net.Clients.Rest
             if (options == null)
                 throw new ArgumentException("Cant pass null options, use empty constructor for default");
 
-            GeneralApi = new BitfinexClientGeneral(this, options);
-            SpotApi = new BitfinexClientSpotMarket(this, options);
+            GeneralApi = new BitfinexClientGeneralApi(this, options);
+            SpotApi = new BitfinexClientSpotApi(this, options);
         }
         #endregion
 

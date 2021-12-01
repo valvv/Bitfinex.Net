@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Bitfinex.Net.Objects.Models;
 using Bitfinex.Net.Objects.Models.V1;
 
-namespace Bitfinex.Net.Interfaces.Clients.Rest
+namespace Bitfinex.Net.Interfaces.Clients.SpotApi
 {
     /// <summary>
     /// Bitfinex exchange data endpoints. Exchange data includes market data (tickers, order books, etc) and system status.
     /// </summary>
-    public interface IBitfinexClientSpotMarketExchangeData
+    public interface IBitfinexClientSpotApiExchangeData
     {
         /// <summary>
         /// Gets the platform status

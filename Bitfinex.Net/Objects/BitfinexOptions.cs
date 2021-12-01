@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using Bitfinex.Net.Interfaces.Clients.Socket;
+using Bitfinex.Net.Interfaces.Clients;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
-using Microsoft.Extensions.Logging;
 
 namespace Bitfinex.Net.Objects
 {
