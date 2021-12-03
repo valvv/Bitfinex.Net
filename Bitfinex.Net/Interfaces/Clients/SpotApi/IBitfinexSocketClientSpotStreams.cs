@@ -11,7 +11,7 @@ using CryptoExchange.Net.Sockets;
 namespace Bitfinex.Net.Interfaces.Clients.SpotApi
 {
     /// <summary>
-    /// Interface for the Bitfinex socket client
+    /// Bitfinex spot streams
     /// </summary>
     public interface IBitfinexSocketClientSpotStreams : IDisposable
     {

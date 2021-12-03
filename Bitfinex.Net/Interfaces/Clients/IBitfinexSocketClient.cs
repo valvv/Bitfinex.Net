@@ -4,10 +4,13 @@ using CryptoExchange.Net.Interfaces;
 namespace Bitfinex.Net.Interfaces.Clients
 {
     /// <summary>
-    /// Interface for the Bitfinex socket client
+    /// Client for accessing the Bitfinex websocket API
     /// </summary>
     public interface IBitfinexSocketClient : ISocketClient
     {
+        /// <summary>
+        /// Spot streams
+        /// </summary>
         IBitfinexSocketClientSpotStreams SpotStreams { get; }
     }
 }

@@ -17,6 +17,7 @@ using Bitfinex.Net.Interfaces.Clients.SpotApi;
 
 namespace Bitfinex.Net.Clients.SpotApi
 {
+    /// <inheritdoc />
     public class BitfinexClientSpotApiAccount : IBitfinexClientSpotApiAccount
     {
         private const string WalletsEndpoint = "auth/r/wallets";

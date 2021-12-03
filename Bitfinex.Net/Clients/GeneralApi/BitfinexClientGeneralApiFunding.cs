@@ -16,6 +16,7 @@ using Bitfinex.Net.Interfaces.Clients.GeneralApi;
 
 namespace Bitfinex.Net.Clients.GeneralApi
 {
+    /// <inheritdoc />
     public class BitfinexClientGeneralApiFunding : IBitfinexClientGeneralApiFunding
     {
         private const string ActiveFundingOffersEndpoint = "auth/r/funding/offers/{}";

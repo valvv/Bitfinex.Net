@@ -23,9 +23,7 @@ using Bitfinex.Net.Clients.Socket;
 
 namespace Bitfinex.Net.Clients.SpotApi
 {
-    /// <summary>
-    /// Socket client for the Bitfinex API
-    /// </summary>
+    /// <inheritdoc cref="IBitfinexSocketClientSpotStreams" />
     public class BitfinexSocketClientSpotStreams : SocketApiClient, IBitfinexSocketClientSpotStreams
     {
         #region fields
@@ -39,11 +37,7 @@ namespace Bitfinex.Net.Clients.SpotApi
         #endregion
 
         #region ctor
-        /// <summary>
-        /// Create a new instance of BitfinexSocketClient using provided options
-        /// </summary>
-        /// <param name="options">The options to use for this client</param>
-        public BitfinexSocketClientSpotStreams(Log log, BitfinexSocketClient baseClient, BitfinexSocketClientOptions options) :
+        internal BitfinexSocketClientSpotStreams(Log log, BitfinexSocketClient baseClient, BitfinexSocketClientOptions options) :
             base(options, options.SpotStreamsOptions)
         {
             _log = log;
@@ -54,8 +48,8 @@ namespace Bitfinex.Net.Clients.SpotApi
             _bookSerializer.Converters.Add(new OrderBookEntryConverter());
         }
         #endregion
-
-        public override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
+        /// <inheritdoc />
+        protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
             => new BitfinexAuthenticationProvider(credentials, _options.NonceProvider ?? new BitfinexNonceProvider());
 
         #region public methods

@@ -9,9 +9,14 @@ namespace Bitfinex.Net.Interfaces.Clients
     /// </summary>
     public interface IBitfinexClient : IRestClient
     {
-
+        /// <summary>
+        /// General endpoints
+        /// </summary>
         IBitfinexClientGeneralApi GeneralApi { get; }
 
+        /// <summary>
+        /// Spot endpoints
+        /// </summary>
         IBitfinexClientSpotApi SpotApi { get; }
     }
 }

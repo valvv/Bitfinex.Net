@@ -2,6 +2,9 @@
 
 namespace Bitfinex.Net.Interfaces.Clients.GeneralApi
 {
+    /// <summary>
+    /// General API endpoints
+    /// </summary>
     public interface IBitfinexClientGeneralApi : IDisposable
     {
         /// <summary>

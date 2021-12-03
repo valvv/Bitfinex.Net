@@ -18,6 +18,7 @@ using Bitfinex.Net.Interfaces.Clients.SpotApi;
 
 namespace Bitfinex.Net.Clients.SpotApi
 {
+    /// <inheritdoc />
     public class BitfinexClientSpotApiTrading : IBitfinexClientSpotApiTrading
     {
         private const string OpenOrdersEndpoint = "auth/r/orders";

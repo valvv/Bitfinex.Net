@@ -16,14 +16,14 @@ using Bitfinex.Net.Clients.SpotApi;
 
 namespace Bitfinex.Net.Clients.Rest
 {
-    /// <summary>
-    /// Client for the Bitfinex API
-    /// </summary>
+    /// <inheritdoc cref="IBitfinexClient" />
     public class BitfinexClient : BaseRestClient, IBitfinexClient
     {
         #region Api clients
 
+        /// <inheritdoc />
         public IBitfinexClientGeneralApi GeneralApi { get; }
+        /// <inheritdoc />
         public IBitfinexClientSpotApi SpotApi { get; }
 
         #endregion
@@ -51,10 +51,11 @@ namespace Bitfinex.Net.Clients.Rest
         #endregion
 
         #region methods
+
         /// <summary>
-        /// Sets the default options to use for new clients
+        /// Set the default options to be used when creating new clients
         /// </summary>
-        /// <param name="options">The options to use for new clients</param>
+        /// <param name="options">Options to use as default</param>
         public static void SetDefaultOptions(BitfinexClientOptions options)
         {
             BitfinexClientOptions.Default = options;
@@ -94,6 +95,7 @@ namespace Bitfinex.Net.Clients.Rest
                 => base.SendRequestAsync<T>(apiClient, uri, method, cancellationToken, parameters, signed);
         #endregion
 
+        /// <inheritdoc />
         public override void Dispose()
         {
             SpotApi.Dispose();

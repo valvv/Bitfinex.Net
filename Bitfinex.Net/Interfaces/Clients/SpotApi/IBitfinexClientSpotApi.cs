@@ -2,6 +2,9 @@
 
 namespace Bitfinex.Net.Interfaces.Clients.SpotApi
 {
+    /// <summary>
+    /// Spot API endpoints
+    /// </summary>
     public interface IBitfinexClientSpotApi : IDisposable
     {
         /// <summary>

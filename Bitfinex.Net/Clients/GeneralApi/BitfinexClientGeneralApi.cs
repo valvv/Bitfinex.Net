@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace Bitfinex.Net.Clients.GeneralApi
 {
+    /// <inheritdoc cref="IBitfinexClientGeneralApi" />
     public class BitfinexClientGeneralApi : RestApiClient, IBitfinexClientGeneralApi
     {
         #region fields
@@ -24,17 +25,9 @@ namespace Bitfinex.Net.Clients.GeneralApi
         #endregion
 
         #region Api clients
+        /// <inheritdoc />
         public IBitfinexClientGeneralApiFunding Funding { get; }
         #endregion
-
-        /// <summary>
-        /// Event triggered when an order is placed via this client
-        /// </summary>
-        public event Action<ICommonOrderId>? OnOrderPlaced;
-        /// <summary>
-        /// Event triggered when an order is canceled via this client
-        /// </summary>
-        public event Action<ICommonOrderId>? OnOrderCanceled;
 
         #region ctor
 
@@ -51,7 +44,8 @@ namespace Bitfinex.Net.Clients.GeneralApi
 
         #endregion
 
-        public override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
+        /// <inheritdoc />
+        protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
             => new BitfinexAuthenticationProvider(credentials, _options.NonceProvider ?? new BitfinexNonceProvider());
 
         internal Task<WebCallResult<T>> SendRequestAsync<T>(

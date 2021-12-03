@@ -131,7 +131,7 @@ namespace Bitfinex.Net.UnitTests.TestImplementations
             return request;
         }
 
-        public static object? GetTestValue(Type type, int i)
+        public static object GetTestValue(Type type, int i)
         {
             if (type == typeof(bool))
                 return true;

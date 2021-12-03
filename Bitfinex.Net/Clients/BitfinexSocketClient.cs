@@ -18,13 +18,12 @@ using Bitfinex.Net.Clients.SpotApi;
 
 namespace Bitfinex.Net.Clients.Socket
 {
-    /// <summary>
-    /// Socket client for the Bitfinex API
-    /// </summary>
+    /// <inheritdoc cref="IBitfinexSocketClient" />
     public class BitfinexSocketClient : BaseSocketClient, IBitfinexSocketClient
     {
         #region Api clients
 
+        /// <inheritdoc />
         public IBitfinexSocketClientSpotStreams SpotStreams { get; }
 
         #endregion
@@ -58,16 +57,16 @@ namespace Bitfinex.Net.Clients.Socket
         #endregion
 
         /// <summary>
-        /// set the default options used when creating a client without specifying options
+        /// Set the default options to be used when creating new clients
         /// </summary>
-        /// <param name="newDefaultOptions"></param>
-        public static void SetDefaultOptions(BitfinexSocketClientOptions newDefaultOptions)
+        /// <param name="options">Options to use as default</param>
+        public static void SetDefaultOptions(BitfinexSocketClientOptions options)
         {
-            BitfinexSocketClientOptions.Default = newDefaultOptions;
+            BitfinexSocketClientOptions.Default = options;
         }
 
         #region private methods
-        
+
         private void ConfHandler(MessageEvent messageEvent)
         {
             var confEvent = messageEvent.JsonData.Type == JTokenType.Object && messageEvent.JsonData["event"]?.ToString() == "conf";
@@ -370,7 +369,7 @@ namespace Bitfinex.Net.Clients.Socket
         }
 
         /// <inheritdoc />
-        protected override bool MessageMatchesHandler(JToken message, object request)
+        protected override bool MessageMatchesHandler(SocketConnection socketConnection, JToken message, object request)
         {
             if (message.Type != JTokenType.Array)
                 return false;
@@ -390,7 +389,7 @@ namespace Bitfinex.Net.Clients.Socket
         }
 
         /// <inheritdoc />
-        protected override bool MessageMatchesHandler(JToken message, string identifier)
+        protected override bool MessageMatchesHandler(SocketConnection socketConnection, JToken message, string identifier)
         {
             if (message.Type == JTokenType.Object)
             {
@@ -430,6 +429,7 @@ namespace Bitfinex.Net.Clients.Socket
             return false;
         }
 
+        /// <inheritdoc />
         public override void Dispose()
         {
             SpotStreams.Dispose();
