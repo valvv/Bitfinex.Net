@@ -1,5 +1,4 @@
-﻿using Bitfinex.Net.Clients.Rest;
-using Bitfinex.Net.Interfaces.Clients.GeneralApi;
+﻿using Bitfinex.Net.Interfaces.Clients.GeneralApi;
 using Bitfinex.Net.Objects;
 using Bitfinex.Net.Objects.Internal;
 using CryptoExchange.Net;

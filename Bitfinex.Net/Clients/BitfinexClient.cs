@@ -14,7 +14,7 @@ using Bitfinex.Net.Interfaces.Clients.GeneralApi;
 using Bitfinex.Net.Clients.GeneralApi;
 using Bitfinex.Net.Clients.SpotApi;
 
-namespace Bitfinex.Net.Clients.Rest
+namespace Bitfinex.Net.Clients
 {
     /// <inheritdoc cref="IBitfinexClient" />
     public class BitfinexClient : BaseRestClient, IBitfinexClient

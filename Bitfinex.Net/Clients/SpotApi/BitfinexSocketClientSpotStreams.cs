@@ -19,7 +19,6 @@ using Bitfinex.Net.Objects.Models;
 using Bitfinex.Net.Objects.Models.Socket;
 using CryptoExchange.Net.Logging;
 using Bitfinex.Net.Interfaces.Clients.SpotApi;
-using Bitfinex.Net.Clients.Socket;
 
 namespace Bitfinex.Net.Clients.SpotApi
 {

@@ -28,7 +28,7 @@ namespace Bitfinex.Net.Interfaces.Clients.SpotApi
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BitfinexAsset>>> GetAssetAsync(CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BitfinexAsset>>> GetAssetsAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Returns basic market data for the provided symbols

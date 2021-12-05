@@ -52,7 +52,7 @@ namespace Bitfinex.Net.Clients.SpotApi
         }
 
         /// <inheritdoc />
-        public async Task<WebCallResult<IEnumerable<BitfinexAsset>>> GetAssetAsync(CancellationToken ct = default)
+        public async Task<WebCallResult<IEnumerable<BitfinexAsset>>> GetAssetsAsync(CancellationToken ct = default)
         {
             var result = await _baseClient.SendRequestAsync<IEnumerable<IEnumerable<BitfinexAsset>>>(_baseClient.GetUrl(CurrenciesEndpoint, "2"), HttpMethod.Get, ct).ConfigureAwait(false);
             if (!result)

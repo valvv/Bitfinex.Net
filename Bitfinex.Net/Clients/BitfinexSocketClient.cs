@@ -16,7 +16,7 @@ using Bitfinex.Net.Interfaces.Clients;
 using Bitfinex.Net.Interfaces.Clients.SpotApi;
 using Bitfinex.Net.Clients.SpotApi;
 
-namespace Bitfinex.Net.Clients.Socket
+namespace Bitfinex.Net.Clients
 {
     /// <inheritdoc cref="IBitfinexSocketClient" />
     public class BitfinexSocketClient : BaseSocketClient, IBitfinexSocketClient

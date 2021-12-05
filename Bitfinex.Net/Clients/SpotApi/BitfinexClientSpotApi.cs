@@ -1,5 +1,4 @@
-﻿using Bitfinex.Net.Clients.Rest;
-using Bitfinex.Net.Enums;
+﻿using Bitfinex.Net.Enums;
 using Bitfinex.Net.Interfaces.Clients.SpotApi;
 using Bitfinex.Net.Objects;
 using Bitfinex.Net.Objects.Internal;
