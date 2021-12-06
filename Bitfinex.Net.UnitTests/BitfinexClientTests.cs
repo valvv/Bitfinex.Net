@@ -8,12 +8,11 @@ using Bitfinex.Net.UnitTests.TestImplementations;
 using Moq;
 using System.Net;
 using System.Threading.Tasks;
-using Bitfinex.Net.Clients.Rest;
 using System.Reflection;
 using System.Diagnostics;
-using Bitfinex.Net.Clients.Socket;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
+using Bitfinex.Net.Clients;
 
 namespace Bitfinex.Net.UnitTests
 {
@@ -27,7 +26,7 @@ namespace Bitfinex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient("Error message", null, HttpStatusCode.BadRequest);
 
             // act
-            var result = await client.SpotApi.ExchangeData.GetAssetAsync();
+            var result = await client.SpotApi.ExchangeData.GetAssetsAsync();
 
             // assert
             Assert.AreEqual(false, result.Success);
