@@ -67,8 +67,11 @@ namespace Bitfinex.Net.Clients.SpotApi
         }
 
         /// <inheritdoc />
-        public Task<WebCallResult<IEnumerable<BitfinexSymbolOverview>>> GetTickerAsync(string symbol, CancellationToken ct = default)
-            => GetTickersAsync(new[] { symbol }, ct);
+        public async Task<WebCallResult<BitfinexSymbolOverview>> GetTickerAsync(string symbol, CancellationToken ct = default)
+        { 
+            var ticker = await GetTickersAsync(new[] { symbol }, ct).ConfigureAwait(false);
+            return ticker.As<BitfinexSymbolOverview>(ticker.Data?.First());
+        }
 
         /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<BitfinexSymbolOverview>>> GetTickersAsync(IEnumerable<string>? symbols = null, CancellationToken ct = default)
@@ -96,7 +99,7 @@ namespace Bitfinex.Net.Clients.SpotApi
         }
 
         /// <inheritdoc />
-        public async Task<WebCallResult<IEnumerable<BitfinexOrderBookEntry>>> GetOrderBookAsync(string symbol, Precision precision, int? limit = null, CancellationToken ct = default)
+        public async Task<WebCallResult<BitfinexOrderBook>> GetOrderBookAsync(string symbol, Precision precision, int? limit = null, CancellationToken ct = default)
         {
             symbol.ValidateBitfinexSymbol();
             limit?.ValidateIntValues("limit", 25, 100);
@@ -107,11 +110,21 @@ namespace Bitfinex.Net.Clients.SpotApi
             parameters.AddOptionalParameter("len", limit?.ToString(CultureInfo.InvariantCulture));
             var prec = JsonConvert.SerializeObject(precision, new PrecisionConverter(false));
 
-            return await _baseClient.SendRequestAsync<IEnumerable<BitfinexOrderBookEntry>>(_baseClient.GetUrl(OrderBookEndpoint.FillPathParameters(symbol, prec), "2"), HttpMethod.Get, ct, parameters).ConfigureAwait(false);
+            var result = await _baseClient.SendRequestAsync<IEnumerable<BitfinexOrderBookEntry>>(_baseClient.GetUrl(OrderBookEndpoint.FillPathParameters(symbol, prec), "2"), HttpMethod.Get, ct, parameters).ConfigureAwait(false);
+            if (!result)
+                return result.As<BitfinexOrderBook>(default);
+
+            var isFunding = symbol.StartsWith("f");
+            var book = new BitfinexOrderBook()
+            {
+                Asks = result.Data.Where(d => isFunding ? d.Quantity < 0 : d.Quantity > 0),
+                Bids = result.Data.Where(d => isFunding ? d.Quantity > 0 : d.Quantity < 0)
+            };
+            return result.As(book);
         }
 
         /// <inheritdoc />
-        public async Task<WebCallResult<IEnumerable<BitfinexRawOrderBookEntry>>> GetRawOrderBookAsync(string symbol, int? limit = null, CancellationToken ct = default)
+        public async Task<WebCallResult<BitfinexOrderBook>> GetRawOrderBookAsync(string symbol, int? limit = null, CancellationToken ct = default)
         {
             symbol.ValidateBitfinexSymbol();
             limit?.ValidateIntValues("limit", 25, 100);
@@ -120,7 +133,17 @@ namespace Bitfinex.Net.Clients.SpotApi
             parameters.AddOptionalParameter("len", limit?.ToString(CultureInfo.InvariantCulture));
             var prec = JsonConvert.SerializeObject(Precision.R0, new PrecisionConverter(false));
 
-            return await _baseClient.SendRequestAsync<IEnumerable<BitfinexRawOrderBookEntry>>(_baseClient.GetUrl(OrderBookEndpoint.FillPathParameters(symbol, prec), "2"), HttpMethod.Get, ct, parameters).ConfigureAwait(false);
+            var result = await _baseClient.SendRequestAsync<IEnumerable<BitfinexRawOrderBookEntry>>(_baseClient.GetUrl(OrderBookEndpoint.FillPathParameters(symbol, prec), "2"), HttpMethod.Get, ct, parameters).ConfigureAwait(false);
+            if (!result)
+                return result.As<BitfinexOrderBook>(default);
+
+            var isFunding = symbol.StartsWith("f");
+            var book = new BitfinexOrderBook()
+            {
+                Asks = result.Data.Where(d => isFunding ? d.Quantity < 0 : d.Quantity > 0),
+                Bids = result.Data.Where(d => isFunding ? d.Quantity > 0 : d.Quantity < 0)
+            };
+            return result.As(book);
         }
 
         /// <inheritdoc />

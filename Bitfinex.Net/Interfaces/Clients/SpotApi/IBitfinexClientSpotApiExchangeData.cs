@@ -37,7 +37,7 @@ namespace Bitfinex.Net.Interfaces.Clients.SpotApi
         /// <param name="symbol">The symbol to get data for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol data</returns>
-        Task<WebCallResult<IEnumerable<BitfinexSymbolOverview>>> GetTickerAsync(string symbol, CancellationToken ct = default);
+        Task<WebCallResult<BitfinexSymbolOverview>> GetTickerAsync(string symbol, CancellationToken ct = default);
 
         /// <summary>
         /// Returns basic market data for the provided symbols
@@ -70,7 +70,7 @@ namespace Bitfinex.Net.Interfaces.Clients.SpotApi
         /// <param name="limit">The amount of results in the book</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>The order book for the symbol</returns>
-        Task<WebCallResult<IEnumerable<BitfinexOrderBookEntry>>> GetOrderBookAsync(string symbol, Precision precision, int? limit = null, CancellationToken ct = default);
+        Task<WebCallResult<BitfinexOrderBook>> GetOrderBookAsync(string symbol, Precision precision, int? limit = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get the raw order book for a symbol
@@ -80,7 +80,7 @@ namespace Bitfinex.Net.Interfaces.Clients.SpotApi
         /// <param name="limit">The amount of results in the book</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BitfinexRawOrderBookEntry>>> GetRawOrderBookAsync(string symbol, int? limit = null, CancellationToken ct = default);
+        Task<WebCallResult<BitfinexOrderBook>> GetRawOrderBookAsync(string symbol, int? limit = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get various stats for the symbol

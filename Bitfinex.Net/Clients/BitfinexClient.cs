@@ -45,8 +45,8 @@ namespace Bitfinex.Net.Clients
             if (options == null)
                 throw new ArgumentException("Cant pass null options, use empty constructor for default");
 
-            GeneralApi = new BitfinexClientGeneralApi(this, options);
-            SpotApi = new BitfinexClientSpotApi(this, options);
+            GeneralApi = new BitfinexClientGeneralApi(log, this, options);
+            SpotApi = new BitfinexClientSpotApi(log, this, options);
         }
         #endregion
 

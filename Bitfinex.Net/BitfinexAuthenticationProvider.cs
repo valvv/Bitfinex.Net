@@ -17,8 +17,6 @@ namespace Bitfinex.Net
     internal class BitfinexAuthenticationProvider: AuthenticationProvider
     {
         private readonly INonceProvider _nonceProvider;
-        private readonly HMACSHA384 _encryptor;
-        private readonly object _locker;
 
         public long GetNonce() => _nonceProvider.GetNonce();
 
@@ -28,67 +26,45 @@ namespace Bitfinex.Net
                 throw new ArgumentException("ApiKey/Secret needed");
 
             _nonceProvider = nonceProvider ?? new BitfinexNonceProvider();
-            _locker = new object();
-            _encryptor = new HMACSHA384(Encoding.UTF8.GetBytes(credentials.Secret.GetString()));
         }
 
-        public override Dictionary<string, string> AddAuthenticationToHeaders(string uri, HttpMethod method, Dictionary<string, object> parameters, bool signed, HttpMethodParameterPosition parameterPosition, ArrayParametersSerialization arraySerialization)
+        public override void AuthenticateUriRequest(RestApiClient apiClient, ref Uri uri, HttpMethod method, SortedDictionary<string, object> parameters, Dictionary<string, string> headers, bool auth, ArrayParametersSerialization arraySerialization)
         {
-            if(Credentials.Key == null)
-                throw new ArgumentException("ApiKey/Secret needed");
+            // Only public endpoints are Uri requests, so no need to do anything here
+            return;
+        }
 
-            var result = new Dictionary<string, string>();
-            if (!signed)
-                return result;
+        public override void AuthenticateBodyRequest(RestApiClient apiClient, Uri uri, HttpMethod method, SortedDictionary<string, object> parameters, Dictionary<string, string> headers, bool auth, ArrayParametersSerialization arraySerialization)
+        {
+            if (!auth)
+                return;
 
-            if (uri.Contains("v1"))
+            if (uri.AbsolutePath.Contains("v1"))
             {
-                var signature = JsonConvert.SerializeObject(parameters);
+                parameters.Add("request", uri.AbsolutePath);
+                parameters.Add("nonce", _nonceProvider.GetNonce().ToString());
 
+                var signature = JsonConvert.SerializeObject(parameters);
                 var payload = Convert.ToBase64String(Encoding.ASCII.GetBytes(signature));
                 var signedData = Sign(payload);
 
-                result.Add("X-BFX-APIKEY", Credentials.Key.GetString());
-                result.Add("X-BFX-PAYLOAD", payload);
-                result.Add("X-BFX-SIGNATURE", signedData.ToLower(CultureInfo.InvariantCulture));
+                headers.Add("X-BFX-APIKEY", Credentials.Key!.GetString());
+                headers.Add("X-BFX-PAYLOAD", payload);
+                headers.Add("X-BFX-SIGNATURE", signedData.ToLower(CultureInfo.InvariantCulture));
             }
-            else if (uri.Contains("v2"))
+            else if (uri.AbsolutePath.Contains("v2"))
             {
-                var json = JsonConvert.SerializeObject(parameters.OrderBy(p => p.Key).ToDictionary(p => p.Key, p => p.Value));
+                var json = JsonConvert.SerializeObject(parameters);
                 var n = _nonceProvider.GetNonce().ToString();
-                var signature = $"/api{uri.Split(new[] { ".com" }, StringSplitOptions.None)[1]}{n}{json}";
-                var signedData = Sign(signature);
+                var signature = $"/api{uri.AbsolutePath}{n}{json}";
+                var signedData = SignHMACSHA384(signature);
 
-                result.Add("bfx-apikey", Credentials.Key.GetString());
-                result.Add("bfx-nonce", n);
-                result.Add("bfx-signature", signedData.ToLower(CultureInfo.InvariantCulture));
+                headers.Add("bfx-apikey", Credentials.Key!.GetString());
+                headers.Add("bfx-nonce", n);
+                headers.Add("bfx-signature", signedData.ToLower(CultureInfo.InvariantCulture));
             }
-
-            return result;
         }
 
-        public override Dictionary<string, object> AddAuthenticationToParameters(string uri, HttpMethod method, Dictionary<string, object> parameters, bool signed, HttpMethodParameterPosition parameterPosition, ArrayParametersSerialization arraySerialization)
-        {
-            if (!signed)
-                return parameters;
-
-            if (uri.Contains("v1"))
-            {
-                parameters.Add("request", uri.Split(new[] { ".com" }, StringSplitOptions.None)[1]);
-                parameters.Add("nonce", _nonceProvider.GetNonce().ToString());
-            }
-            else if (uri.Contains("v2"))
-            {
-                // Nothing
-            }
-
-            return parameters;
-        }
-
-        public override string Sign(string toSign)
-        {
-            lock(_locker)
-                return ByteToString(_encryptor.ComputeHash(Encoding.UTF8.GetBytes(toSign)));
-        }
+        public override string Sign(string toSign) => SignHMACSHA384(toSign);
     }
 }

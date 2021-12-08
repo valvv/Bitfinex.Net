@@ -6,7 +6,9 @@ using Bitfinex.Net.Objects.Models;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.ExchangeInterfaces;
+using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Objects;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -24,7 +26,12 @@ namespace Bitfinex.Net.Clients.SpotApi
         internal string? AffiliateCode { get; set; }
 
         private readonly BitfinexClient _baseClient;
+        private readonly Log _log;
         private readonly BitfinexClientOptions _options;
+
+        internal static TimeSpan TimeOffset;
+        internal static SemaphoreSlim SemaphoreSlim = new SemaphoreSlim(1, 1);
+        internal static DateTime LastTimeSync;
         #endregion
 
         #region Api clients
@@ -47,10 +54,11 @@ namespace Bitfinex.Net.Clients.SpotApi
 
         #region ctor
 
-        internal BitfinexClientSpotApi(BitfinexClient baseClient, BitfinexClientOptions options) :
+        internal BitfinexClientSpotApi(Log log, BitfinexClient baseClient, BitfinexClientOptions options) :
             base(options, options.SpotApiOptions)
         {
             _baseClient = baseClient;
+            _log = log;
             _options = options;
 
             Account = new BitfinexClientSpotApiAccount(this);
@@ -87,7 +95,7 @@ namespace Bitfinex.Net.Clients.SpotApi
         async Task<WebCallResult<ICommonTicker>> IExchangeClient.GetTickerAsync(string symbol)
         {
             var tickersResult = await ExchangeData.GetTickerAsync(symbol).ConfigureAwait(false);
-            return tickersResult.As<ICommonTicker>(tickersResult.Data?.FirstOrDefault());
+            return tickersResult.As<ICommonTicker>(tickersResult.Data);
         }
 
         async Task<WebCallResult<IEnumerable<ICommonTicker>>> IExchangeClient.GetTickersAsync()
@@ -108,14 +116,7 @@ namespace Bitfinex.Net.Clients.SpotApi
             if (!orderBookResult)
                 return WebCallResult<ICommonOrderBook>.CreateErrorResult(orderBookResult.ResponseStatusCode, orderBookResult.ResponseHeaders, orderBookResult.Error!);
 
-            var isFunding = symbol.StartsWith("f");
-            var result = new BitfinexOrderBook
-            {
-                Asks = orderBookResult.Data.Where(d => isFunding ? d.Quantity < 0 : d.Quantity > 0),
-                Bids = orderBookResult.Data.Where(d => isFunding ? d.Quantity > 0 : d.Quantity < 0)
-            };
-
-            return orderBookResult.As<ICommonOrderBook>(result);
+            return orderBookResult.As<ICommonOrderBook>(orderBookResult.Data);
         }
 
         async Task<WebCallResult<IEnumerable<ICommonKline>>> IExchangeClient.GetKlinesAsync(string symbol, TimeSpan timespan, DateTime? startTime = null, DateTime? endTime = null, int? limit = null)
@@ -183,16 +184,16 @@ namespace Bitfinex.Net.Clients.SpotApi
         private static KlineInterval GetTimeFrameFromTimeSpan(TimeSpan timeSpan)
         {
             if (timeSpan == TimeSpan.FromMinutes(1)) return KlineInterval.OneMinute;
-            if (timeSpan == TimeSpan.FromMinutes(5)) return KlineInterval.FiveMinute;
-            if (timeSpan == TimeSpan.FromMinutes(15)) return KlineInterval.FifteenMinute;
-            if (timeSpan == TimeSpan.FromMinutes(30)) return KlineInterval.ThirtyMinute;
+            if (timeSpan == TimeSpan.FromMinutes(5)) return KlineInterval.FiveMinutes;
+            if (timeSpan == TimeSpan.FromMinutes(15)) return KlineInterval.FifteenMinutes;
+            if (timeSpan == TimeSpan.FromMinutes(30)) return KlineInterval.ThirtyMinutes;
             if (timeSpan == TimeSpan.FromHours(1)) return KlineInterval.OneHour;
-            if (timeSpan == TimeSpan.FromHours(3)) return KlineInterval.ThreeHour;
-            if (timeSpan == TimeSpan.FromHours(6)) return KlineInterval.SixHour;
-            if (timeSpan == TimeSpan.FromHours(12)) return KlineInterval.TwelveHour;
+            if (timeSpan == TimeSpan.FromHours(3)) return KlineInterval.ThreeHours;
+            if (timeSpan == TimeSpan.FromHours(6)) return KlineInterval.SixHours;
+            if (timeSpan == TimeSpan.FromHours(12)) return KlineInterval.TwelveHours;
             if (timeSpan == TimeSpan.FromDays(1)) return KlineInterval.OneDay;
-            if (timeSpan == TimeSpan.FromDays(7)) return KlineInterval.SevenDay;
-            if (timeSpan == TimeSpan.FromDays(14)) return KlineInterval.FourteenDay;
+            if (timeSpan == TimeSpan.FromDays(7)) return KlineInterval.SevenDays;
+            if (timeSpan == TimeSpan.FromDays(14)) return KlineInterval.FourteenDays;
             if (timeSpan == TimeSpan.FromDays(30) || timeSpan == TimeSpan.FromDays(31)) return KlineInterval.OneMonth;
 
             throw new ArgumentException("Unsupported timespan for Bitfinex Klines, check supported intervals using Bitfinex.Net.Objects.TimeFrame");
@@ -226,6 +227,33 @@ namespace Bitfinex.Net.Clients.SpotApi
         {
             return new Uri(BaseAddress.AppendPath($"v{version}", endpoint));
         }
+
+        /// <inheritdoc />
+        protected override Task<WebCallResult<DateTime>> GetServerTimestampAsync()
+        {
+            // No timestamp request available on the server..
+            return Task.FromResult(new WebCallResult<DateTime> (null, null, DateTime.UtcNow, null));
+        }
+
+        /// <inheritdoc />
+        protected override TimeSyncModel GetTimeSyncParameters()
+        {
+            return new TimeSyncModel(_options.SpotApiOptions.AutoTimestamp, SemaphoreSlim, LastTimeSync);
+        }
+
+        /// <inheritdoc />
+        protected override void UpdateTimeOffset(TimeSpan timestamp)
+        {
+            LastTimeSync = DateTime.UtcNow;
+            if (timestamp.TotalMilliseconds > 0 && timestamp.TotalMilliseconds < 500)
+                return;
+
+            _log.Write(LogLevel.Information, $"Time offset set to {Math.Round(timestamp.TotalMilliseconds)}ms");
+            TimeOffset = timestamp;
+        }
+
+        /// <inheritdoc />
+        public override TimeSpan GetTimeOffset() => TimeOffset;
         #endregion
     }
 }
