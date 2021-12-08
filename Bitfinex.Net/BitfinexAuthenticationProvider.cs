@@ -28,7 +28,7 @@ namespace Bitfinex.Net
             _nonceProvider = nonceProvider ?? new BitfinexNonceProvider();
         }
 
-        public override void AuthenticateUriRequest(RestApiClient apiClient, ref Uri uri, HttpMethod method, SortedDictionary<string, object> parameters, Dictionary<string, string> headers, bool auth, ArrayParametersSerialization arraySerialization)
+        public override void AuthenticateUriRequest(RestApiClient apiClient, Uri uri, HttpMethod method, SortedDictionary<string, object> parameters, Dictionary<string, string> headers, bool auth, ArrayParametersSerialization arraySerialization)
         {
             // Only public endpoints are Uri requests, so no need to do anything here
             return;
