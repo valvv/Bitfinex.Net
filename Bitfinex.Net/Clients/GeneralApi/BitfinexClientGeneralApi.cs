@@ -67,26 +67,14 @@ namespace Bitfinex.Net.Clients.GeneralApi
 
         /// <inheritdoc />
         protected override Task<WebCallResult<DateTime>> GetServerTimestampAsync()
-        {
-            // No timestamp request available on the server..
-            return Task.FromResult(new WebCallResult<DateTime>(null, null, DateTime.UtcNow, null));
-        }
+            => Task.FromResult(new WebCallResult<DateTime>(null, null, DateTime.UtcNow, null));
 
-        protected override TimeSyncModel GetTimeSyncParameters()
-        {
-            return new TimeSyncModel(_options.SpotApiOptions.AutoTimestamp, BitfinexClientSpotApi.SemaphoreSlim, BitfinexClientSpotApi.LastTimeSync);
-        }
+        /// <inheritdoc />
+        protected override TimeSyncInfo GetTimeSyncInfo()
+            => new TimeSyncInfo(_log, _options.SpotApiOptions.AutoTimestamp, BitfinexClientSpotApi.TimeSyncState);
 
-        protected override void UpdateTimeOffset(TimeSpan timestamp)
-        {
-            BitfinexClientSpotApi.LastTimeSync = DateTime.UtcNow;
-            if (timestamp.TotalMilliseconds > 0 && timestamp.TotalMilliseconds < 500)
-                return;
-
-            _log.Write(LogLevel.Information, $"Time offset set to {Math.Round(timestamp.TotalMilliseconds)}ms");
-            BitfinexClientSpotApi.TimeOffset = timestamp;
-        }
-
-        public override TimeSpan GetTimeOffset() => BitfinexClientSpotApi.TimeOffset;
+        /// <inheritdoc />
+        public override TimeSpan GetTimeOffset()
+            => BitfinexClientSpotApi.TimeSyncState.TimeOffset;
     }
 }

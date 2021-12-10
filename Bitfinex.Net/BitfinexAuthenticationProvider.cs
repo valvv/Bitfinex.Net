@@ -22,29 +22,25 @@ namespace Bitfinex.Net
 
         public BitfinexAuthenticationProvider(ApiCredentials credentials, INonceProvider? nonceProvider) : base(credentials)
         {
-            if (credentials.Secret == null)
-                throw new ArgumentException("ApiKey/Secret needed");
-
             _nonceProvider = nonceProvider ?? new BitfinexNonceProvider();
         }
 
-        public override void AuthenticateUriRequest(RestApiClient apiClient, Uri uri, HttpMethod method, SortedDictionary<string, object> parameters, Dictionary<string, string> headers, bool auth, ArrayParametersSerialization arraySerialization)
+        public override void AuthenticateRequest(RestApiClient apiClient, Uri uri, HttpMethod method, Dictionary<string, object> providedParameters, bool auth, ArrayParametersSerialization arraySerialization, HttpMethodParameterPosition parameterPosition, out SortedDictionary<string, object> uriParameters, out SortedDictionary<string, object> bodyParameters, out Dictionary<string, string> headers)
         {
-            // Only public endpoints are Uri requests, so no need to do anything here
-            return;
-        }
+            uriParameters = parameterPosition == HttpMethodParameterPosition.InUri ? new SortedDictionary<string, object>(providedParameters) : new SortedDictionary<string, object>();
+            bodyParameters = parameterPosition == HttpMethodParameterPosition.InBody ? new SortedDictionary<string, object>(providedParameters) : new SortedDictionary<string, object>();
+            headers = new Dictionary<string, string>();
 
-        public override void AuthenticateBodyRequest(RestApiClient apiClient, Uri uri, HttpMethod method, SortedDictionary<string, object> parameters, Dictionary<string, string> headers, bool auth, ArrayParametersSerialization arraySerialization)
-        {
             if (!auth)
                 return;
 
+            // Auth requests are always POST
             if (uri.AbsolutePath.Contains("v1"))
             {
-                parameters.Add("request", uri.AbsolutePath);
-                parameters.Add("nonce", _nonceProvider.GetNonce().ToString());
+                bodyParameters.Add("request", uri.AbsolutePath);
+                bodyParameters.Add("nonce", _nonceProvider.GetNonce().ToString());
 
-                var signature = JsonConvert.SerializeObject(parameters);
+                var signature = JsonConvert.SerializeObject(bodyParameters);
                 var payload = Convert.ToBase64String(Encoding.ASCII.GetBytes(signature));
                 var signedData = Sign(payload);
 
@@ -54,7 +50,7 @@ namespace Bitfinex.Net
             }
             else if (uri.AbsolutePath.Contains("v2"))
             {
-                var json = JsonConvert.SerializeObject(parameters);
+                var json = JsonConvert.SerializeObject(bodyParameters);
                 var n = _nonceProvider.GetNonce().ToString();
                 var signature = $"/api{uri.AbsolutePath}{n}{json}";
                 var signedData = SignHMACSHA384(signature);
@@ -66,5 +62,7 @@ namespace Bitfinex.Net
         }
 
         public override string Sign(string toSign) => SignHMACSHA384(toSign);
+
+        
     }
 }

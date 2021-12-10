@@ -103,16 +103,16 @@ namespace Bitfinex.Net.UnitTests
         }
 
         [TestCase(KlineInterval.OneMinute)]
-        [TestCase(KlineInterval.FiveMinute)]
-        [TestCase(KlineInterval.FifteenMinute)]
-        [TestCase(KlineInterval.ThirtyMinute)]
+        [TestCase(KlineInterval.FiveMinutes)]
+        [TestCase(KlineInterval.FifteenMinutes)]
+        [TestCase(KlineInterval.ThirtyMinutes)]
         [TestCase(KlineInterval.OneHour)]
-        [TestCase(KlineInterval.ThreeHour)]
-        [TestCase(KlineInterval.SixHour)]
-        [TestCase(KlineInterval.TwelveHour)]
+        [TestCase(KlineInterval.ThreeHours)]
+        [TestCase(KlineInterval.SixHours)]
+        [TestCase(KlineInterval.TwelveHours)]
         [TestCase(KlineInterval.OneDay)]
-        [TestCase(KlineInterval.SevenDay)]
-        [TestCase(KlineInterval.FourteenDay)]
+        [TestCase(KlineInterval.SevenDays)]
+        [TestCase(KlineInterval.FourteenDays)]
         public void SubscribingToCandleUpdates_Should_SubscribeSuccessfully(KlineInterval timeframe)
         {
             // arrange
@@ -144,16 +144,16 @@ namespace Bitfinex.Net.UnitTests
         }
 
         [TestCase(KlineInterval.OneMinute)]
-        [TestCase(KlineInterval.FiveMinute)]
-        [TestCase(KlineInterval.FifteenMinute)]
-        [TestCase(KlineInterval.ThirtyMinute)]
+        [TestCase(KlineInterval.FiveMinutes)]
+        [TestCase(KlineInterval.FifteenMinutes)]
+        [TestCase(KlineInterval.ThirtyMinutes)]
         [TestCase(KlineInterval.OneHour)]
-        [TestCase(KlineInterval.ThreeHour)]
-        [TestCase(KlineInterval.SixHour)]
-        [TestCase(KlineInterval.TwelveHour)]
+        [TestCase(KlineInterval.ThreeHours)]
+        [TestCase(KlineInterval.SixHours)]
+        [TestCase(KlineInterval.TwelveHours)]
         [TestCase(KlineInterval.OneDay)]
-        [TestCase(KlineInterval.SevenDay)]
-        [TestCase(KlineInterval.FourteenDay)]
+        [TestCase(KlineInterval.SevenDays)]
+        [TestCase(KlineInterval.FourteenDays)]
         public void SubscribingToCandleUpdates_Should_TriggerWithCandleUpdate(KlineInterval timeframe)
         {
             // arrange
@@ -709,14 +709,14 @@ namespace Bitfinex.Net.UnitTests
             });
 
             var rstEvent = new ManualResetEvent(false);
-            var subTask = client.SpotStreams.SubscribeToKlineUpdatesAsync("tBTCUSD", KlineInterval.FiveMinute, data => { });
+            var subTask = client.SpotStreams.SubscribeToKlineUpdatesAsync("tBTCUSD", KlineInterval.FiveMinutes, data => { });
             socket.InvokeMessage(new CandleSubscriptionResponse()
             {
                 Channel = "candles",
                 Event = "subscribed",
                 ChannelId = 1,
                 Symbol = "tBTCUSD",
-                Key = "trade:" + JsonConvert.SerializeObject(KlineInterval.FiveMinute, new KlineIntervalConverter(false)) + ":tBTCUSD"
+                Key = "trade:" + JsonConvert.SerializeObject(KlineInterval.FiveMinutes, new KlineIntervalConverter(false)) + ":tBTCUSD"
             });
             var subResult = subTask.Result;
 
@@ -731,7 +731,7 @@ namespace Bitfinex.Net.UnitTests
                 Event = "subscribed",
                 ChannelId = 1,
                 Symbol = "tBTCUSD",
-                Key = "trade:" + JsonConvert.SerializeObject(KlineInterval.FiveMinute, new KlineIntervalConverter(false)) + ":tBTCUSD"
+                Key = "trade:" + JsonConvert.SerializeObject(KlineInterval.FiveMinutes, new KlineIntervalConverter(false)) + ":tBTCUSD"
             });
 
             var triggered = rstEvent.WaitOne(1000);
@@ -757,7 +757,7 @@ namespace Bitfinex.Net.UnitTests
             });
 
             var rstEvent = new ManualResetEvent(false);
-            var subTask = client.SpotStreams.SubscribeToKlineUpdatesAsync("tBTCUSD", KlineInterval.FiveMinute, data => { });
+            var subTask = client.SpotStreams.SubscribeToKlineUpdatesAsync("tBTCUSD", KlineInterval.FiveMinutes, data => { });
             socket.OnOpen += async () =>
             {
                 await Task.Delay(10);
@@ -767,7 +767,7 @@ namespace Bitfinex.Net.UnitTests
                     Event = "subscribed",
                     ChannelId = 1,
                     Symbol = "tBTCUSD",
-                    Key = "trade:" + JsonConvert.SerializeObject(KlineInterval.FiveMinute, new KlineIntervalConverter(false)) +
+                    Key = "trade:" + JsonConvert.SerializeObject(KlineInterval.FiveMinutes, new KlineIntervalConverter(false)) +
                           ":tBTCUSD"
                 });
             };
@@ -775,7 +775,7 @@ namespace Bitfinex.Net.UnitTests
 
             subResult.Data.ActivityPaused += async () =>
             {
-                subResultWhenPaused = await client.SpotStreams.SubscribeToKlineUpdatesAsync("tBTCUSD", KlineInterval.FiveMinute, data => { });
+                subResultWhenPaused = await client.SpotStreams.SubscribeToKlineUpdatesAsync("tBTCUSD", KlineInterval.FiveMinutes, data => { });
                 rstEvent.Set();
             };
 

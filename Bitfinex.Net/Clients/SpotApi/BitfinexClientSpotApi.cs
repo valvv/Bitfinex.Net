@@ -32,6 +32,8 @@ namespace Bitfinex.Net.Clients.SpotApi
         internal static TimeSpan TimeOffset;
         internal static SemaphoreSlim SemaphoreSlim = new SemaphoreSlim(1, 1);
         internal static DateTime LastTimeSync;
+
+        internal static TimeSyncState TimeSyncState = new TimeSyncState();
         #endregion
 
         #region Api clients
@@ -154,7 +156,7 @@ namespace Bitfinex.Net.Clients.SpotApi
 
         async Task<WebCallResult<IEnumerable<ICommonOrder>>> IExchangeClient.GetClosedOrdersAsync(string? symbol)
         {
-            var result = await Trading.GetOrdersAsync(symbol).ConfigureAwait(false);
+            var result = await Trading.GetClosedOrdersAsync(symbol).ConfigureAwait(false);
             return result.As<IEnumerable<ICommonOrder>>(result.Data);
         }
 
@@ -230,30 +232,15 @@ namespace Bitfinex.Net.Clients.SpotApi
 
         /// <inheritdoc />
         protected override Task<WebCallResult<DateTime>> GetServerTimestampAsync()
-        {
-            // No timestamp request available on the server..
-            return Task.FromResult(new WebCallResult<DateTime> (null, null, DateTime.UtcNow, null));
-        }
+            => Task.FromResult(new WebCallResult<DateTime>(null, null, DateTime.UtcNow, null));
 
         /// <inheritdoc />
-        protected override TimeSyncModel GetTimeSyncParameters()
-        {
-            return new TimeSyncModel(_options.SpotApiOptions.AutoTimestamp, SemaphoreSlim, LastTimeSync);
-        }
+        protected override TimeSyncInfo GetTimeSyncInfo()
+            => new TimeSyncInfo(_log, _options.SpotApiOptions.AutoTimestamp, TimeSyncState);
 
         /// <inheritdoc />
-        protected override void UpdateTimeOffset(TimeSpan timestamp)
-        {
-            LastTimeSync = DateTime.UtcNow;
-            if (timestamp.TotalMilliseconds > 0 && timestamp.TotalMilliseconds < 500)
-                return;
-
-            _log.Write(LogLevel.Information, $"Time offset set to {Math.Round(timestamp.TotalMilliseconds)}ms");
-            TimeOffset = timestamp;
-        }
-
-        /// <inheritdoc />
-        public override TimeSpan GetTimeOffset() => TimeOffset;
+        public override TimeSpan GetTimeOffset()
+            => TimeSyncState.TimeOffset;
         #endregion
     }
 }
