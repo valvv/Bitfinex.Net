@@ -31,10 +31,8 @@ namespace Bitfinex.Net.SymbolOrderBooks
         /// Create a new order book instance
         /// </summary>
         /// <param name="symbol">The symbol the order book is for</param>
-        /// <param name="precisionLevel">The precision level of the order book</param>
-        /// <param name="limit">The limit of entries in the order book, either 25 or 100</param>
         /// <param name="options">Options for the order book</param>
-        public BitfinexSymbolOrderBook(string symbol, Precision precisionLevel, int limit, BitfinexOrderBookOptions? options = null) : base("Bitfinex[Spot]", symbol, options ?? new BitfinexOrderBookOptions())
+        public BitfinexSymbolOrderBook(string symbol, BitfinexOrderBookOptions? options = null) : base("Bitfinex", symbol, options ?? new BitfinexOrderBookOptions())
         {
             symbol.ValidateBitfinexSymbol();
             socketClient = options?.SocketClient ?? new BitfinexSocketClient(new BitfinexSocketClientOptions
@@ -43,8 +41,8 @@ namespace Bitfinex.Net.SymbolOrderBooks
             });
             _socketOwner = options?.SocketClient == null;
 
-            Levels = limit;
-            precision = precisionLevel;
+            Levels = options?.Limit ?? 25;
+            precision = options?.Precision ?? Precision.PrecisionLevel0;
         }
 
         /// <inheritdoc />
@@ -52,7 +50,6 @@ namespace Bitfinex.Net.SymbolOrderBooks
         {
             if(precision == Precision.R0)
                 throw new ArgumentException("Invalid precision: R0");
-
 
             var result = await socketClient.SpotStreams.SubscribeToOrderBookUpdatesAsync(Symbol, precision, Frequency.Realtime, Levels!.Value, ProcessUpdate, ProcessChecksum).ConfigureAwait(false);
             if (!result)

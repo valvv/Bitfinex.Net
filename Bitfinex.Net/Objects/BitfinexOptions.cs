@@ -1,4 +1,5 @@
 ﻿using System;
+using Bitfinex.Net.Enums;
 using Bitfinex.Net.Interfaces.Clients;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
@@ -135,13 +136,13 @@ namespace Bitfinex.Net.Objects
         /// The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.
         /// </summary>
         public IBitfinexSocketClient? SocketClient { get; }
-
         /// <summary>
+        /// The precision level of the order book
         /// </summary>
-        /// <param name="client">The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.</param>
-        public BitfinexOrderBookOptions(IBitfinexSocketClient? client = null)
-        {
-            SocketClient = client;
-        }
+        public Precision? Precision { get; }
+        /// <summary>
+        /// The limit of entries in the order book, either 25 or 100
+        /// </summary>
+        public int? Limit { get; }
     }
 }
