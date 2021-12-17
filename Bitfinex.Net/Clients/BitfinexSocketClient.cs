@@ -48,7 +48,7 @@ namespace Bitfinex.Net.Clients
             ContinueOnQueryResponse = true;
             UnhandledMessageExpected = true;
 
-            SpotStreams = new BitfinexSocketClientSpotStreams(log, this, options);
+            SpotStreams = AddApiClient(new BitfinexSocketClientSpotStreams(log, this, options));
 
             AddGenericHandler("HB", (messageEvent) => { });
             AddGenericHandler("Info", InfoHandler);
@@ -427,13 +427,6 @@ namespace Bitfinex.Net.Clients
             }
 
             return false;
-        }
-
-        /// <inheritdoc />
-        public override void Dispose()
-        {
-            SpotStreams.Dispose();
-            base.Dispose();
         }
     }
 }

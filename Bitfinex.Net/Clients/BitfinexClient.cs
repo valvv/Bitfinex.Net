@@ -45,8 +45,8 @@ namespace Bitfinex.Net.Clients
             if (options == null)
                 throw new ArgumentException("Cant pass null options, use empty constructor for default");
 
-            GeneralApi = new BitfinexClientGeneralApi(log, this, options);
-            SpotApi = new BitfinexClientSpotApi(log, this, options);
+            GeneralApi = AddApiClient(new BitfinexClientGeneralApi(log, this, options));
+            SpotApi = AddApiClient(new BitfinexClientSpotApi(log, this, options));
         }
         #endregion
 
@@ -94,13 +94,5 @@ namespace Bitfinex.Net.Clients
             bool signed = false) where T : class
                 => base.SendRequestAsync<T>(apiClient, uri, method, cancellationToken, parameters, signed);
         #endregion
-
-        /// <inheritdoc />
-        public override void Dispose()
-        {
-            SpotApi.Dispose();
-            GeneralApi.Dispose();
-            base.Dispose();
-        }
     }
 }
