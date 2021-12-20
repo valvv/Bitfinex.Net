@@ -135,14 +135,14 @@ namespace Bitfinex.Net.Objects
         /// <summary>
         /// The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.
         /// </summary>
-        public IBitfinexSocketClient? SocketClient { get; }
+        public IBitfinexSocketClient? SocketClient { get; set; }
         /// <summary>
         /// The precision level of the order book
         /// </summary>
-        public Precision? Precision { get; }
+        public Precision? Precision { get; set; }
         /// <summary>
         /// The limit of entries in the order book, either 25 or 100
         /// </summary>
-        public int? Limit { get; }
+        public int? Limit { get; set; }
     }
 }

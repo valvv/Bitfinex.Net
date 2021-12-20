@@ -75,8 +75,8 @@ namespace Bitfinex.Net.Interfaces.Clients.SpotApi
         /// <param name="symbol">Symbol to place order for</param>
         /// <param name="side">Side of the order</param>
         /// <param name="type">Type of the order</param>
-        /// <param name="quantity">The quantity of the order</param>
         /// <param name="price">The price for the order</param>
+        /// <param name="quantity">The quantity of the order</param>
         /// <param name="affiliateCode">Affiliate code for the order</param>
         /// <param name="ct">Cancellation token</param>
         /// <param name="flags"></param>
@@ -92,8 +92,8 @@ namespace Bitfinex.Net.Interfaces.Clients.SpotApi
             string symbol,
             OrderSide side,
             OrderType type,
-            decimal price,
             decimal quantity,
+            decimal price,
             int? flags = null,
             int? leverage = null,
             int? groupId = null,

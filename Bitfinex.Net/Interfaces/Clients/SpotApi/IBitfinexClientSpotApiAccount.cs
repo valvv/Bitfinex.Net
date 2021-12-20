@@ -55,7 +55,7 @@ namespace Bitfinex.Net.Interfaces.Clients.SpotApi
         /// <param name="symbol">Symbol to get history for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BitfinexMovement>>> GetMovementsAsync(string? symbol, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BitfinexMovement>>> GetMovementsAsync(string? symbol = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get the list of alerts
