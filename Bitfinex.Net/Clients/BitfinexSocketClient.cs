@@ -226,7 +226,9 @@ namespace Bitfinex.Net.Clients
                 return false;
 
             var bfRequest = (BitfinexSocketQuery)request;
-            var eventType = BitfinexEvents.EventMapping[data[1]!.ToString()];
+            var evntString = data[1]!.ToString();
+            if (!BitfinexEvents.EventMapping.TryGetValue(evntString, out var eventType))
+                return false;
 
             if (eventType == BitfinexEventType.Notification)
             {
