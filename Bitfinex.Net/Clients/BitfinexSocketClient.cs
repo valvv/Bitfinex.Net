@@ -154,7 +154,7 @@ namespace Bitfinex.Net.Clients
             return result;
         }
 
-        private BitfinexAuthentication GetAuthObject(SocketApiClient apiClient, params string[] filter)
+        private static BitfinexAuthentication GetAuthObject(SocketApiClient apiClient, params string[] filter)
         {
             var n = ((BitfinexAuthenticationProvider)apiClient.AuthenticationProvider!).GetNonce().ToString();
             var authentication = new BitfinexAuthentication
@@ -178,7 +178,7 @@ namespace Bitfinex.Net.Clients
             if (s.ApiClient.AuthenticationProvider == null)
                 return new CallResult<bool>(false, new NoApiCredentialsError());
 
-            var authObject = GetAuthObject(s.ApiClient);
+            var authObject = BitfinexSocketClient.GetAuthObject(s.ApiClient);
             var result = new CallResult<bool>(false, new ServerError("No response from server"));
             await s.SendAndWaitAsync(authObject, ClientOptions.SocketResponseTimeout, tokenData =>
             {

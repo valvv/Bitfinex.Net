@@ -37,7 +37,6 @@ namespace Bitfinex.Net.Clients.SpotApi
         private const string WithdrawEndpoint = "withdraw";
         private const string MarginInfoBaseEndpoint = "auth/r/info/margin/base";
         private const string MarginInfoSymbolEndpoint = "auth/r/info/margin/{}";
-        private const string FundingInfoEndpoint = "auth/r/info/funding/{}";
         private const string SummaryEndpoint = "summary";
         private const string WithdrawalFeeEndpoint = "account_fees";
 
@@ -67,13 +66,6 @@ namespace Bitfinex.Net.Clients.SpotApi
         {
             symbol.ValidateBitfinexSymbol();
             return await _baseClient.SendRequestAsync<BitfinexMarginSymbol>(_baseClient.GetUrl(MarginInfoSymbolEndpoint.FillPathParameters(symbol), "2"), HttpMethod.Post, ct, null, true).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<WebCallResult<BitfinexFundingInfo>> GetFundingInfoAsync(string symbol, CancellationToken ct = default)
-        {
-            symbol.ValidateBitfinexSymbol();
-            return await _baseClient.SendRequestAsync<BitfinexFundingInfo>(_baseClient.GetUrl(FundingInfoEndpoint.FillPathParameters(symbol), "2"), HttpMethod.Post, ct, null, true).ConfigureAwait(false);
         }
 
         /// <inheritdoc />

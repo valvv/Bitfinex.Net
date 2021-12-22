@@ -28,6 +28,7 @@ namespace Bitfinex.Net.Clients.GeneralApi
         private const string FundingTradesEndpoint = "auth/r/funding/trades/{}/hist";
         private const string FundingOfferSubmitEndpoint = "auth/w/funding/offer/submit";
         private const string FundingOfferCancelEndpoint = "auth/w/funding/offer/cancel";
+        private const string FundingInfoEndpoint = "auth/r/info/funding/{}";
 
         private const string NewOfferEndpoint = "offer/new";
         private const string CancelOfferEndpoint = "offer/cancel";
@@ -184,6 +185,12 @@ namespace Bitfinex.Net.Clients.GeneralApi
                 { "swap_id", swapId }
             };
             return await _baseClient.SendRequestAsync<BitfinexFundingContract>(_baseClient.GetUrl(CloseMarginFundingEndpoint, "1"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
+        }
+        /// <inheritdoc />
+        public async Task<WebCallResult<BitfinexFundingInfo>> GetFundingInfoAsync(string symbol, CancellationToken ct = default)
+        {
+            symbol.ValidateBitfinexSymbol();
+            return await _baseClient.SendRequestAsync<BitfinexFundingInfo>(_baseClient.GetUrl(FundingInfoEndpoint.FillPathParameters(symbol), "2"), HttpMethod.Post, ct, null, true).ConfigureAwait(false);
         }
     }
 }

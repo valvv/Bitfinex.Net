@@ -40,15 +40,6 @@ namespace Bitfinex.Net.Interfaces.Clients.SpotApi
         Task<WebCallResult<BitfinexMarginSymbol>> GetSymbolMarginInfoAsync(string symbol, CancellationToken ct = default);
 
         /// <summary>
-        /// Get funding info for a symbol
-        /// <para><a href="https://docs.bitfinex.com/reference#rest-auth-info-funding" /></para>
-        /// </summary>
-        /// <param name="symbol">The symbol to get the info for</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BitfinexFundingInfo>> GetFundingInfoAsync(string symbol, CancellationToken ct = default);
-
-        /// <summary>
         /// Get the withdrawal/deposit history
         /// <para><a href="https://docs.bitfinex.com/reference#rest-auth-movements" /></para>
         /// </summary>

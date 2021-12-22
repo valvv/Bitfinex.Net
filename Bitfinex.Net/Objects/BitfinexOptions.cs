@@ -26,7 +26,7 @@ namespace Bitfinex.Net.Objects
         /// </summary>
         public INonceProvider? NonceProvider { get; set; }
 
-        private RestApiClientOptions _spotApiOptions = new RestApiClientOptions("https://api.bitfinex.com");
+        private readonly RestApiClientOptions _spotApiOptions = new RestApiClientOptions("https://api.bitfinex.com");
         /// <summary>
         /// Options for the spot API
         /// </summary>
@@ -89,7 +89,7 @@ namespace Bitfinex.Net.Objects
         public INonceProvider? NonceProvider { get; set; }
 
         
-        private ApiClientOptions _spotStreamsOptions = new ApiClientOptions("wss://api.bitfinex.com/ws/2");
+        private readonly ApiClientOptions _spotStreamsOptions = new ApiClientOptions("wss://api.bitfinex.com/ws/2");
         /// <summary>
         /// Options for the spot streams
         /// </summary>

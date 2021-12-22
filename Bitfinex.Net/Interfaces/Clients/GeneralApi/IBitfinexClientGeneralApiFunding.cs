@@ -150,5 +150,14 @@ namespace Bitfinex.Net.Interfaces.Clients.GeneralApi
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         Task<WebCallResult<BitfinexFundingContract>> CloseMarginFundingAsync(long swapId, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get funding info for a symbol
+        /// <para><a href="https://docs.bitfinex.com/reference#rest-auth-info-funding" /></para>
+        /// </summary>
+        /// <param name="symbol">The symbol to get the info for</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<WebCallResult<BitfinexFundingInfo>> GetFundingInfoAsync(string symbol, CancellationToken ct = default);
     }
 }
