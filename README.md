@@ -92,6 +92,10 @@ For the basic client options see also the CryptoExchange.Net [docs](https://gith
 |`AffiliateCode`|The affiliate code to use for requests|kCCe-CNBO
 
 ## Release notes
+* Version 5.0.0-alpha3 - 27 Dec 2021
+    * Fixed GetTicker returning success with no data
+    * Updated CryptoExchange.Net
+
 * Version 5.0.0-alpha2 - 21 Dec 2021
     * Update to new CryptoExchange.Net version
 
