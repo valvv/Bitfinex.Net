@@ -70,7 +70,13 @@ namespace Bitfinex.Net.Clients.SpotApi
         public async Task<WebCallResult<BitfinexSymbolOverview>> GetTickerAsync(string symbol, CancellationToken ct = default)
         { 
             var ticker = await GetTickersAsync(new[] { symbol }, ct).ConfigureAwait(false);
-            return ticker.As<BitfinexSymbolOverview>(ticker.Data?.First());
+            if(!ticker)
+                return ticker.As<BitfinexSymbolOverview>(null);
+
+            if (!ticker.Data.Any())
+                return new WebCallResult<BitfinexSymbolOverview>(ticker.ResponseStatusCode, ticker.ResponseHeaders, null, new ServerError("Symbol not found"));
+
+            return ticker.As(ticker.Data.First());
         }
 
         /// <inheritdoc />

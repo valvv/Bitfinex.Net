@@ -36,6 +36,9 @@ namespace Bitfinex.Net.Clients.SpotApi
         internal static TimeSyncState TimeSyncState = new TimeSyncState();
         #endregion
 
+        /// <inheritdoc />
+        public string ExchangeName => "Bitfinex";
+
         #region Api clients
         /// <inheritdoc />
         public IBitfinexClientSpotApiAccount Account { get; }
@@ -241,6 +244,9 @@ namespace Bitfinex.Net.Clients.SpotApi
         /// <inheritdoc />
         public override TimeSpan GetTimeOffset()
             => TimeSyncState.TimeOffset;
+
+        /// <inheritdoc />
+        public IExchangeClient AsExchangeClient() => this;
         #endregion
     }
 }
