@@ -2,7 +2,6 @@
 using Bitfinex.Net.Converters;
 using Bitfinex.Net.Enums;
 using CryptoExchange.Net.Converters;
-using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
 namespace Bitfinex.Net.Objects.Models.V1
@@ -10,7 +9,7 @@ namespace Bitfinex.Net.Objects.Models.V1
     /// <summary>
     /// Placed order info
     /// </summary>
-    public class BitfinexPlacedOrder: ICommonOrderId, ICommonOrder
+    public class BitfinexPlacedOrder
     {
         /// <summary>
         /// The id of the order
@@ -113,37 +112,6 @@ namespace Bitfinex.Net.Objects.Models.V1
         /// Affiliate code for the order
         /// </summary>
         [JsonProperty("aff_code")]
-        public string? AffiliateCode { get; set; }
-        
-        string ICommonOrderId.CommonId => Id.ToString();
-        string ICommonOrder.CommonSymbol => Symbol;
-        decimal ICommonOrder.CommonPrice => Price;
-        decimal ICommonOrder.CommonQuantity => Quantity;
-
-        IExchangeClient.OrderStatus ICommonOrder.CommonStatus
-        {
-            get
-            {
-                if (Canceled) return IExchangeClient.OrderStatus.Canceled;
-                if (QuantityRemaining == 0) return IExchangeClient.OrderStatus.Filled;
-                return IExchangeClient.OrderStatus.Active;
-            }
-        }
-
-        bool ICommonOrder.IsActive => Live;
-        DateTime ICommonOrder.CommonOrderTime => Timestamp;
-
-        IExchangeClient.OrderSide ICommonOrder.CommonSide =>
-            Side == OrderSide.Sell ? IExchangeClient.OrderSide.Sell : IExchangeClient.OrderSide.Buy;
-
-        IExchangeClient.OrderType ICommonOrder.CommonType
-        {
-            get
-            {
-                if (Type == OrderTypeV1.ExchangeMarket) return IExchangeClient.OrderType.Market;
-                if (Type == OrderTypeV1.ExchangeLimit) return IExchangeClient.OrderType.Limit;
-                else return IExchangeClient.OrderType.Other;
-            }
-        }
+        public string? AffiliateCode { get; set; }        
     }
 }

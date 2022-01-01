@@ -1,12 +1,11 @@
-﻿using CryptoExchange.Net.ExchangeInterfaces;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Bitfinex.Net.Objects.Models.V1
 {
     /// <summary>
     /// Symbol details
     /// </summary>
-    public class BitfinexSymbolDetails: ICommonSymbol
+    public class BitfinexSymbolDetails
     {
         /// <summary>
         /// The symbol pair
@@ -47,8 +46,5 @@ namespace Bitfinex.Net.Objects.Models.V1
         /// If margin trading is enabled for the pair
         /// </summary>
         public bool Margin { get; set; }
-
-        string ICommonSymbol.CommonName => Symbol;
-        decimal ICommonSymbol.CommonMinimumTradeQuantity => MinimumOrderQuantity;
     }
 }

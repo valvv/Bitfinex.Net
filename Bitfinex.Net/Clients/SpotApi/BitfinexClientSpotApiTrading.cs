@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Bitfinex.Net.Objects.Models;
 using Bitfinex.Net.Objects.Models.V1;
 using Bitfinex.Net.Interfaces.Clients.SpotApi;
+using CryptoExchange.Net.ComonObjects;
 
 namespace Bitfinex.Net.Clients.SpotApi
 {
@@ -95,8 +96,8 @@ namespace Bitfinex.Net.Clients.SpotApi
         /// <inheritdoc />
         public async Task<WebCallResult<BitfinexWriteResult<BitfinexOrder>>> PlaceOrderAsync(
             string symbol,
-            OrderSide side,
-            OrderType type,
+            Enums.OrderSide side,
+            Enums.OrderType type,
             decimal quantity,
             decimal price,
             int? flags = null,
@@ -112,7 +113,7 @@ namespace Bitfinex.Net.Clients.SpotApi
         {
             symbol.ValidateBitfinexSymbol();
 
-            if (side == OrderSide.Sell)
+            if (side == Enums.OrderSide.Sell)
                 quantity = -quantity;
 
             var parameters = new Dictionary<string, object>
@@ -153,7 +154,7 @@ namespace Bitfinex.Net.Clients.SpotApi
                 Data = orderData
             };
 
-            _baseClient.InvokeOrderPlaced(orderData!);
+            _baseClient.InvokeOrderPlaced(new OrderId { SourceObject = result.Data, Id = result.Data.Id.ToString(CultureInfo.InvariantCulture) });
             return result.As(output);
         }
 
@@ -174,7 +175,7 @@ namespace Bitfinex.Net.Clients.SpotApi
 
             var result = await _baseClient.SendRequestAsync<BitfinexWriteResult<BitfinexOrder>>(_baseClient.GetUrl(CancelOrderEndpoint, "2"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
             if (result)
-                _baseClient.InvokeOrderCanceled(result.Data.Data!);
+                _baseClient.InvokeOrderCanceled(new OrderId { SourceObject = result.Data, Id = result.Data.Id.ToString(CultureInfo.InvariantCulture) });
             return result;
         }
 

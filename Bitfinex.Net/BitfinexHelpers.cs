@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Bitfinex.Net.Clients;
+using Bitfinex.Net.Interfaces.Clients;
+using Bitfinex.Net.Objects;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Text.RegularExpressions;
 
 namespace Bitfinex.Net
@@ -8,6 +12,28 @@ namespace Bitfinex.Net
     /// </summary>
     public static class BitfinexHelpers
     {
+        /// <summary>
+        /// Add the IBitfinexClient and IBitfinexSocketClient to the sevice collection so they can be injected
+        /// </summary>
+        /// <param name="services">The service collection</param>
+        /// <param name="defaultOptionsCallback">Set default options for the client</param>
+        /// <returns></returns>
+        public static IServiceCollection AddBitfinex(this IServiceCollection services, Action<BitfinexClientOptions, BitfinexSocketClientOptions>? defaultOptionsCallback = null)
+        {
+            if (defaultOptionsCallback != null)
+            {
+                var options = new BitfinexClientOptions();
+                var socketOptions = new BitfinexSocketClientOptions();
+                defaultOptionsCallback?.Invoke(options, socketOptions);
+
+                BitfinexClient.SetDefaultOptions(options);
+                BitfinexSocketClient.SetDefaultOptions(socketOptions);
+            }
+
+            return services.AddTransient<IBitfinexClient, BitfinexClient>()
+                           .AddScoped<IBitfinexSocketClient, BitfinexSocketClient>();
+        }
+
         /// <summary>
         /// Validate the string is a valid Bitfinex symbol.
         /// </summary>

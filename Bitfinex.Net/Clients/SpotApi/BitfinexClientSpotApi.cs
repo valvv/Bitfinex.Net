@@ -5,7 +5,8 @@ using Bitfinex.Net.Objects.Internal;
 using Bitfinex.Net.Objects.Models;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
-using CryptoExchange.Net.ExchangeInterfaces;
+using CryptoExchange.Net.ComonObjects;
+using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Objects;
 using Microsoft.Extensions.Logging;
@@ -20,7 +21,7 @@ using System.Threading.Tasks;
 namespace Bitfinex.Net.Clients.SpotApi
 {
     /// <inheritdoc cref="IBitfinexClientSpotApi" />
-    public class BitfinexClientSpotApi : RestApiClient, IBitfinexClientSpotApi, IExchangeClient
+    public class BitfinexClientSpotApi : RestApiClient, IBitfinexClientSpotApi, ISpotClient
     {
         #region fields
         internal string? AffiliateCode { get; set; }
@@ -51,11 +52,11 @@ namespace Bitfinex.Net.Clients.SpotApi
         /// <summary>
         /// Event triggered when an order is placed via this client
         /// </summary>
-        public event Action<ICommonOrderId>? OnOrderPlaced;
+        public event Action<OrderId>? OnOrderPlaced;
         /// <summary>
         /// Event triggered when an order is canceled via this client
         /// </summary>
-        public event Action<ICommonOrderId>? OnOrderCanceled;
+        public event Action<OrderId>? OnOrderCanceled;
 
         #region ctor
 
@@ -90,98 +91,12 @@ namespace Bitfinex.Net.Clients.SpotApi
         public string GetSymbolName(string baseAsset, string quoteAsset) =>
             "t" + (baseAsset + quoteAsset).ToUpper(CultureInfo.InvariantCulture);
 
-#pragma warning disable 1066
-        async Task<WebCallResult<IEnumerable<ICommonSymbol>>> IExchangeClient.GetSymbolsAsync()
-        {
-            var symbols = await ExchangeData.GetSymbolDetailsAsync().ConfigureAwait(false);
-            return symbols.As<IEnumerable<ICommonSymbol>>(symbols.Data);
-        }
-
-        async Task<WebCallResult<ICommonTicker>> IExchangeClient.GetTickerAsync(string symbol)
-        {
-            var tickersResult = await ExchangeData.GetTickerAsync(symbol).ConfigureAwait(false);
-            return tickersResult.As<ICommonTicker>(tickersResult.Data);
-        }
-
-        async Task<WebCallResult<IEnumerable<ICommonTicker>>> IExchangeClient.GetTickersAsync()
-        {
-            var tickersResult = await ExchangeData.GetTickersAsync().ConfigureAwait(false);
-            return tickersResult.As<IEnumerable<ICommonTicker>>(tickersResult.Data);
-        }
-
-        async Task<WebCallResult<IEnumerable<ICommonRecentTrade>>> IExchangeClient.GetRecentTradesAsync(string symbol)
-        {
-            var tradesResult = await ExchangeData.GetTradeHistoryAsync(symbol).ConfigureAwait(false);
-            return tradesResult.As<IEnumerable<ICommonRecentTrade>>(tradesResult.Data);
-        }
-
-        async Task<WebCallResult<ICommonOrderBook>> IExchangeClient.GetOrderBookAsync(string symbol)
-        {
-            var orderBookResult = await ExchangeData.GetOrderBookAsync(symbol, Precision.PrecisionLevel0).ConfigureAwait(false);
-            if (!orderBookResult)
-                return WebCallResult<ICommonOrderBook>.CreateErrorResult(orderBookResult.ResponseStatusCode, orderBookResult.ResponseHeaders, orderBookResult.Error!);
-
-            return orderBookResult.As<ICommonOrderBook>(orderBookResult.Data);
-        }
-
-        async Task<WebCallResult<IEnumerable<ICommonKline>>> IExchangeClient.GetKlinesAsync(string symbol, TimeSpan timespan, DateTime? startTime = null, DateTime? endTime = null, int? limit = null)
-        {
-            var klines = await ExchangeData.GetKlinesAsync(symbol, GetTimeFrameFromTimeSpan(timespan), startTime: startTime, endTime: endTime, limit: limit).ConfigureAwait(false);
-            return klines.As<IEnumerable<ICommonKline>>(klines.Data);
-        }
-
-        async Task<WebCallResult<ICommonOrder>> IExchangeClient.GetOrderAsync(string orderId, string? symbol)
-        {
-            var result = await Trading.GetOrderAsync(long.Parse(orderId)).ConfigureAwait(false);
-            return result.As<ICommonOrder>(result.Data);
-        }
-
-        async Task<WebCallResult<IEnumerable<ICommonTrade>>> IExchangeClient.GetTradesAsync(string orderId, string? symbol = null)
-        {
-            if (string.IsNullOrEmpty(symbol))
-                return WebCallResult<IEnumerable<ICommonTrade>>.CreateErrorResult(new ArgumentError(nameof(symbol) + " required for Bitfinex " + nameof(IExchangeClient.GetTradesAsync)));
-
-            var result = await Trading.GetOrderTradesAsync(symbol!, long.Parse(orderId)).ConfigureAwait(false);
-            return result.As<IEnumerable<ICommonTrade>>(result.Data);
-        }
-
-        async Task<WebCallResult<ICommonOrderId>> IExchangeClient.PlaceOrderAsync(string symbol, IExchangeClient.OrderSide side, IExchangeClient.OrderType type, decimal quantity, decimal? price = null, string? accountId = null)
-        {
-            var result = await Trading.PlaceOrderAsync(symbol, GetOrderSide(side), GetOrderType(type), quantity, price ?? 0).ConfigureAwait(false);
-            return result.As<ICommonOrderId>(result.Data?.Data);
-        }
-
-        async Task<WebCallResult<IEnumerable<ICommonOrder>>> IExchangeClient.GetOpenOrdersAsync(string? symbol)
-        {
-            var result = await Trading.GetOpenOrdersAsync().ConfigureAwait(false);
-            return result.As<IEnumerable<ICommonOrder>>(result.Data);
-        }
-
-        async Task<WebCallResult<IEnumerable<ICommonOrder>>> IExchangeClient.GetClosedOrdersAsync(string? symbol)
-        {
-            var result = await Trading.GetClosedOrdersAsync(symbol).ConfigureAwait(false);
-            return result.As<IEnumerable<ICommonOrder>>(result.Data);
-        }
-
-        async Task<WebCallResult<ICommonOrderId>> IExchangeClient.CancelOrderAsync(string orderId, string? symbol)
-        {
-            var result = await Trading.CancelOrderAsync(long.Parse(orderId)).ConfigureAwait(false);
-            return result.As<ICommonOrderId>(result.Data?.Data);
-        }
-
-        async Task<WebCallResult<IEnumerable<ICommonBalance>>> IExchangeClient.GetBalancesAsync(string? accountId = null)
-        {
-            var result = await Account.GetBalancesAsync().ConfigureAwait(false);
-            return result.As<IEnumerable<ICommonBalance>>(result.Data.Where(d => d.Type == WalletType.Exchange));
-        }
-#pragma warning restore 1066
-
-        internal void InvokeOrderPlaced(ICommonOrderId id)
+        internal void InvokeOrderPlaced(OrderId id)
         {
             OnOrderPlaced?.Invoke(id);
         }
 
-        internal void InvokeOrderCanceled(ICommonOrderId id)
+        internal void InvokeOrderCanceled(OrderId id)
         {
             OnOrderCanceled?.Invoke(id);
         }
@@ -204,18 +119,18 @@ namespace Bitfinex.Net.Clients.SpotApi
             throw new ArgumentException("Unsupported timespan for Bitfinex Klines, check supported intervals using Bitfinex.Net.Objects.TimeFrame");
         }
 
-        private static OrderSide GetOrderSide(IExchangeClient.OrderSide side)
+        private static Enums.OrderSide GetOrderSide(CryptoExchange.Net.ComonObjects.OrderSide side)
         {
-            if (side == IExchangeClient.OrderSide.Sell) return OrderSide.Sell;
-            if (side == IExchangeClient.OrderSide.Buy) return OrderSide.Buy;
+            if (side == CryptoExchange.Net.ComonObjects.OrderSide.Sell) return Enums.OrderSide.Sell;
+            if (side == CryptoExchange.Net.ComonObjects.OrderSide.Buy) return Enums.OrderSide.Buy;
 
             throw new ArgumentException("Unsupported order side for Bitfinex order: " + side);
         }
 
-        private static OrderType GetOrderType(IExchangeClient.OrderType type)
+        private static Enums.OrderType GetOrderType(CryptoExchange.Net.ComonObjects.OrderType type)
         {
-            if (type == IExchangeClient.OrderType.Limit) return OrderType.ExchangeLimit;
-            if (type == IExchangeClient.OrderType.Market) return OrderType.ExchangeMarket;
+            if (type == CryptoExchange.Net.ComonObjects.OrderType.Limit) return Enums.OrderType.ExchangeLimit;
+            if (type == CryptoExchange.Net.ComonObjects.OrderType.Market) return Enums.OrderType.ExchangeMarket;
 
             throw new ArgumentException("Unsupported order type for Bitfinex order: " + type);
         }
@@ -246,7 +161,264 @@ namespace Bitfinex.Net.Clients.SpotApi
             => TimeSyncState.TimeOffset;
 
         /// <inheritdoc />
-        public IExchangeClient AsExchangeClient() => this;
+        public ISpotClient ComonSpotClient => this;
+
+        async Task<WebCallResult<OrderId>> ISpotClient.PlaceOrderAsync(string symbol, CryptoExchange.Net.ComonObjects.OrderSide side, CryptoExchange.Net.ComonObjects.OrderType type, decimal quantity, decimal? price, string? accountId)
+        {
+            if (string.IsNullOrWhiteSpace(symbol))
+                throw new ArgumentException(nameof(symbol) + " required for Bitfinex " + nameof(ISpotClient.PlaceOrderAsync), nameof(symbol));
+
+            var result = await Trading.PlaceOrderAsync(symbol, GetOrderSide(side), GetOrderType(type), quantity, price ?? 0).ConfigureAwait(false);
+            if (!result)
+                return result.As<OrderId>(null);
+
+            return result.As(new OrderId
+            {
+                SourceObject = result.Data,
+                Id = result.Data.Id.ToString(CultureInfo.InvariantCulture)
+            });
+        }
+
+        async Task<WebCallResult<Order>> IBaseRestClient.GetOrderAsync(string orderId, string? symbol)
+        {
+            if (!long.TryParse(orderId, out var id))
+                throw new ArgumentException($"Invalid orderId provided for Bitfinex {nameof(ISpotClient.GetOrderAsync)}", nameof(orderId));
+
+            var result = await Trading.GetOrderAsync(id).ConfigureAwait(false);
+            if (!result)
+                return result.As<Order>(null);
+
+            return result.As(new Order
+            {
+                SourceObject = result.Data,
+                Id = result.Data.Id.ToString(CultureInfo.InvariantCulture),
+                Symbol = result.Data.Symbol,
+                Timestamp = result.Data.Timestamp,
+                Price = result.Data.Price,
+                Quantity = result.Data.Quantity,
+                QuantityFilled = result.Data.QuantityFilled,                
+                Side = result.Data.Side == Enums.OrderSide.Buy ? CryptoExchange.Net.ComonObjects.OrderSide.Buy: CryptoExchange.Net.ComonObjects.OrderSide.Sell,
+                Status = result.Data.Canceled ? CryptoExchange.Net.ComonObjects.OrderStatus.Canceled: result.Data.QuantityRemaining == 0 ? CryptoExchange.Net.ComonObjects.OrderStatus.Filled: CryptoExchange.Net.ComonObjects.OrderStatus.Active,
+                Type = result.Data.Type == Enums.OrderTypeV1.ExchangeLimit ? CryptoExchange.Net.ComonObjects.OrderType.Limit : result.Data.Type == Enums.OrderTypeV1.ExchangeMarket ? CryptoExchange.Net.ComonObjects.OrderType.Market: CryptoExchange.Net.ComonObjects.OrderType.Other
+            });
+        }
+
+        async Task<WebCallResult<IEnumerable<UserTrade>>> IBaseRestClient.GetOrderTradesAsync(string orderId, string? symbol)
+        {
+            if (!long.TryParse(orderId, out var id))
+                throw new ArgumentException($"Invalid orderId provided for Bitfinex {nameof(ISpotClient.GetOrderAsync)}", nameof(orderId));
+
+            if (string.IsNullOrEmpty(symbol))
+                throw new ArgumentException(nameof(symbol) + " required for Bitfinex " + nameof(ISpotClient.GetOrderTradesAsync), nameof(symbol));
+
+            var result = await Trading.GetOrderTradesAsync(symbol!, id).ConfigureAwait(false);
+            if (!result)
+                return result.As<IEnumerable<UserTrade>>(null);
+
+            return result.As(result.Data.Select(d => new UserTrade
+            {
+                SourceObject = d,
+                Id = d.Id.ToString(CultureInfo.InvariantCulture),
+                OrderId = d.OrderId.ToString(CultureInfo.InvariantCulture),
+                Price = d.Price,
+                Quantity = d.Quantity,
+                Symbol = d.Symbol,
+                Fee = d.Fee,
+                FeeAsset = d.FeeAsset,
+                Timestamp = d.Timestamp
+            }));
+        }
+
+        async Task<WebCallResult<IEnumerable<Order>>> IBaseRestClient.GetOpenOrdersAsync(string? symbol)
+        {
+            var result = await Trading.GetOpenOrdersAsync().ConfigureAwait(false);
+            if (!result)
+                return result.As<IEnumerable<Order>>(null);
+
+            return result.As(result.Data.Select(o =>
+                new Order
+                {
+                    SourceObject = o,
+                    Id = o.Id.ToString(CultureInfo.InvariantCulture),
+                    Symbol = o.Symbol,
+                    Timestamp = o.CreateTime,
+                    Price = o.Price,
+                    Quantity = o.Quantity,
+                    QuantityFilled = o.Quantity - o.QuantityRemaining,
+                    Side = o.Side == Enums.OrderSide.Buy ? CryptoExchange.Net.ComonObjects.OrderSide.Buy : CryptoExchange.Net.ComonObjects.OrderSide.Sell,
+                    Status = o.Status == Enums.OrderStatus.Canceled ? CryptoExchange.Net.ComonObjects.OrderStatus.Canceled: o.Status == Enums.OrderStatus.Executed? CryptoExchange.Net.ComonObjects.OrderStatus.Filled: CryptoExchange.Net.ComonObjects.OrderStatus.Active,
+                    Type = o.Type == Enums.OrderType.ExchangeLimit ? CryptoExchange.Net.ComonObjects.OrderType.Limit: o.Type == Enums.OrderType.ExchangeMarket ? CryptoExchange.Net.ComonObjects.OrderType.Market: CryptoExchange.Net.ComonObjects.OrderType.Other
+                }
+            ));
+        }
+
+        async Task<WebCallResult<IEnumerable<Order>>> IBaseRestClient.GetClosedOrdersAsync(string? symbol)
+        {
+            var result = await Trading.GetClosedOrdersAsync(symbol).ConfigureAwait(false);
+            if (!result)
+                return result.As<IEnumerable<Order>>(null);
+
+            return result.As(result.Data.Select(o =>
+                new Order
+                {
+                    SourceObject = o,
+                    Id = o.Id.ToString(CultureInfo.InvariantCulture),
+                    Symbol = o.Symbol,
+                    Timestamp = o.CreateTime,
+                    Price = o.Price,
+                    Quantity = o.Quantity,
+                    QuantityFilled = o.Quantity - o.QuantityRemaining,
+                    Side = o.Side == Enums.OrderSide.Buy ? CryptoExchange.Net.ComonObjects.OrderSide.Buy : CryptoExchange.Net.ComonObjects.OrderSide.Sell,
+                    Status = o.Status == Enums.OrderStatus.Canceled ? CryptoExchange.Net.ComonObjects.OrderStatus.Canceled : o.Status == Enums.OrderStatus.Executed ? CryptoExchange.Net.ComonObjects.OrderStatus.Filled : CryptoExchange.Net.ComonObjects.OrderStatus.Active,
+                    Type = o.Type == Enums.OrderType.ExchangeLimit ? CryptoExchange.Net.ComonObjects.OrderType.Limit : o.Type == Enums.OrderType.ExchangeMarket ? CryptoExchange.Net.ComonObjects.OrderType.Market : CryptoExchange.Net.ComonObjects.OrderType.Other
+                }
+            ));
+        }
+
+        async Task<WebCallResult<OrderId>> IBaseRestClient.CancelOrderAsync(string orderId, string? symbol)
+        {
+            if (!long.TryParse(orderId, out var id))
+                throw new ArgumentException($"Invalid orderId provided for Bitfinex {nameof(ISpotClient.GetOrderAsync)}", nameof(orderId));
+
+            var result = await Trading.CancelOrderAsync(id).ConfigureAwait(false);
+            if (!result)
+                return result.As<OrderId>(null);
+
+            return result.As(new OrderId
+            {
+                SourceObject = result.Data,
+                Id = result.Data.Id.ToString(CultureInfo.InvariantCulture)
+            });
+        }
+
+        async Task<WebCallResult<IEnumerable<Symbol>>> IBaseRestClient.GetSymbolsAsync()
+        {
+            var symbols = await ExchangeData.GetSymbolDetailsAsync().ConfigureAwait(false);
+            if (!symbols)
+                return symbols.As<IEnumerable<Symbol>>(null);
+
+            return symbols.As(symbols.Data.Select(s =>
+                new Symbol
+                {
+                    SourceObject = s,
+                    Name = s.Symbol,
+                    PriceDecimals = s.PricePrecision,
+                    MinTradeQuantity = s.MinimumOrderQuantity
+                }));
+        }
+
+        async Task<WebCallResult<Ticker>> IBaseRestClient.GetTickerAsync(string symbol)
+        {
+            if (string.IsNullOrWhiteSpace(symbol))
+                throw new ArgumentException(nameof(symbol) + " required for Bitfinex " + nameof(ISpotClient.GetTickerAsync), nameof(symbol));
+
+            var tickersResult = await ExchangeData.GetTickerAsync(symbol).ConfigureAwait(false);
+            if (!tickersResult)
+                return tickersResult.As<Ticker>(null);
+
+            return tickersResult.As(new Ticker
+            {
+                SourceObject = tickersResult.Data,
+                HighPrice = tickersResult.Data.HighPrice,
+                LowPrice = tickersResult.Data.LowPrice,
+                LastPrice = tickersResult.Data.LastPrice,
+                Price24H = tickersResult.Data.LastPrice - tickersResult.Data.DailyChange,
+                Symbol = tickersResult.Data.Symbol,
+                Volume = tickersResult.Data.Volume
+            });
+        }
+
+        async Task<WebCallResult<IEnumerable<Ticker>>> IBaseRestClient.GetTickersAsync()
+        {
+            var tickersResult = await ExchangeData.GetTickersAsync().ConfigureAwait(false);
+            if (!tickersResult)
+                return tickersResult.As<IEnumerable<Ticker>>(null);
+
+            return tickersResult.As(tickersResult.Data.Select(t =>
+            new Ticker
+            {
+                SourceObject = t,
+                HighPrice = t.HighPrice,
+                LowPrice = t.LowPrice,
+                LastPrice = t.LastPrice,
+                Price24H = t.LastPrice - t.DailyChange,
+                Symbol = t.Symbol,
+                Volume = t.Volume
+            }));
+        }
+
+        async Task<WebCallResult<IEnumerable<Kline>>> IBaseRestClient.GetKlinesAsync(string symbol, TimeSpan timespan, DateTime? startTime, DateTime? endTime, int? limit)
+        {
+            if (string.IsNullOrWhiteSpace(symbol))
+                throw new ArgumentException(nameof(symbol) + " required for Bitfinex " + nameof(ISpotClient.GetKlinesAsync), nameof(symbol));
+
+            var klines = await ExchangeData.GetKlinesAsync(symbol, GetTimeFrameFromTimeSpan(timespan), startTime: startTime, endTime: endTime, limit: limit).ConfigureAwait(false);
+            if (!klines)
+                return klines.As<IEnumerable<Kline>>(null);
+
+            return klines.As(klines.Data.Select(k =>
+            new Kline
+            {
+                SourceObject = k,
+                OpenPrice = k.OpenPrice,
+                OpenTime = k.OpenTime,
+                ClosePrice = k.ClosePrice,
+                HighPrice = k.HighPrice,
+                LowPrice = k.LowPrice,
+                Volume = k.Volume
+            }));
+        }
+
+        async Task<WebCallResult<OrderBook>> IBaseRestClient.GetOrderBookAsync(string symbol)
+        {
+            if (string.IsNullOrWhiteSpace(symbol))
+                throw new ArgumentException(nameof(symbol) + " required for Bitfinex " + nameof(ISpotClient.GetOrderAsync), nameof(symbol));
+
+            var orderBookResult = await ExchangeData.GetOrderBookAsync(symbol, Precision.PrecisionLevel0).ConfigureAwait(false);
+            if (!orderBookResult)
+                return orderBookResult.As<OrderBook>(null);
+
+            return orderBookResult.As(new OrderBook
+            {
+                SourceObject = orderBookResult.Data,
+                Asks = orderBookResult.Data.Asks.Select(a => new OrderBookEntry() { Price = a.Price, Quantity = a.Quantity }),
+                Bids = orderBookResult.Data.Bids.Select(b => new OrderBookEntry() { Price = b.Price, Quantity = b.Quantity }),
+            });
+        }
+
+        async Task<WebCallResult<IEnumerable<Trade>>> IBaseRestClient.GetRecentTradesAsync(string symbol)
+        {
+            if (string.IsNullOrWhiteSpace(symbol))
+                throw new ArgumentException(nameof(symbol) + " required for Bitfinex " + nameof(ISpotClient.GetRecentTradesAsync), nameof(symbol));
+
+            var tradesResult = await ExchangeData.GetTradeHistoryAsync(symbol).ConfigureAwait(false);
+            if (!tradesResult)
+                return tradesResult.As<IEnumerable<Trade>>(null);
+
+            return tradesResult.As(tradesResult.Data.Select(t => new Trade
+            {
+                SourceObject = t,
+                Price = t.Price,
+                Quantity = t.Quantity,
+                Symbol = symbol,
+                Timestamp = t.Timestamp
+            }));
+        }
+
+        async Task<WebCallResult<IEnumerable<Balance>>> IBaseRestClient.GetBalancesAsync(string? accountId)
+        {
+            var result = await Account.GetBalancesAsync().ConfigureAwait(false);
+            if (!result)
+                return result.As<IEnumerable<Balance>>(null);
+
+            return result.As(result.Data.Select(b => new Balance
+            {
+                SourceObject = b,
+                Asset = b.Asset,
+                Available = b.Available,
+                Total = b.Total
+            }));
+        }
         #endregion
     }
 }

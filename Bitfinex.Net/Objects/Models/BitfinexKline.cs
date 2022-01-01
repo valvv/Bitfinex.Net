@@ -1,6 +1,5 @@
 ﻿using System;
 using CryptoExchange.Net.Converters;
-using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
 namespace Bitfinex.Net.Objects.Models
@@ -9,7 +8,7 @@ namespace Bitfinex.Net.Objects.Models
     /// Kline info
     /// </summary>
     [JsonConverter(typeof(ArrayConverter))]
-    public class BitfinexKline: ICommonKline
+    public class BitfinexKline
     {
         /// <summary>
         /// The timestamp of the kline
@@ -41,12 +40,5 @@ namespace Bitfinex.Net.Objects.Models
         /// </summary>
         [ArrayProperty(5)]
         public decimal Volume { get; set; }
-
-        decimal ICommonKline.CommonHighPrice => HighPrice;
-        decimal ICommonKline.CommonLowPrice => LowPrice;
-        decimal ICommonKline.CommonOpenPrice => OpenPrice;
-        decimal ICommonKline.CommonClosePrice => ClosePrice;
-        DateTime ICommonKline.CommonOpenTime => OpenTime;
-        decimal ICommonKline.CommonVolume => Volume;
     }
 }

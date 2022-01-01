@@ -4,7 +4,6 @@ using Bitfinex.Net.Objects;
 using Bitfinex.Net.Objects.Internal;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
-using CryptoExchange.Net.ExchangeInterfaces;
 using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Objects;
 using Microsoft.Extensions.Logging;

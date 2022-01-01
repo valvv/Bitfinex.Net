@@ -1,5 +1,4 @@
 ﻿using CryptoExchange.Net.Converters;
-using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
 namespace Bitfinex.Net.Objects.Models
@@ -8,7 +7,7 @@ namespace Bitfinex.Net.Objects.Models
     /// Market overview
     /// </summary>
     [JsonConverter(typeof(ArrayConverter))]
-    public class BitfinexSymbolOverview: ICommonTicker
+    public class BitfinexSymbolOverview
     {
         /// <summary>
         /// The symbol
@@ -65,10 +64,5 @@ namespace Bitfinex.Net.Objects.Models
         /// </summary>
         [ArrayProperty(10)]
         public decimal LowPrice { get; set; }
-
-        string ICommonTicker.CommonSymbol => Symbol;
-        decimal ICommonTicker.CommonHighPrice => HighPrice;
-        decimal ICommonTicker.CommonLowPrice => LowPrice;
-        decimal ICommonTicker.CommonVolume => Volume;
     }
 }

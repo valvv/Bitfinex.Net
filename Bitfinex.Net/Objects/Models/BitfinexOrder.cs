@@ -3,7 +3,6 @@ using Bitfinex.Net.Converters;
 using Bitfinex.Net.Enums;
 using Bitfinex.Net.Objects.Internal;
 using CryptoExchange.Net.Converters;
-using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
 namespace Bitfinex.Net.Objects.Models
@@ -12,7 +11,7 @@ namespace Bitfinex.Net.Objects.Models
     /// Order info
     /// </summary>
     [JsonConverter(typeof(ArrayConverter))]
-    public class BitfinexOrder: ICommonOrder, ICommonOrderId
+    public class BitfinexOrder
     {
         /// <summary>
         /// The id of the order
@@ -200,26 +199,10 @@ namespace Bitfinex.Net.Objects.Models
         [JsonConverter(typeof(BitfinexMetaConverter))]
         public BitfinexMeta? Meta { get; set; }
 
-        string ICommonOrderId.CommonId => Id.ToString();
-        string ICommonOrder.CommonSymbol => Symbol;
-        decimal ICommonOrder.CommonPrice => Price;
-        decimal ICommonOrder.CommonQuantity => Quantity;
-        IExchangeClient.OrderStatus ICommonOrder.CommonStatus => Status == OrderStatus.Canceled ? IExchangeClient.OrderStatus.Canceled:
-            Status == OrderStatus.Executed ? IExchangeClient.OrderStatus.Filled:
-            IExchangeClient.OrderStatus.Active;
-        bool ICommonOrder.IsActive => Status == OrderStatus.Active;
-        DateTime ICommonOrder.CommonOrderTime => CreateTime;
-
-        IExchangeClient.OrderSide ICommonOrder.CommonSide =>
-            Quantity < 0 ? IExchangeClient.OrderSide.Sell : IExchangeClient.OrderSide.Buy;
-        IExchangeClient.OrderType ICommonOrder.CommonType
-        {
-            get
-            {
-                if (Type == OrderType.ExchangeMarket) return IExchangeClient.OrderType.Market;
-                if (Type == OrderType.ExchangeLimit) return IExchangeClient.OrderType.Limit;
-                else return IExchangeClient.OrderType.Other;
-            }
-        }
+        /// <summary>
+        /// The side of the order
+        /// </summary>
+        [JsonIgnore]
+        public OrderSide Side => Quantity < 0 ? OrderSide.Sell : OrderSide.Buy;
     }
 }

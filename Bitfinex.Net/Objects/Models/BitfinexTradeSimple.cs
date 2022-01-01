@@ -1,7 +1,6 @@
 ﻿using System;
 using Bitfinex.Net.Enums;
 using CryptoExchange.Net.Converters;
-using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
 namespace Bitfinex.Net.Objects.Models
@@ -10,7 +9,7 @@ namespace Bitfinex.Net.Objects.Models
     /// Trade info
     /// </summary>
     [JsonConverter(typeof(ArrayConverter))]
-    public class BitfinexTradeSimple: ICommonRecentTrade
+    public class BitfinexTradeSimple
     {
         /// <summary>
         /// The id of the trade
@@ -38,9 +37,5 @@ namespace Bitfinex.Net.Objects.Models
         /// </summary>
         [JsonIgnore]
         public BitfinexEventType UpdateType { get; set; } = BitfinexEventType.TradeSnapshot;
-
-        decimal ICommonRecentTrade.CommonPrice => Price;
-        decimal ICommonRecentTrade.CommonQuantity => Quantity;
-        DateTime ICommonRecentTrade.CommonTradeTime => Timestamp;
     }
 }
