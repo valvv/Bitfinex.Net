@@ -5,7 +5,7 @@ using Bitfinex.Net.Objects.Internal;
 using Bitfinex.Net.Objects.Models;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
-using CryptoExchange.Net.ComonObjects;
+using CryptoExchange.Net.CommonObjects;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Objects;
@@ -119,18 +119,18 @@ namespace Bitfinex.Net.Clients.SpotApi
             throw new ArgumentException("Unsupported timespan for Bitfinex Klines, check supported intervals using Bitfinex.Net.Objects.TimeFrame");
         }
 
-        private static Enums.OrderSide GetOrderSide(CryptoExchange.Net.ComonObjects.OrderSide side)
+        private static Enums.OrderSide GetOrderSide(CryptoExchange.Net.CommonObjects.OrderSide side)
         {
-            if (side == CryptoExchange.Net.ComonObjects.OrderSide.Sell) return Enums.OrderSide.Sell;
-            if (side == CryptoExchange.Net.ComonObjects.OrderSide.Buy) return Enums.OrderSide.Buy;
+            if (side == CryptoExchange.Net.CommonObjects.OrderSide.Sell) return Enums.OrderSide.Sell;
+            if (side == CryptoExchange.Net.CommonObjects.OrderSide.Buy) return Enums.OrderSide.Buy;
 
             throw new ArgumentException("Unsupported order side for Bitfinex order: " + side);
         }
 
-        private static Enums.OrderType GetOrderType(CryptoExchange.Net.ComonObjects.OrderType type)
+        private static Enums.OrderType GetOrderType(CryptoExchange.Net.CommonObjects.OrderType type)
         {
-            if (type == CryptoExchange.Net.ComonObjects.OrderType.Limit) return Enums.OrderType.ExchangeLimit;
-            if (type == CryptoExchange.Net.ComonObjects.OrderType.Market) return Enums.OrderType.ExchangeMarket;
+            if (type == CryptoExchange.Net.CommonObjects.OrderType.Limit) return Enums.OrderType.ExchangeLimit;
+            if (type == CryptoExchange.Net.CommonObjects.OrderType.Market) return Enums.OrderType.ExchangeMarket;
 
             throw new ArgumentException("Unsupported order type for Bitfinex order: " + type);
         }
@@ -163,7 +163,7 @@ namespace Bitfinex.Net.Clients.SpotApi
         /// <inheritdoc />
         public ISpotClient ComonSpotClient => this;
 
-        async Task<WebCallResult<OrderId>> ISpotClient.PlaceOrderAsync(string symbol, CryptoExchange.Net.ComonObjects.OrderSide side, CryptoExchange.Net.ComonObjects.OrderType type, decimal quantity, decimal? price, string? accountId)
+        async Task<WebCallResult<OrderId>> ISpotClient.PlaceOrderAsync(string symbol, CryptoExchange.Net.CommonObjects.OrderSide side, CryptoExchange.Net.CommonObjects.OrderType type, decimal quantity, decimal? price, string? accountId)
         {
             if (string.IsNullOrWhiteSpace(symbol))
                 throw new ArgumentException(nameof(symbol) + " required for Bitfinex " + nameof(ISpotClient.PlaceOrderAsync), nameof(symbol));
@@ -197,9 +197,9 @@ namespace Bitfinex.Net.Clients.SpotApi
                 Price = result.Data.Price,
                 Quantity = result.Data.Quantity,
                 QuantityFilled = result.Data.QuantityFilled,                
-                Side = result.Data.Side == Enums.OrderSide.Buy ? CryptoExchange.Net.ComonObjects.OrderSide.Buy: CryptoExchange.Net.ComonObjects.OrderSide.Sell,
-                Status = result.Data.Canceled ? CryptoExchange.Net.ComonObjects.OrderStatus.Canceled: result.Data.QuantityRemaining == 0 ? CryptoExchange.Net.ComonObjects.OrderStatus.Filled: CryptoExchange.Net.ComonObjects.OrderStatus.Active,
-                Type = result.Data.Type == Enums.OrderTypeV1.ExchangeLimit ? CryptoExchange.Net.ComonObjects.OrderType.Limit : result.Data.Type == Enums.OrderTypeV1.ExchangeMarket ? CryptoExchange.Net.ComonObjects.OrderType.Market: CryptoExchange.Net.ComonObjects.OrderType.Other
+                Side = result.Data.Side == Enums.OrderSide.Buy ? CryptoExchange.Net.CommonObjects.OrderSide.Buy: CryptoExchange.Net.CommonObjects.OrderSide.Sell,
+                Status = result.Data.Canceled ? CryptoExchange.Net.CommonObjects.OrderStatus.Canceled: result.Data.QuantityRemaining == 0 ? CryptoExchange.Net.CommonObjects.OrderStatus.Filled: CryptoExchange.Net.CommonObjects.OrderStatus.Active,
+                Type = result.Data.Type == Enums.OrderTypeV1.ExchangeLimit ? CryptoExchange.Net.CommonObjects.OrderType.Limit : result.Data.Type == Enums.OrderTypeV1.ExchangeMarket ? CryptoExchange.Net.CommonObjects.OrderType.Market: CryptoExchange.Net.CommonObjects.OrderType.Other
             });
         }
 
@@ -245,9 +245,9 @@ namespace Bitfinex.Net.Clients.SpotApi
                     Price = o.Price,
                     Quantity = o.Quantity,
                     QuantityFilled = o.Quantity - o.QuantityRemaining,
-                    Side = o.Side == Enums.OrderSide.Buy ? CryptoExchange.Net.ComonObjects.OrderSide.Buy : CryptoExchange.Net.ComonObjects.OrderSide.Sell,
-                    Status = o.Status == Enums.OrderStatus.Canceled ? CryptoExchange.Net.ComonObjects.OrderStatus.Canceled: o.Status == Enums.OrderStatus.Executed? CryptoExchange.Net.ComonObjects.OrderStatus.Filled: CryptoExchange.Net.ComonObjects.OrderStatus.Active,
-                    Type = o.Type == Enums.OrderType.ExchangeLimit ? CryptoExchange.Net.ComonObjects.OrderType.Limit: o.Type == Enums.OrderType.ExchangeMarket ? CryptoExchange.Net.ComonObjects.OrderType.Market: CryptoExchange.Net.ComonObjects.OrderType.Other
+                    Side = o.Side == Enums.OrderSide.Buy ? CryptoExchange.Net.CommonObjects.OrderSide.Buy : CryptoExchange.Net.CommonObjects.OrderSide.Sell,
+                    Status = o.Status == Enums.OrderStatus.Canceled ? CryptoExchange.Net.CommonObjects.OrderStatus.Canceled: o.Status == Enums.OrderStatus.Executed? CryptoExchange.Net.CommonObjects.OrderStatus.Filled: CryptoExchange.Net.CommonObjects.OrderStatus.Active,
+                    Type = o.Type == Enums.OrderType.ExchangeLimit ? CryptoExchange.Net.CommonObjects.OrderType.Limit: o.Type == Enums.OrderType.ExchangeMarket ? CryptoExchange.Net.CommonObjects.OrderType.Market: CryptoExchange.Net.CommonObjects.OrderType.Other
                 }
             ));
         }
@@ -268,9 +268,9 @@ namespace Bitfinex.Net.Clients.SpotApi
                     Price = o.Price,
                     Quantity = o.Quantity,
                     QuantityFilled = o.Quantity - o.QuantityRemaining,
-                    Side = o.Side == Enums.OrderSide.Buy ? CryptoExchange.Net.ComonObjects.OrderSide.Buy : CryptoExchange.Net.ComonObjects.OrderSide.Sell,
-                    Status = o.Status == Enums.OrderStatus.Canceled ? CryptoExchange.Net.ComonObjects.OrderStatus.Canceled : o.Status == Enums.OrderStatus.Executed ? CryptoExchange.Net.ComonObjects.OrderStatus.Filled : CryptoExchange.Net.ComonObjects.OrderStatus.Active,
-                    Type = o.Type == Enums.OrderType.ExchangeLimit ? CryptoExchange.Net.ComonObjects.OrderType.Limit : o.Type == Enums.OrderType.ExchangeMarket ? CryptoExchange.Net.ComonObjects.OrderType.Market : CryptoExchange.Net.ComonObjects.OrderType.Other
+                    Side = o.Side == Enums.OrderSide.Buy ? CryptoExchange.Net.CommonObjects.OrderSide.Buy : CryptoExchange.Net.CommonObjects.OrderSide.Sell,
+                    Status = o.Status == Enums.OrderStatus.Canceled ? CryptoExchange.Net.CommonObjects.OrderStatus.Canceled : o.Status == Enums.OrderStatus.Executed ? CryptoExchange.Net.CommonObjects.OrderStatus.Filled : CryptoExchange.Net.CommonObjects.OrderStatus.Active,
+                    Type = o.Type == Enums.OrderType.ExchangeLimit ? CryptoExchange.Net.CommonObjects.OrderType.Limit : o.Type == Enums.OrderType.ExchangeMarket ? CryptoExchange.Net.CommonObjects.OrderType.Market : CryptoExchange.Net.CommonObjects.OrderType.Other
                 }
             ));
         }

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using Bitfinex.Net.Objects.Models;
 using Bitfinex.Net.Objects.Models.V1;
 using Bitfinex.Net.Interfaces.Clients.SpotApi;
-using CryptoExchange.Net.ComonObjects;
+using CryptoExchange.Net.CommonObjects;
 
 namespace Bitfinex.Net.Clients.SpotApi
 {
