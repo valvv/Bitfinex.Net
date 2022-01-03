@@ -92,6 +92,9 @@ For the basic client options see also the CryptoExchange.Net [docs](https://gith
 |`AffiliateCode`|The affiliate code to use for requests|kCCe-CNBO
 
 ## Release notes
+* Version 5.0.0-alpha5 - 03 Jan 2022
+    * Updated CryptoExchange.Net
+
 * Version 5.0.0-alpha4 - 01 Jan 2022
     * New comon implementation, added AddBitfinex extension method
 
