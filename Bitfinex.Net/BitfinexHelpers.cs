@@ -17,8 +17,12 @@ namespace Bitfinex.Net
         /// </summary>
         /// <param name="services">The service collection</param>
         /// <param name="defaultOptionsCallback">Set default options for the client</param>
+        /// <param name="socketClientLifeTime">The lifetime of the IBitfinexSocketClient for the service collection. Defaults to Scoped.</param>
         /// <returns></returns>
-        public static IServiceCollection AddBitfinex(this IServiceCollection services, Action<BitfinexClientOptions, BitfinexSocketClientOptions>? defaultOptionsCallback = null)
+        public static IServiceCollection AddBitfinex(
+            this IServiceCollection services, 
+            Action<BitfinexClientOptions, BitfinexSocketClientOptions>? defaultOptionsCallback = null,
+            ServiceLifetime? socketClientLifeTime = null)
         {
             if (defaultOptionsCallback != null)
             {
@@ -30,8 +34,12 @@ namespace Bitfinex.Net
                 BitfinexSocketClient.SetDefaultOptions(socketOptions);
             }
 
-            return services.AddTransient<IBitfinexClient, BitfinexClient>()
-                           .AddScoped<IBitfinexSocketClient, BitfinexSocketClient>();
+            services.AddTransient<IBitfinexClient, BitfinexClient>();
+            if (socketClientLifeTime == null)
+                services.AddScoped<IBitfinexSocketClient, BitfinexSocketClient>();
+            else
+                services.Add(new ServiceDescriptor(typeof(IBitfinexSocketClient), typeof(BitfinexSocketClient), socketClientLifeTime.Value));
+            return services;
         }
 
         /// <summary>
