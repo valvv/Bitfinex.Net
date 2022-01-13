@@ -17,7 +17,7 @@ namespace Bitfinex.Net.Objects.Models.V1
         /// The id of the position
         /// </summary>
         [JsonProperty("position_id")]
-        public long PositionId { get; set; }
+        public long? PositionId { get; set; }
         /// <summary>
         /// The asset of the contract
         /// </summary>
