@@ -176,10 +176,10 @@ namespace Bitfinex.Net.Clients
         protected override async Task<CallResult<bool>> AuthenticateSocketAsync(SocketConnection s)
         {
             if (s.ApiClient.AuthenticationProvider == null)
-                return new CallResult<bool>(false, new NoApiCredentialsError());
+                return new CallResult<bool>(new NoApiCredentialsError());
 
             var authObject = BitfinexSocketClient.GetAuthObject(s.ApiClient);
-            var result = new CallResult<bool>(false, new ServerError("No response from server"));
+            var result = new CallResult<bool>(new ServerError("No response from server"));
             await s.SendAndWaitAsync(authObject, ClientOptions.SocketResponseTimeout, tokenData =>
             {
                 if (tokenData.Type != JTokenType.Object)
@@ -192,20 +192,20 @@ namespace Bitfinex.Net.Clients
                 if (!authResponse)
                 {
                     log.Write(LogLevel.Warning, $"Socket {s.Socket.Id} authentication failed: " + authResponse.Error);
-                    result = new CallResult<bool>(false, authResponse.Error);
+                    result = new CallResult<bool>(authResponse.Error!);
                     return false;
                 }
 
                 if (authResponse.Data.Status != "OK")
                 {
                     var error = new ServerError(authResponse.Data.ErrorCode, authResponse.Data.ErrorMessage ?? "-");
-                    result = new CallResult<bool>(false, error);
+                    result = new CallResult<bool>(error);
                     log.Write(LogLevel.Debug, $"Socket {s.Socket.Id} authentication failed: " + error);
                     return false;
                 }
 
                 log.Write(LogLevel.Debug, $"Socket {s.Socket.Id} authentication completed");
-                result = new CallResult<bool>(true, null);
+                result = new CallResult<bool>(true);
                 return true;
             }).ConfigureAwait(false);
 
@@ -251,7 +251,7 @@ namespace Bitfinex.Net.Clients
                         if (orderData[2]?.ToString() != bfRequest.Id)
                             return false;
 
-                        callResult = new CallResult<T>(default, new ServerError(notificationData[7].ToString()));
+                        callResult = new CallResult<T>(new ServerError(notificationData[7].ToString()));
                         return true;
                     }
 
@@ -261,7 +261,7 @@ namespace Bitfinex.Net.Clients
                         if (orderData[0]?.ToString() != bfRequest.Id)
                             return false;
 
-                        callResult = new CallResult<T>(default, new ServerError(notificationData[7].ToString()));
+                        callResult = new CallResult<T>(new ServerError(notificationData[7].ToString()));
                         return true;
                     }
 
@@ -270,13 +270,13 @@ namespace Bitfinex.Net.Clients
                         // OrderUpdateRequest not found notification doesn't carry the order id, where as OrderCancelRequest not found notification does..
                         // Anyway, can't check for ids, so just assume its for this one
 
-                        callResult = new CallResult<T>(default, new ServerError(notificationData[7].ToString()));
+                        callResult = new CallResult<T>(new ServerError(notificationData[7].ToString()));
                         return true;
                     }
 
                     if (bfRequest.QueryType == BitfinexEventType.OrderCancelMulti && notificationType == BitfinexEventType.OrderCancelMultiRequest)
                     {
-                        callResult = new CallResult<T>(default, new ServerError(notificationData[7].ToString()));
+                        callResult = new CallResult<T>(new ServerError(notificationData[7].ToString()));
                         return true;
                     }
                 }
@@ -297,11 +297,11 @@ namespace Bitfinex.Net.Clients
                             var desResult = Deserialize<T>(orderData);
                             if (!desResult)
                             {
-                                callResult = new CallResult<T>(default, desResult.Error);
+                                callResult = new CallResult<T>(desResult.Error!);
                                 return true;
                             }
 
-                            callResult = new CallResult<T>(desResult.Data, null);
+                            callResult = new CallResult<T>(desResult.Data);
                             return true;
                         }
                     }
@@ -309,14 +309,14 @@ namespace Bitfinex.Net.Clients
 
                 if (notificationType == BitfinexEventType.OrderCancelMultiRequest)
                 {
-                    callResult = new CallResult<T>(Deserialize<T>(JToken.Parse("true")).Data, null);
+                    callResult = new CallResult<T>(Deserialize<T>(JToken.Parse("true")).Data);
                     return true;
                 }
             }
 
             if (bfRequest.QueryType == BitfinexEventType.OrderCancelMulti && eventType == BitfinexEventType.OrderCancel)
             {
-                callResult = new CallResult<T>(Deserialize<T>(JToken.Parse("true")).Data, null);
+                callResult = new CallResult<T>(Deserialize<T>(JToken.Parse("true")).Data);
                 return true;
             }
 
@@ -340,7 +340,7 @@ namespace Bitfinex.Net.Clients
                 var subResponse = Deserialize<BitfinexSubscribeResponse>(data);
                 if (!subResponse)
                 {
-                    callResult = new CallResult<object>(null, subResponse.Error);
+                    callResult = new CallResult<object>(subResponse.Error!);
                     log.Write(LogLevel.Warning, $"Socket {s.Socket.Id} subscription failed: " + subResponse.Error);
                     return false;
                 }
@@ -350,7 +350,7 @@ namespace Bitfinex.Net.Clients
                     return false;                
 
                 bRequest.ChannelId = subResponse.Data.ChannelId;
-                callResult = new CallResult<object>(subResponse.Data, subResponse.Error);
+                callResult = subResponse.As<object>(subResponse.Data);
                 return true;
             }
             else
@@ -358,13 +358,13 @@ namespace Bitfinex.Net.Clients
                 var subResponse = Deserialize<BitfinexErrorResponse>(data);
                 if (!subResponse)
                 {
-                    callResult = new CallResult<object>(null, subResponse.Error);
+                    callResult = new CallResult<object>(subResponse.Error!);
                     log.Write(LogLevel.Warning, $"Socket {s.Socket.Id} subscription failed: " + subResponse.Error);
                     return false;
                 }
 
                 var error = new ServerError(subResponse.Data.Code, subResponse.Data.Message);
-                callResult = new CallResult<object>(null, error);
+                callResult = new CallResult<object>(error);
                 log.Write(LogLevel.Debug, $"Socket {s.Socket.Id} subscription failed: " + error);
                 return true;
             }

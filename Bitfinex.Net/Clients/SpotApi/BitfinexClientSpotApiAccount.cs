@@ -151,7 +151,7 @@ namespace Bitfinex.Net.Clients.SpotApi
         public async Task<WebCallResult<BitfinexAccountInfo>> GetAccountInfoAsync(CancellationToken ct = default)
         {
             var result = await _baseClient.SendRequestAsync<IEnumerable<BitfinexAccountInfo>>(_baseClient.GetUrl(AccountInfoEndpoint, "1"), HttpMethod.Post, ct, null, true).ConfigureAwait(false);
-            return result ? result.As(result.Data.First()) : WebCallResult<BitfinexAccountInfo>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error!);
+            return result ? result.As(result.Data.First()) : result.As<BitfinexAccountInfo>(default);
         }
 
         /// <inheritdoc />
@@ -243,11 +243,11 @@ namespace Bitfinex.Net.Clients.SpotApi
 
             var result = await _baseClient.SendRequestAsync<IEnumerable<BitfinexWithdrawalResult>>(_baseClient.GetUrl(WithdrawEndpoint, "1"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
             if (!result)
-                return WebCallResult<BitfinexWithdrawalResult>.CreateErrorResult(result.ResponseStatusCode, null, result.Error!);
+                return result.As<BitfinexWithdrawalResult>(default);
 
             var data = result.Data.First();
             if (!data.Success)
-                return WebCallResult<BitfinexWithdrawalResult>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, new ServerError(data.Message));
+                return result.AsError<BitfinexWithdrawalResult>(new ServerError(data.Message));
             return result.As(data);
         }
 

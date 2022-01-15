@@ -56,7 +56,7 @@ namespace Bitfinex.Net.Clients.SpotApi
         {
             var result = await _baseClient.SendRequestAsync<IEnumerable<IEnumerable<BitfinexAsset>>>(_baseClient.GetUrl(CurrenciesEndpoint, "2"), HttpMethod.Get, ct).ConfigureAwait(false);
             if (!result)
-                return WebCallResult<IEnumerable<BitfinexAsset>>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error!);
+                return result.As<IEnumerable<BitfinexAsset>>(default);
             return result.As(result.Data.First());
         }
 
@@ -74,7 +74,7 @@ namespace Bitfinex.Net.Clients.SpotApi
                 return ticker.As<BitfinexSymbolOverview>(null);
 
             if (!ticker.Data.Any())
-                return new WebCallResult<BitfinexSymbolOverview>(ticker.ResponseStatusCode, ticker.ResponseHeaders, null, new ServerError("Symbol not found"));
+                return ticker.AsError<BitfinexSymbolOverview>(new ServerError("Symbol not found"));
 
             return ticker.As(ticker.Data.First());
         }

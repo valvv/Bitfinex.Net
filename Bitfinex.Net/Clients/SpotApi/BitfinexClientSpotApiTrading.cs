@@ -139,8 +139,7 @@ namespace Bitfinex.Net.Clients.SpotApi
 
             var result = await _baseClient.SendRequestAsync<BitfinexWriteResult<JArray>>(_baseClient.GetUrl(PlaceOrderEndpoint, "2"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
             if (!result)
-                return WebCallResult<BitfinexWriteResult<BitfinexOrder>>.CreateErrorResult(result.ResponseStatusCode,
-                    result.ResponseHeaders, result.Error!);
+                return result.As<BitfinexWriteResult<BitfinexOrder>>(default);
 
             var orderData = result.Data.Data!.First().ToObject<BitfinexOrder>();
             var output = new BitfinexWriteResult<BitfinexOrder>()

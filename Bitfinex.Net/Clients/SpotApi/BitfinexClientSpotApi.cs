@@ -150,7 +150,7 @@ namespace Bitfinex.Net.Clients.SpotApi
 
         /// <inheritdoc />
         protected override Task<WebCallResult<DateTime>> GetServerTimestampAsync()
-            => Task.FromResult(new WebCallResult<DateTime>(null, null, DateTime.UtcNow, null));
+            => Task.FromResult(new WebCallResult<DateTime>(null, null, null, null, null, null, null, null, DateTime.UtcNow, null));
 
         /// <inheritdoc />
         protected override TimeSyncInfo GetTimeSyncInfo()
