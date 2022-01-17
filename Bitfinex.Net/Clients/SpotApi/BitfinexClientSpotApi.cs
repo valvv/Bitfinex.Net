@@ -161,7 +161,7 @@ namespace Bitfinex.Net.Clients.SpotApi
             => TimeSyncState.TimeOffset;
 
         /// <inheritdoc />
-        public ISpotClient ComonSpotClient => this;
+        public ISpotClient CommonSpotClient => this;
 
         async Task<WebCallResult<OrderId>> ISpotClient.PlaceOrderAsync(string symbol, CryptoExchange.Net.CommonObjects.OrderSide side, CryptoExchange.Net.CommonObjects.OrderType type, decimal quantity, decimal? price, string? accountId)
         {
