@@ -6,7 +6,7 @@ nav_order: 3
 ## Basic operations
 Make sure to read the [CryptoExchange.Net documentation](https://jkorf.github.io/CryptoExchange.Net/Clients.html#processing-request-responses) on processing responses.
 
-#### Get market data
+### Get market data
 ```csharp
 // Getting info on all symbols
 var symbolData = await bitfinexClient.SpotApi.ExchangeData.GetSymbolsAsync();
@@ -21,11 +21,11 @@ var orderBookData = await bitfinexClient.SpotApi.ExchangeData.GetOrderBookAsync(
 var tradeHistoryData = await bitfinexClient.SpotApi.ExchangeData.GetTradeHistoryAsync("tBTCUST");
 ```
 
-#### Requesting balances
+### Requesting balances
 ```csharp
 var accountData = await bitfinexClient.SpotApi.Account.GetBalancesAsync();
 ```
-#### Placing order
+### Placing order
 ```csharp
 // Placing a buy limit order for 0.001 BTC at a price of 50000USDT each
 var symbolData = await bitfinexClient.SpotApi.Trading.PlaceOrderAsync(
@@ -45,30 +45,30 @@ var orderData = await bitfinexClient.SpotApi.Trading.PlaceOrderAsync(
                 priceAuxLimit: 40000);
 ```
 
-#### Requesting a specific order
+### Requesting a specific order
 ```csharp
 // Request info on order with id `1234`
 var orderData = await bitfinexClient.SpotApi.Trading.GetOrderAsync(1234);
 ```
 
-#### Requesting order history
+### Requesting order history
 ```csharp
 // Get all orders conform the parameters
  var ordersData = await bitfinexClient.SpotApi.Trading.GetClosedOrdersAsync();
 ```
 
-#### Cancel order
+### Cancel order
 ```csharp
 // Cancel order with id `1234`
 var orderData = await bitfinexClient.SpotApi.Trading.CancelOrderAsync(1234);
 ```
 
-#### Get user trades
+### Get user trades
 ```csharp
 var userTradesResult = await bitfinexClient.SpotApi.Trading.GetUserTradesAsync();
 ```
 
-#### Subscribing to market data updates
+### Subscribing to market data updates
 ```csharp
 var subscribeResult =  bitfinexSocket.SpotStreams.SubscribeToTickerUpdatesAsync("tBTCUST", data =>
 {
@@ -76,7 +76,7 @@ var subscribeResult =  bitfinexSocket.SpotStreams.SubscribeToTickerUpdatesAsync(
 });
 ```
 
-#### Subscribing to order updates
+### Subscribing to order updates
 ```csharp
 // Any handler can be passed `null` if you're not interested in that type of update
 var subscribeResult = await bitfinexSocket.SpotStreams.SubscribeToUserTradeUpdatesAsync(
