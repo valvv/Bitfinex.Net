@@ -1,8 +1,9 @@
 ---
-title: IBitfinexClient
+title: Rest API documentation
 has_children: true
 ---
 *[generated documentation]*  
+### BitfinexClient  
 *Client for accessing the Bitfinex API.*
   
 ***

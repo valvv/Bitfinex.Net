@@ -2,7 +2,7 @@
 title: IBitfinexClientSpotApiExchangeData
 has_children: false
 parent: IBitfinexClientSpotApi
-grand_parent: IBitfinexClient
+grand_parent: Rest API documentation
 ---
 *[generated documentation]*  
 `BitfinexClient > SpotApi > ExchangeData`  

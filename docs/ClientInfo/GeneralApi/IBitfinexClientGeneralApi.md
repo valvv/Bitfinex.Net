@@ -1,7 +1,7 @@
 ---
 title: IBitfinexClientGeneralApi
 has_children: true
-parent: IBitfinexClient
+parent: Rest API documentation
 ---
 *[generated documentation]*  
 `BitfinexClient > GeneralApi`  

@@ -1,8 +1,9 @@
 ---
-title: IBitfinexSocketClient
+title: Socket API documentation
 has_children: true
 ---
 *[generated documentation]*  
+### BitfinexSocketClient  
 *Client for accessing the Bitfinex websocket API*
   
 ***

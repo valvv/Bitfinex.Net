@@ -2,7 +2,7 @@
 title: IBitfinexClientGeneralApiFunding
 has_children: false
 parent: IBitfinexClientGeneralApi
-grand_parent: IBitfinexClient
+grand_parent: Rest API documentation
 ---
 *[generated documentation]*  
 `BitfinexClient > GeneralApi > Funding`  
