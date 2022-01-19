@@ -48,7 +48,7 @@ var bitfinexClient = new BitfinexClient(new BitfinexClientOptions
 ```
 
 ### Client structure
-Version 5 adds the `GeneralApi` and `SpotApi` Api clients under the `BitfinexClient`, and a topic underneath that. This is done to keep the same client structure as other exchange implementations, more info on this (here)(https://jkorf.github.io/CryptoExchange.Net/Clients.html).
+Version 5 adds the `GeneralApi` and `SpotApi` Api clients under the `BitfinexClient`, and a topic underneath that. This is done to keep the same client structure as other exchange implementations, more info on this [here](https://jkorf.github.io/CryptoExchange.Net/Clients.html).
 In the BitfinexSocketClient a `SpotStreams` Api client is added. This means all calls will have changed, though most will only need to add `SpotApi.[Topic].XXX`/`SpotStreams.XXX`:
 
 *V4*
@@ -64,7 +64,6 @@ var trades = await bitfinexClient.GetUserTradesAsync();
 
 var sub = bitfinexSocket.SubscribeToTickerUpdatesAsync("tBTCUSD", DataHandler);
 ```
-// TODO Funding
 
 *V5*  
 ```csharp
