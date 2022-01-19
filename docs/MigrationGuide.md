@@ -13,6 +13,7 @@ Changes related to `IExchangeClient`, options and client structure are also (par
 
 ### Namespaces
 There are a few namespace changes:  
+
 |Type|Old|New|
 |----|---|---|
 |Enums|`Bitfinex.Net.Objects`|`Bitfinex.Net.Enums`  |
@@ -81,6 +82,7 @@ var sub = bitfinexSocket.SpotStreams.SubscribeToTickerUpdatesAsync("tBTCUSD", Da
 
 ### Definitions
 Some names have been changed to a common definition. This includes where the name is part of a bigger name  
+
 |Old|New||
 |----|---|---|
 |`Currency`|`Asset`|`GetCurrenciesAsync` -> `GetAssetsAsync`|
