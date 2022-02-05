@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Bitfinex.Net.Clients;
 using Bitfinex.Net.Enums;
@@ -46,7 +47,7 @@ namespace Bitfinex.Net.SymbolOrderBooks
         }
 
         /// <inheritdoc />
-        protected override async Task<CallResult<UpdateSubscription>> DoStartAsync()
+        protected override async Task<CallResult<UpdateSubscription>> DoStartAsync(CancellationToken ct)
         {
             if(precision == Precision.R0)
                 throw new ArgumentException("Invalid precision: R0");
@@ -55,9 +56,15 @@ namespace Bitfinex.Net.SymbolOrderBooks
             if (!result)
                 return result;
 
+            if (ct.IsCancellationRequested)
+            {
+                await result.Data.CloseAsync().ConfigureAwait(false);
+                return result.AsError<UpdateSubscription>(new CancellationRequestedError());
+            }
+
             Status = OrderBookStatus.Syncing;
             
-            var setResult = await WaitForSetOrderBookAsync(30000).ConfigureAwait(false);
+            var setResult = await WaitForSetOrderBookAsync(30000, ct).ConfigureAwait(false);
             return setResult ? result : new CallResult<UpdateSubscription>(setResult.Error!);
         }
 
@@ -168,9 +175,9 @@ namespace Bitfinex.Net.SymbolOrderBooks
         }
 
         /// <inheritdoc />
-        protected override async Task<CallResult<bool>> DoResyncAsync()
+        protected override async Task<CallResult<bool>> DoResyncAsync(CancellationToken ct)
         {
-            return await WaitForSetOrderBookAsync(30000).ConfigureAwait(false);
+            return await WaitForSetOrderBookAsync(30000, ct).ConfigureAwait(false);
         }
 
         /// <summary>
