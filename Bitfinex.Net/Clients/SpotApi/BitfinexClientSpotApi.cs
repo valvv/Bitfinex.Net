@@ -7,6 +7,7 @@ using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.CommonObjects;
 using CryptoExchange.Net.Interfaces;
+using CryptoExchange.Net.Interfaces.CommonClients;
 using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Objects;
 using Microsoft.Extensions.Logging;
@@ -163,12 +164,21 @@ namespace Bitfinex.Net.Clients.SpotApi
         /// <inheritdoc />
         public ISpotClient CommonSpotClient => this;
 
-        async Task<WebCallResult<OrderId>> ISpotClient.PlaceOrderAsync(string symbol, CommonOrderSide side, CommonOrderType type, decimal quantity, decimal? price, string? accountId, CancellationToken ct)
+        async Task<WebCallResult<OrderId>> ISpotClient.PlaceOrderAsync(string symbol, CommonOrderSide side, CommonOrderType type, decimal quantity, decimal? price, string? accountId, string? clientOrderId, CancellationToken ct)
         {
             if (string.IsNullOrWhiteSpace(symbol))
                 throw new ArgumentException(nameof(symbol) + " required for Bitfinex " + nameof(ISpotClient.PlaceOrderAsync), nameof(symbol));
 
-            var result = await Trading.PlaceOrderAsync(symbol, GetOrderSide(side), GetOrderType(type), quantity, price ?? 0, ct: ct).ConfigureAwait(false);
+            int? clientId = null;
+            if (clientOrderId != null) 
+            {  
+                if(!int.TryParse(clientOrderId, out var id))
+                    throw new ArgumentException("ClientOrderId for Bitfinex should be parsable to int");
+                else
+                    clientId = id;
+            }
+
+            var result = await Trading.PlaceOrderAsync(symbol, GetOrderSide(side), GetOrderType(type), quantity, price ?? 0, clientOrderId: clientId, ct: ct).ConfigureAwait(false);
             if (!result)
                 return result.As<OrderId>(null);
 
