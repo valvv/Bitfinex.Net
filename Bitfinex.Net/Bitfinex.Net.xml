@@ -128,6 +128,9 @@
         <member name="T:Bitfinex.Net.Clients.GeneralApi.BitfinexRestClientGeneralApi">
             <inheritdoc cref="T:Bitfinex.Net.Interfaces.Clients.GeneralApi.IBitfinexRestClientGeneralApi" />
         </member>
+        <member name="P:Bitfinex.Net.Clients.GeneralApi.BitfinexRestClientGeneralApi.ClientOptions">
+            <inheritdoc />
+        </member>
         <member name="P:Bitfinex.Net.Clients.GeneralApi.BitfinexRestClientGeneralApi.Funding">
             <inheritdoc />
         </member>
@@ -199,6 +202,9 @@
         </member>
         <member name="T:Bitfinex.Net.Clients.SpotApi.BitfinexRestClientSpotApi">
             <inheritdoc cref="T:Bitfinex.Net.Interfaces.Clients.SpotApi.IBitfinexRestClientSpotApi" />
+        </member>
+        <member name="P:Bitfinex.Net.Clients.SpotApi.BitfinexRestClientSpotApi.ClientOptions">
+            <inheritdoc />
         </member>
         <member name="P:Bitfinex.Net.Clients.SpotApi.BitfinexRestClientSpotApi.ExchangeName">
             <inheritdoc />
@@ -397,6 +403,9 @@
         </member>
         <member name="T:Bitfinex.Net.Clients.SpotApi.BitfinexSocketClientSpotApi">
             <inheritdoc cref="T:Bitfinex.Net.Interfaces.Clients.SpotApi.IBitfinexSocketClientSpotApi" />
+        </member>
+        <member name="P:Bitfinex.Net.Clients.SpotApi.BitfinexSocketClientSpotApi.ClientOptions">
+            <inheritdoc />
         </member>
         <member name="M:Bitfinex.Net.Clients.SpotApi.BitfinexSocketClientSpotApi.CreateAuthenticationProvider(CryptoExchange.Net.Authentication.ApiCredentials)">
             <inheritdoc />

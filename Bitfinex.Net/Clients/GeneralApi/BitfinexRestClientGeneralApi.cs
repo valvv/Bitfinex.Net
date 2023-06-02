@@ -20,7 +20,8 @@ namespace Bitfinex.Net.Clients.GeneralApi
         #region fields
         internal string? AffiliateCode { get; set; }
 
-        private readonly BitfinexRestOptions _options;
+        /// <inheritdoc />
+        public new BitfinexRestOptions ClientOptions => (BitfinexRestOptions)base.ClientOptions;
         #endregion
 
         #region Api clients
@@ -33,8 +34,6 @@ namespace Bitfinex.Net.Clients.GeneralApi
         internal BitfinexRestClientGeneralApi(ILogger logger, HttpClient? httpClient, BitfinexRestOptions options) :
             base(logger, httpClient, options.Environment.RestAddress, options, options.SpotOptions)
         {
-            _options = options;
-
             Funding = new BitfinexRestClientGeneralApiFunding(this);
 
             AffiliateCode = options.AffiliateCode;
@@ -44,7 +43,7 @@ namespace Bitfinex.Net.Clients.GeneralApi
 
         /// <inheritdoc />
         protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
-            => new BitfinexAuthenticationProvider(credentials, _options.NonceProvider ?? new BitfinexNonceProvider());
+            => new BitfinexAuthenticationProvider(credentials, ClientOptions.NonceProvider ?? new BitfinexNonceProvider());
 
         internal Task<WebCallResult<T>> SendRequestAsync<T>(
             Uri uri,

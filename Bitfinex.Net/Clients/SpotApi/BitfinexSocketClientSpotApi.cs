@@ -25,19 +25,18 @@ namespace Bitfinex.Net.Clients.SpotApi
     public class BitfinexSocketClientSpotApi : SocketApiClient, IBitfinexSocketClientSpotApi
     {
         #region fields
-        private readonly BitfinexSocketOptions _options;
-
         private readonly JsonSerializer _bookSerializer = new JsonSerializer();
         private readonly Random _random = new Random();
         private readonly string? _affCode;
+
+        /// <inheritdoc />
+        public new BitfinexSocketOptions ClientOptions => (BitfinexSocketOptions)base.ClientOptions;
         #endregion
 
         #region ctor
         internal BitfinexSocketClientSpotApi(ILogger logger, BitfinexSocketOptions options) :
             base(logger, options.Environment.SocketAddress, options, options.SpotOptions)
         {
-            _options = options;
-
             ContinueOnQueryResponse = true;
             UnhandledMessageExpected = true;
 
@@ -51,7 +50,7 @@ namespace Bitfinex.Net.Clients.SpotApi
         #endregion
         /// <inheritdoc />
         protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
-            => new BitfinexAuthenticationProvider(credentials, _options.NonceProvider ?? new BitfinexNonceProvider());
+            => new BitfinexAuthenticationProvider(credentials, ClientOptions.NonceProvider ?? new BitfinexNonceProvider());
 
         #region public methods
 
@@ -503,17 +502,18 @@ namespace Bitfinex.Net.Clients.SpotApi
 
         private static BitfinexAuthentication GetAuthObject(SocketApiClient apiClient, params string[] filter)
         {
-            var n = ((BitfinexAuthenticationProvider)apiClient.AuthenticationProvider!).GetNonce().ToString();
+            var authProvider = (BitfinexAuthenticationProvider)apiClient.AuthenticationProvider!;
+            var n = authProvider.GetNonce().ToString();
             var authentication = new BitfinexAuthentication
             {
                 Event = "auth",
-                ApiKey = apiClient.AuthenticationProvider!.Credentials.Key!.GetString(),
+                ApiKey = authProvider.GetApiKey(),
                 Nonce = n,
                 Payload = "AUTH" + n
             };
             if (filter.Any())
                 authentication.Filter = filter;
-            authentication.Signature = apiClient.AuthenticationProvider.Sign(authentication.Payload).ToLower(CultureInfo.InvariantCulture);
+            authentication.Signature = authProvider.Sign(authentication.Payload).ToLower(CultureInfo.InvariantCulture);
             return authentication;
         }
 
