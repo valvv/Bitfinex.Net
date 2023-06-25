@@ -23,6 +23,9 @@ namespace Bitfinex.Net
 
         public BitfinexAuthenticationProvider(ApiCredentials credentials, INonceProvider? nonceProvider) : base(credentials)
         {
+            if (credentials.CredentialType != ApiCredentialsType.Hmac)
+                throw new Exception("Only Hmac authentication is supported");
+
             _nonceProvider = nonceProvider ?? new BitfinexNonceProvider();
         }
 
